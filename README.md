@@ -1,36 +1,137 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mall of America — Premium Sales Experience
+
+A high-end, single-page marketing experience for Mall of America, designed to pitch leasing, sponsorship, and event partnerships to prospective brands. Built as a performant, animated web application with a cinematic dark aesthetic and gold accent palette.
+
+---
+
+## Tech Stack
+
+| Layer     | Technology                                                         |
+| --------- | ------------------------------------------------------------------ |
+| Framework | [Next.js 16](https://nextjs.org/) (App Router)                     |
+| Language  | [TypeScript](https://www.typescriptlang.org/)                      |
+| Styling   | [Tailwind CSS v4](https://tailwindcss.com/)                        |
+| Animation | [Framer Motion](https://www.framer.com/motion/)                    |
+| Icons     | [React Icons (Lucide)](https://react-icons.github.io/react-icons/) |
+| Runtime   | [React 19](https://react.dev/)                                     |
+| Linting   | ESLint with `eslint-config-next`                                   |
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- **Node.js** ≥ 18
+- **npm**, **yarn**, **pnpm**, or **bun**
+
+### Installation
+
+```bash
+# Clone the repository
+git clone <repo-url>
+cd mall
+
+# Install dependencies
+npm install
+```
+
+### Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+### Linting
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+src/
+├── app/                        # Next.js App Router (layout, page, globals)
+├── components/
+│   ├── navigation/             # Floating nav with scroll progress
+│   ├── sections/               # Page sections (modular folder-per-section)
+│   │   ├── Hero/
+│   │   ├── WhyThisProperty/
+│   │   ├── Retail/
+│   │   ├── Entertainment/
+│   │   ├── DiningLifestyle/
+│   │   ├── Events/
+│   │   ├── Luxury/
+│   │   └── FinalCTA/
+│   └── ui/                     # Shared UI primitives (StatCard, AnimatedText, etc.)
+├── hooks/                      # Custom React hooks (useScrollTo, etc.)
+├── lib/                        # Constants, types, motion utilities, lazy loaders
+└── modules/                    # Domain modules (events, leasing, sponsorship)
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Each section follows a **folder-per-component** pattern: a main section file, its subcomponents in sibling files, and a barrel `index.ts` for clean imports.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Design Decisions
+
+### Architecture
+
+- **Folder-per-section pattern** — Every section (Hero, Retail, Events, etc.) lives in its own folder with subcomponents split into individual files. Barrel exports keep consumer imports clean while maintaining a flat dependency graph.
+- **Lazy loading via `next/dynamic`** — All sections below the fold are dynamically imported through a centralized `lazy-sections.ts` module, keeping the initial JS bundle small and the first paint fast.
+- **Shared constants file** — All data arrays (stats, categories, timelines, brand logos) are defined once in `lib/constants.ts` and imported by the components that need them. No inline data duplication.
+
+### Styling
+
+- **CSS custom properties for theming** — Core palette (gold, surface, muted, border) is expressed as CSS variables, making global theme changes trivial.
+- **Tailwind v4 utility-first approach** — All layout and visual styling uses Tailwind classes directly. No separate CSS modules or styled-components.
+- **Dark cinematic aesthetic** — Near-black backgrounds with gold gradients and glass-morphism cards create a premium, editorial feel appropriate for a luxury retail pitch.
+
+### Animation
+
+- **Framer Motion throughout** — Scroll-triggered entrance animations (`useInView`), parallax effects (`useScroll` / `useTransform`), infinite marquees, and layout transitions are all handled by Framer Motion for consistency.
+- **Shared easing constants** — A custom exponential ease-out curve (`EASE_OUT_EXPO`) is defined in `lib/motion.ts` and reused across all animated components for a cohesive motion language.
+- **`AnimatePresence` for mount/unmount** — Components that conditionally render (modals, info panels) use `AnimatePresence` for smooth enter/exit transitions without layout shift.
+
+### TypeScript
+
+- **Strict typing** — All component props use named interfaces with `Readonly<>` wrappers. Shared types (`IconComponent`, `NavId`, `FloorId`) live in dedicated type files.
+- **No `any` types** — The codebase enforces explicit typing throughout.
+
+### Interactive Floor Plan
+
+- **SVG-based map** — The mall floor plan is rendered as an inline SVG with dynamic polygon data per floor, enabling hover highlights and click-to-select interactions without external mapping libraries.
+- **Floor-scoped keys** — Each store polygon uses a `floor-storeName` composite key to prevent React reconciliation bugs across level switches.
+
+---
+
+## AI Tools Used
+
+| Tool               | Purpose                                                                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **GitHub Copilot** | Code generation, component scaffolding, refactoring, debugging, and architectural decisions throughout the entire development process |
+| **Google Gemini**  | Image generation (hero backgrounds, section imagery) and logo generation for luxury brand assets used in the marquee                  |
+
+---
+
+## Deployment
+
+The easiest way to deploy is via [Vercel](https://vercel.com/new):
+
+```bash
+npm run build
+```
+
+Or connect the repository directly to Vercel for automatic deployments on push.
