@@ -93,17 +93,14 @@ export default function Retail() {
   );
 }
 
-function RetailCard({
-  title,
-  body,
-  tag,
-  index,
-}: Readonly<{
+interface RetailCardProps {
   title: string;
   body: string;
   tag: string;
   index: number;
-}>) {
+}
+
+function RetailCard({ title, body, tag, index }: Readonly<RetailCardProps>) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-5% 0px" });
 

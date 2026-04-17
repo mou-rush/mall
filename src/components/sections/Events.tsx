@@ -4,7 +4,8 @@ import { useRef } from "react";
 import Image from "next/image";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import AnimatedText from "@/components/ui/AnimatedText";
-import { EVENTS_CATEGORIES, type IconComponent } from "@/lib/constants";
+import { EVENTS_CATEGORIES } from "@/lib/constants";
+import type { IconComponent } from "@/lib/types";
 
 export default function Events() {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -104,19 +105,21 @@ export default function Events() {
   );
 }
 
+interface EventCategoryCardProps {
+  icon: IconComponent;
+  title: string;
+  scale: string;
+  examples: string[];
+  index: number;
+}
+
 function EventCategoryCard({
   icon: Icon,
   title,
   scale,
   examples,
   index,
-}: Readonly<{
-  icon: IconComponent;
-  title: string;
-  scale: string;
-  examples: string[];
-  index: number;
-}>) {
+}: Readonly<EventCategoryCardProps>) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-5% 0px" });
 

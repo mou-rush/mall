@@ -1,4 +1,3 @@
-import type { ComponentType, CSSProperties } from "react";
 import {
   LuUtensilsCrossed,
   LuChefHat,
@@ -14,11 +13,7 @@ import {
   LuHandshake,
 } from "react-icons/lu";
 
-export type IconComponent = ComponentType<{
-  className?: string;
-  size?: number;
-  style?: CSSProperties;
-}>;
+export type { IconComponent, NavId } from "@/lib/types";
 
 export const NAV_ITEMS = [
   { id: "hero", label: "Home" },
@@ -30,8 +25,6 @@ export const NAV_ITEMS = [
   { id: "events", label: "Events" },
   { id: "cta", label: "Partner" },
 ] as const;
-
-export type NavId = (typeof NAV_ITEMS)[number]["id"];
 
 export const STATS = [
   {

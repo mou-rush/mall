@@ -59,13 +59,15 @@ export default function Luxury() {
   );
 }
 
+interface BrandMarqueeProps {
+  brands: string[];
+  reverse?: boolean;
+}
+
 function BrandMarquee({
   brands,
   reverse = false,
-}: Readonly<{
-  brands: string[];
-  reverse?: boolean;
-}>) {
+}: Readonly<BrandMarqueeProps>) {
   const dir = reverse ? "r" : "f";
   const items = [
     ...brands.map((b) => ({ id: `${dir}-a-${b}`, label: b })),

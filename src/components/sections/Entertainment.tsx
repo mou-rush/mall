@@ -72,6 +72,18 @@ export default function Entertainment() {
   );
 }
 
+interface AttractionCardProps {
+  name: string;
+  type: string;
+  headline: string;
+  desc: string;
+  color: string;
+  image: string;
+  index: number;
+  isActive: boolean;
+  onHover: () => void;
+}
+
 function AttractionCard({
   name,
   type,
@@ -82,17 +94,7 @@ function AttractionCard({
   index,
   isActive,
   onHover,
-}: Readonly<{
-  name: string;
-  type: string;
-  headline: string;
-  desc: string;
-  color: string;
-  image: string;
-  index: number;
-  isActive: boolean;
-  onHover: () => void;
-}>) {
+}: Readonly<AttractionCardProps>) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-5% 0px" });
 

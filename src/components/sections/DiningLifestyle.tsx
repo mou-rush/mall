@@ -3,7 +3,8 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import AnimatedText from "@/components/ui/AnimatedText";
-import { DINING_CATEGORIES, type IconComponent } from "@/lib/constants";
+import { DINING_CATEGORIES } from "@/lib/constants";
+import type { IconComponent } from "@/lib/types";
 
 export default function DiningLifestyle() {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -59,19 +60,21 @@ export default function DiningLifestyle() {
   );
 }
 
+interface DiningCardProps {
+  icon: IconComponent;
+  title: string;
+  count: string;
+  desc: string;
+  index: number;
+}
+
 function DiningCard({
   icon: Icon,
   title,
   count,
   desc,
   index,
-}: Readonly<{
-  icon: IconComponent;
-  title: string;
-  count: string;
-  desc: string;
-  index: number;
-}>) {
+}: Readonly<DiningCardProps>) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-5% 0px" });
 

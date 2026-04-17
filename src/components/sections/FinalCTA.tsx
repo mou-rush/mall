@@ -5,7 +5,8 @@ import { LuStore, LuHandshake, LuMic } from "react-icons/lu";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import AnimatedText from "@/components/ui/AnimatedText";
 import VideoBackground from "@/components/ui/VideoBackground";
-import { VIDEOS, type IconComponent } from "@/lib/constants";
+import { VIDEOS } from "@/lib/constants";
+import type { IconComponent } from "@/lib/types";
 
 const PATHS = [
   {
@@ -148,6 +149,17 @@ export default function FinalCTA() {
   );
 }
 
+interface CTACardProps {
+  icon: IconComponent;
+  title: string;
+  desc: string;
+  cta: string;
+  color: string;
+  index: number;
+  isActive: boolean;
+  onSelect: () => void;
+}
+
 function CTACard({
   icon: Icon,
   title,
@@ -157,16 +169,7 @@ function CTACard({
   index,
   isActive,
   onSelect,
-}: Readonly<{
-  icon: IconComponent;
-  title: string;
-  desc: string;
-  cta: string;
-  color: string;
-  index: number;
-  isActive: boolean;
-  onSelect: () => void;
-}>) {
+}: Readonly<CTACardProps>) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-5% 0px" });
 
@@ -243,10 +246,12 @@ function CTACard({
   );
 }
 
-function ContactForm({
-  type,
-  onClose,
-}: Readonly<{ type: string; onClose: () => void }>) {
+interface ContactFormProps {
+  type: string;
+  onClose: () => void;
+}
+
+function ContactForm({ type, onClose }: Readonly<ContactFormProps>) {
   const labels: Record<string, string> = {
     leasing: "Leasing Inquiry",
     sponsorship: "Sponsorship Inquiry",
@@ -349,19 +354,21 @@ function ContactForm({
   );
 }
 
+interface FormFieldProps {
+  label: string;
+  name: string;
+  type?: string;
+  placeholder?: string;
+  required?: boolean;
+}
+
 function FormField({
   label,
   name,
   type = "text",
   placeholder,
   required = false,
-}: Readonly<{
-  label: string;
-  name: string;
-  type?: string;
-  placeholder?: string;
-  required?: boolean;
-}>) {
+}: Readonly<FormFieldProps>) {
   return (
     <div>
       <label
