@@ -2,7 +2,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import VideoBackground from "@/components/ui/VideoBackground";
-import { VIDEOS } from "@/lib/constants";
+import ArrowIcon from "@/components/ui/ArrowIcon";
+import { VIDEOS, TICKER_FACTS } from "@/lib/constants";
+import { useScrollTo } from "@/hooks/useScrollTo";
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -14,6 +16,7 @@ export default function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const titleScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.92]);
+  const scrollTo = useScrollTo();
 
   return (
     <section
@@ -52,7 +55,9 @@ export default function Hero() {
           transition={{ delay: 0.6, duration: 1, ease: [0.19, 1, 0.22, 1] }}
         >
           <span className="block text-[var(--moa-white)]">America&rsquo;s</span>
-          <span className="block text-gold-gradient font-thin">Stage</span>
+          <span className="block text-gold-gradient font-thin pb-[0.12em]">
+            Stage
+          </span>
         </motion.h1>
 
         <motion.p
@@ -72,25 +77,11 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
         >
-          <button
-            onClick={() =>
-              document
-                .getElementById("cta")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="btn-primary"
-          >
+          <button onClick={() => scrollTo("cta")} className="btn-primary">
             Partner With Us
-            <ArrowRight />
+            <ArrowIcon />
           </button>
-          <button
-            onClick={() =>
-              document
-                .getElementById("why")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="btn-outline"
-          >
+          <button onClick={() => scrollTo("why")} className="btn-outline">
             Explore the Property
           </button>
         </motion.div>
@@ -124,38 +115,12 @@ export default function Hero() {
   );
 }
 
-function ArrowRight() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M3 8h10M9 4l4 4-4 4"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+const TICKER_ITEMS = [
+  ...TICKER_FACTS.map((fact) => ({ key: `a:${fact}`, fact })),
+  ...TICKER_FACTS.map((fact) => ({ key: `b:${fact}`, fact })),
+];
 
 function TickerStrip() {
-  const facts = [
-    "40M+ Annual Visitors",
-    "500+ Stores & Restaurants",
-    "#1 US Tourism Destination",
-    "$2B+ Annual Sales",
-    "World's Largest Indoor Theme Park",
-    "60% Destination Shoppers",
-    "10,000 Free Parking Spaces",
-    "5.6M Sq Ft",
-  ];
-
   return (
     <div className="flex items-center gap-0 overflow-hidden w-full">
       <motion.div
@@ -163,9 +128,8 @@ function TickerStrip() {
         animate={{ x: ["0%", "-50%"] }}
         transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
       >
-        {[...facts, ...facts].map((fact, i) => (
-          // eslint-disable-next-line react/no-array-index-key -- static infinite ticker, duplicate content by design
-          <span key={`ticker-${i}`} className="flex items-center gap-10">
+        {TICKER_ITEMS.map(({ key, fact }) => (
+          <span key={key} className="flex items-center gap-10">
             <span className="eyebrow text-[0.65rem] text-[var(--moa-muted)]">
               {fact}
             </span>

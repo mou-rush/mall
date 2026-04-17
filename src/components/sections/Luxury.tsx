@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import AnimatedText from "@/components/ui/AnimatedText";
-import { BRAND_LOGO_MAP } from "@/lib/constants";
+import { BRAND_LOGO_MAP, LUXURY_PILLARS } from "@/lib/constants";
 
 export default function Luxury() {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -127,20 +127,7 @@ function LuxurySplitBlock() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
 
-  const pillars = [
-    {
-      title: "Curated Environment",
-      desc: "Luxury brands don't exist in isolation here. Your neighbors define your brand's company — and ours are the best in the business.",
-    },
-    {
-      title: "Dwell Time",
-      desc: "Average visit duration at MoA: 3.5 hours. Guests explore, they linger, they return. That creates multiple conversion touchpoints per visit.",
-    },
-    {
-      title: "Destination Mindset",
-      desc: "60% of our visitors travel 150+ miles to be here. They arrive with intention and budget — the perfect customer for premium and luxury.",
-    },
-  ];
+  const pillars = LUXURY_PILLARS;
 
   return (
     <motion.div

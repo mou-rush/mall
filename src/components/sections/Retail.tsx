@@ -6,10 +6,12 @@ import SectionWrapper from "@/components/ui/SectionWrapper";
 import AnimatedText from "@/components/ui/AnimatedText";
 import MallFloorPlan from "@/components/ui/MallFloorPlan";
 import { RETAIL_FEATURES } from "@/lib/constants";
+import { useScrollTo } from "@/hooks/useScrollTo";
 
 export default function Retail() {
   const headerRef = useRef<HTMLDivElement>(null);
   const inView = useInView(headerRef, { once: true, margin: "-10% 0px" });
+  const scrollTo = useScrollTo();
 
   return (
     <SectionWrapper id="retail" dark>
@@ -58,14 +60,7 @@ export default function Retail() {
               animate={inView ? { opacity: 1 } : {}}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
-              <button
-                onClick={() =>
-                  document
-                    .getElementById("cta")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-                className="btn-primary"
-              >
+              <button onClick={() => scrollTo("cta")} className="btn-primary">
                 Request Leasing Info
               </button>
               <a

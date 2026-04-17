@@ -7,6 +7,7 @@ import {
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { NAV_ITEMS, type NavId } from "@/lib/constants";
+import { useScrollTo } from "@/hooks/useScrollTo";
 
 export default function FloatingNav() {
   const [hidden, setHidden] = useState(false);
@@ -14,6 +15,7 @@ export default function FloatingNav() {
   const [activeId, setActiveId] = useState<NavId>("hero");
   const lastY = useRef(0);
   const { scrollY } = useScroll();
+  const scrollTo = useScrollTo();
 
   useMotionValueEvent(scrollY, "change", (y) => {
     setAtTop(y < 60);
@@ -40,10 +42,6 @@ export default function FloatingNav() {
     return () => observers.forEach((ob) => ob.disconnect());
   }, []);
 
-  const handleClick = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <>
       <motion.header
@@ -57,7 +55,7 @@ export default function FloatingNav() {
       >
         <div className="max-w-[1600px] mx-auto px-8 h-16 flex items-center justify-between">
           <button
-            onClick={() => handleClick("hero")}
+            onClick={() => scrollTo("hero")}
             className="font-bold tracking-[0.12em] text-sm text-[var(--moa-white)] 
                        uppercase hover:text-[var(--gold)] transition-colors duration-300"
             aria-label="Back to top"
@@ -75,7 +73,7 @@ export default function FloatingNav() {
             {NAV_ITEMS.slice(1).map((item) => (
               <button
                 key={item.id}
-                onClick={() => handleClick(item.id)}
+                onClick={() => scrollTo(item.id)}
                 className={`relative px-4 py-2 text-[0.7rem] font-semibold tracking-[0.18em] 
                            uppercase transition-all duration-300 rounded-[2px]
                            ${
@@ -97,7 +95,7 @@ export default function FloatingNav() {
           </nav>
 
           <button
-            onClick={() => handleClick("cta")}
+            onClick={() => scrollTo("cta")}
             className="btn-primary text-[0.65rem] py-2 px-5 hidden md:inline-flex"
           >
             Partner With Us
@@ -119,7 +117,7 @@ export default function FloatingNav() {
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
-                onClick={() => handleClick(item.id)}
+                onClick={() => scrollTo(item.id)}
                 title={item.label}
                 aria-label={`Go to ${item.label}`}
                 className="group flex items-center gap-2"

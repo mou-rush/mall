@@ -1,6 +1,7 @@
 "use client";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { EASE_OUT_EXPO } from "@/lib/motion";
 
 interface StatCardProps {
   value: string;
@@ -14,7 +15,7 @@ export default function StatCard({
   label,
   sub,
   index = 0,
-}: StatCardProps) {
+}: Readonly<StatCardProps>) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-5% 0px" });
 
@@ -26,7 +27,7 @@ export default function StatCard({
       transition={{
         delay: index * 0.1,
         duration: 0.7,
-        ease: [0.19, 1, 0.22, 1],
+        ease: EASE_OUT_EXPO,
       }}
       className="glass-card group relative p-8 rounded-[2px] cursor-default
                  hover:border-[var(--gold)] transition-all duration-500
@@ -45,7 +46,7 @@ export default function StatCard({
         transition={{
           delay: index * 0.1 + 0.2,
           duration: 0.6,
-          ease: [0.19, 1, 0.22, 1],
+          ease: EASE_OUT_EXPO,
         }}
       >
         {value}

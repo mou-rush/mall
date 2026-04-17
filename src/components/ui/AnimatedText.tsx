@@ -2,8 +2,7 @@
 
 import { motion, useInView, type Variants } from "framer-motion";
 import { useRef } from "react";
-
-const EASE_OUT_EXPO = [0.19, 1, 0.22, 1] as [number, number, number, number];
+import { EASE_OUT_EXPO } from "@/lib/motion";
 
 interface AnimatedTextProps {
   text: string;
@@ -36,13 +35,24 @@ const lineVariants: Variants = {
   },
 };
 
+function toWordEntries(
+  text: string,
+): Array<{ word: string; key: string; order: number }> {
+  let offset = 0;
+  return text.split(" ").map((word, order) => {
+    const key = String(offset);
+    offset += word.length + 1;
+    return { word, key, order };
+  });
+}
+
 export default function AnimatedText({
   text,
   el: El = "p",
   className = "",
   variant = "words",
   delay = 0,
-}: AnimatedTextProps) {
+}: Readonly<AnimatedTextProps>) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
 
@@ -60,15 +70,15 @@ export default function AnimatedText({
     );
   }
 
-  const words = text.split(" ");
+  const wordEntries = toWordEntries(text);
 
   return (
     // @ts-expect-error — polymorphic element ref typing
     <El ref={ref} className={`${className} overflow-hidden`} aria-label={text}>
-      {words.map((word, i) => (
+      {wordEntries.map(({ word, key, order }) => (
         <motion.span
-          key={`${word}-${i}`}
-          custom={i}
+          key={key}
+          custom={order}
           variants={wordVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}

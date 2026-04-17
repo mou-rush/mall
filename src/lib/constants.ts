@@ -11,6 +11,7 @@ import {
   LuGamepad2,
   LuCalendarDays,
   LuHandshake,
+  LuStore,
 } from "react-icons/lu";
 
 export type { IconComponent, NavId } from "@/lib/types";
@@ -230,3 +231,97 @@ export const VIDEOS = {
   hero: "ZRvKDndEG8g",
   events: "ZRvKDndEG8g",
 } as const;
+
+export const TICKER_FACTS = [
+  "40M+ Annual Visitors",
+  "500+ Stores & Restaurants",
+  "#1 US Tourism Destination",
+  "$2B+ Annual Sales",
+  "World's Largest Indoor Theme Park",
+  "60% Destination Shoppers",
+  "10,000 Free Parking Spaces",
+  "5.6M Sq Ft",
+] as const;
+
+export const LIFESTYLE_METRICS = [
+  { value: "3.5h", label: "Avg. Visit Duration" },
+  { value: "2.8×", label: "Avg. Return Visit Frequency" },
+  { value: "$187", label: "Avg. In-Mall Spend Per Visit" },
+  { value: "92%", label: "Guest Satisfaction Score" },
+] as const;
+
+export const EVENTS_TIMELINE = [
+  {
+    step: "01",
+    title: "Brief & Vision",
+    desc: "Our events team consults with you to define goals, audience, and KPIs.",
+  },
+  {
+    step: "02",
+    title: "Venue & Date Matching",
+    desc: "We match your format to the optimal venue — from common areas to full mall exclusives.",
+  },
+  {
+    step: "03",
+    title: "Brand Integration",
+    desc: "Sponsorship touchpoints, signage, digital screens, and announcement campaigns built in.",
+  },
+  {
+    step: "04",
+    title: "Execution & Live",
+    desc: "Our on-site production team handles logistics. You focus on the experience.",
+  },
+  {
+    step: "05",
+    title: "Measurement & ROI",
+    desc: "Post-event analytics: foot traffic, dwell time, media value, social reach.",
+  },
+] as const;
+
+export const LUXURY_PILLARS = [
+  {
+    title: "Curated Environment",
+    desc: "Luxury brands don't exist in isolation here. Your neighbors define your brand's company — and ours are the best in the business.",
+  },
+  {
+    title: "Dwell Time",
+    desc: "Average visit duration at MoA: 3.5 hours. Guests explore, they linger, they return. That creates multiple conversion touchpoints per visit.",
+  },
+  {
+    title: "Destination Mindset",
+    desc: "60% of our visitors travel 150+ miles to be here. They arrive with intention and budget — the perfect customer for premium and luxury.",
+  },
+] as const;
+
+export const CTA_PATHS = [
+  {
+    id: "leasing" as const,
+    icon: LuStore,
+    title: "Retail Leasing",
+    desc: "Flagship, pop-up, or long-term tenancy. Our leasing team is ready to build your business case.",
+    cta: "Request Leasing Info",
+    color: "var(--gold)",
+  },
+  {
+    id: "sponsorship" as const,
+    icon: LuHandshake,
+    title: "Brand Sponsorship",
+    desc: "Title sponsorships, category exclusivity, experiential activations inside 5.6M sq ft.",
+    cta: "Explore Sponsorship",
+    color: "#60a5fa",
+  },
+  {
+    id: "events" as const,
+    icon: LuMic,
+    title: "Event Booking",
+    desc: "Launch your next campaign inside America's most-visited address. 400+ events a year.",
+    cta: "Book a Conversation",
+    color: "#a78bfa",
+  },
+];
+
+export const CTA_FORM_LABELS: Record<string, string> = {
+  leasing: "Leasing Inquiry",
+  sponsorship: "Sponsorship Inquiry",
+  events: "Event Booking Request",
+};

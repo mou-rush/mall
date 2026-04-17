@@ -3,7 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import AnimatedText from "@/components/ui/AnimatedText";
-import { DINING_CATEGORIES } from "@/lib/constants";
+import { DINING_CATEGORIES, LIFESTYLE_METRICS } from "@/lib/constants";
 import type { IconComponent } from "@/lib/types";
 
 export default function DiningLifestyle() {
@@ -125,12 +125,7 @@ function LifestyleBanner() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
 
-  const metrics = [
-    { value: "3.5h", label: "Avg. Visit Duration" },
-    { value: "2.8×", label: "Avg. Return Visit Frequency" },
-    { value: "$187", label: "Avg. In-Mall Spend Per Visit" },
-    { value: "92%", label: "Guest Satisfaction Score" },
-  ];
+  const metrics = LIFESTYLE_METRICS;
 
   return (
     <motion.div

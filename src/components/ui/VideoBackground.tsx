@@ -1,4 +1,12 @@
 "use client";
+
+interface VideoBackgroundProps {
+  src: string;
+  poster?: string;
+  overlayOpacity?: number;
+  overlayColor?: string;
+}
+
 function isYouTubeId(src: string): boolean {
   return /^[A-Za-z0-9_-]{11}$/.test(src);
 }
@@ -8,12 +16,7 @@ export default function VideoBackground({
   poster,
   overlayOpacity = 0.55,
   overlayColor = "0,0,0",
-}: Readonly<{
-  src: string;
-  poster?: string;
-  overlayOpacity?: number;
-  overlayColor?: string;
-}>) {
+}: Readonly<VideoBackgroundProps>) {
   return (
     <div className="absolute inset-0 overflow-hidden">
       {isYouTubeId(src) ? (

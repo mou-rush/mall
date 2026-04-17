@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import AnimatedText from "@/components/ui/AnimatedText";
-import { EVENTS_CATEGORIES } from "@/lib/constants";
+import { EVENTS_CATEGORIES, EVENTS_TIMELINE } from "@/lib/constants";
 import type { IconComponent } from "@/lib/types";
 
 export default function Events() {
@@ -173,33 +173,7 @@ function EventTimeline() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
 
-  const phases = [
-    {
-      step: "01",
-      title: "Brief & Vision",
-      desc: "Our events team consults with you to define goals, audience, and KPIs.",
-    },
-    {
-      step: "02",
-      title: "Venue & Date Matching",
-      desc: "We match your format to the optimal venue — from common areas to full mall exclusives.",
-    },
-    {
-      step: "03",
-      title: "Brand Integration",
-      desc: "Sponsorship touchpoints, signage, digital screens, and announcement campaigns built in.",
-    },
-    {
-      step: "04",
-      title: "Execution & Live",
-      desc: "Our on-site production team handles logistics. You focus on the experience.",
-    },
-    {
-      step: "05",
-      title: "Measurement & ROI",
-      desc: "Post-event analytics: foot traffic, dwell time, media value, social reach.",
-    },
-  ];
+  const phases = EVENTS_TIMELINE;
 
   return (
     <motion.div

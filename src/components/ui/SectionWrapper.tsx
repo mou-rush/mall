@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, type ReactNode } from "react";
+import { EASE_OUT_EXPO } from "@/lib/motion";
 
 interface SectionWrapperProps {
   id: string;
@@ -19,7 +20,7 @@ export default function SectionWrapper({
   className = "",
   noSnap = false,
   dark = true,
-}: SectionWrapperProps) {
+}: Readonly<SectionWrapperProps>) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-15% 0px" });
 
@@ -29,7 +30,7 @@ export default function SectionWrapper({
       id={id}
       initial={{ opacity: 0 }}
       animate={inView ? { opacity: 1 } : {}}
-      transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+      transition={{ duration: 0.8, ease: EASE_OUT_EXPO }}
       className={[
         "relative w-full overflow-hidden",
         !noSnap && "scroll-snap-start",

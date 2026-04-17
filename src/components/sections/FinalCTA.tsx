@@ -1,39 +1,12 @@
 "use client";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { LuStore, LuHandshake, LuMic } from "react-icons/lu";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import AnimatedText from "@/components/ui/AnimatedText";
 import VideoBackground from "@/components/ui/VideoBackground";
-import { VIDEOS } from "@/lib/constants";
+import ArrowIcon from "@/components/ui/ArrowIcon";
+import { VIDEOS, CTA_PATHS, CTA_FORM_LABELS } from "@/lib/constants";
 import type { IconComponent } from "@/lib/types";
-
-const PATHS = [
-  {
-    id: "leasing",
-    icon: LuStore,
-    title: "Retail Leasing",
-    desc: "Flagship, pop-up, or long-term tenancy. Our leasing team is ready to build your business case.",
-    cta: "Request Leasing Info",
-    color: "var(--gold)",
-  },
-  {
-    id: "sponsorship",
-    icon: LuHandshake,
-    title: "Brand Sponsorship",
-    desc: "Title sponsorships, category exclusivity, experiential activations inside 5.6M sq ft.",
-    cta: "Explore Sponsorship",
-    color: "#60a5fa",
-  },
-  {
-    id: "events",
-    icon: LuMic,
-    title: "Event Booking",
-    desc: "Launch your next campaign inside America's most-visited address. 400+ events a year.",
-    cta: "Book a Conversation",
-    color: "#a78bfa",
-  },
-] as const;
 
 export default function FinalCTA() {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -114,7 +87,7 @@ export default function FinalCTA() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-20">
-          {PATHS.map((path, i) => (
+          {CTA_PATHS.map((path, i) => (
             <CTACard
               key={path.id}
               {...path}
@@ -223,23 +196,7 @@ function CTACard({
           style={{ color }}
         >
           {isActive ? "Close ✕" : cta}
-          {!isActive && (
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 16 16"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          )}
+          {!isActive && <ArrowIcon size={14} />}
         </button>
       </div>
     </motion.div>
@@ -252,11 +209,7 @@ interface ContactFormProps {
 }
 
 function ContactForm({ type, onClose }: Readonly<ContactFormProps>) {
-  const labels: Record<string, string> = {
-    leasing: "Leasing Inquiry",
-    sponsorship: "Sponsorship Inquiry",
-    events: "Event Booking Request",
-  };
+  const labels = CTA_FORM_LABELS;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -333,21 +286,7 @@ function ContactForm({ type, onClose }: Readonly<ContactFormProps>) {
 
         <button type="submit" className="btn-primary w-full justify-center">
           Send Inquiry
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M3 8h10M9 4l4 4-4 4"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ArrowIcon />
         </button>
       </form>
     </div>

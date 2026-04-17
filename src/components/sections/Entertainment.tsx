@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import AnimatedText from "@/components/ui/AnimatedText";
+import ArrowIcon from "@/components/ui/ArrowIcon";
 import { ENTERTAINMENT_ITEMS } from "@/lib/constants";
 
 export default function Entertainment() {
@@ -171,21 +172,7 @@ function AttractionCard({
           style={{ color }}
         >
           <span>Explore Sponsorship</span>
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 16 16"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M3 8h10M9 4l4 4-4 4"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ArrowIcon size={14} />
         </motion.div>
       </div>
     </motion.div>
