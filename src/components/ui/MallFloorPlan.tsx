@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useState } from "react";
 import {
   FLOOR_UNITS,
@@ -220,7 +221,8 @@ export default function MallFloorPlan() {
                             transition: fill 0.25s, stroke 0.25s, stroke-width 0.2s; cursor: pointer; }
             .moa-unit:hover { fill: rgba(${accent},0.4); stroke: rgba(${accent},0.9); stroke-width: 0.6; }
             .moa-selected  { fill: rgba(${accent},0.55); stroke: rgb(${accent}); stroke-width: 0.8;
-                             filter: drop-shadow(0 0 4px rgba(${accent},0.6)); pointer-events: none; }
+                             filter: drop-shadow(0 0 4px rgba(${accent},0.6)); }
+            .moa-unit.moa-selected:hover { fill: rgba(${accent},0.55); stroke: rgb(${accent}); stroke-width: 0.8; }
           `}</style>
 
           <g id="Boundary">
@@ -260,7 +262,7 @@ export default function MallFloorPlan() {
           <g id="Units">
             {units.map((unit) => (
               <polygon
-                key={unit.name}
+                key={`${floor}-${unit.name}`}
                 className={`moa-unit${selected?.name === unit.name ? " moa-selected" : ""}`}
                 points={unit.pts}
                 onClick={() => handleUnitClick(unit)}
@@ -274,29 +276,40 @@ export default function MallFloorPlan() {
         </svg>
       </div>
 
-      {selected && (
-        <div className="mt-2 flex items-center justify-between rounded-[2px] border border-white/10 bg-[var(--moa-surface)] px-3 py-2">
-          <div className="flex items-center gap-2">
-            <span
-              className="inline-block h-2.5 w-2.5 rounded-full"
-              style={{ background: `rgb(${accent})` }}
-            />
-            <span className="text-sm font-medium text-white">
-              {selected.name}
-            </span>
-            <span className="text-xs text-[var(--moa-muted)]">
-              {FLOORS.find((f) => f.id === floor)?.title}
-            </span>
-          </div>
-          <button
-            onClick={() => setSelected(null)}
-            className="text-xs text-[var(--moa-muted)] transition-colors hover:text-white"
-            aria-label="Deselect store"
+      <AnimatePresence initial={false}>
+        {selected && (
+          <motion.div
+            key={selected.name}
+            initial={{ opacity: 0, y: -6, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto" }}
+            exit={{ opacity: 0, y: -4, height: 0 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            style={{ overflow: "hidden" }}
           >
-            ✕
-          </button>
-        </div>
-      )}
+            <div className="mt-2 flex items-center justify-between rounded-[2px] border border-white/10 bg-[var(--moa-surface)] px-3 py-2">
+              <div className="flex items-center gap-2">
+                <span
+                  className="inline-block h-2.5 w-2.5 rounded-full"
+                  style={{ background: `rgb(${accent})` }}
+                />
+                <span className="text-sm font-medium text-white">
+                  {selected.name}
+                </span>
+                <span className="text-xs text-[var(--moa-muted)]">
+                  {FLOORS.find((f) => f.id === floor)?.title}
+                </span>
+              </div>
+              <button
+                onClick={() => setSelected(null)}
+                className="text-xs text-[var(--moa-muted)] transition-colors hover:text-white"
+                aria-label="Deselect store"
+              >
+                ✕
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="mt-3 flex items-center justify-between">
         <p className="text-[var(--moa-muted)] text-xs">
