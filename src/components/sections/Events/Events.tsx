@@ -4,8 +4,9 @@ import { useRef } from "react";
 import Image from "next/image";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import AnimatedText from "@/components/ui/AnimatedText";
-import { EVENTS_CATEGORIES, EVENTS_TIMELINE } from "@/lib/constants";
-import type { IconComponent } from "@/lib/types";
+import { EVENTS_CATEGORIES } from "@/lib/constants";
+import EventCategoryCard from "./EventCategoryCard";
+import EventTimeline from "./EventTimeline";
 
 export default function Events() {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -102,120 +103,5 @@ export default function Events() {
         <EventTimeline />
       </div>
     </SectionWrapper>
-  );
-}
-
-interface EventCategoryCardProps {
-  icon: IconComponent;
-  title: string;
-  scale: string;
-  examples: string[];
-  index: number;
-}
-
-function EventCategoryCard({
-  icon: Icon,
-  title,
-  scale,
-  examples,
-  index,
-}: Readonly<EventCategoryCardProps>) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-5% 0px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        delay: index * 0.1,
-        duration: 0.7,
-        ease: [0.19, 1, 0.22, 1],
-      }}
-      className="glass-card group p-7 rounded-[2px] hover:border-[var(--gold)] 
-                 transition-all duration-500 relative overflow-hidden cursor-default"
-    >
-      <div
-        className="absolute inset-0 bg-gradient-to-br from-[var(--gold-glow)] to-transparent 
-                      opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-      />
-
-      <div className="relative z-10">
-        <div className="flex items-start justify-between mb-4">
-          <span className="text-[var(--gold)]">
-            <Icon className="w-6 h-6" />
-          </span>
-          <span className="eyebrow text-[0.58rem] text-[var(--moa-muted)] text-right leading-tight max-w-[120px]">
-            {scale}
-          </span>
-        </div>
-
-        <h3 className="text-[var(--moa-white)] font-medium mb-4">{title}</h3>
-
-        <ul className="space-y-1">
-          {examples.map((ex) => (
-            <li
-              key={ex}
-              className="flex items-center gap-2 text-[var(--moa-muted)] text-xs"
-            >
-              <span className="w-1 h-1 rounded-full bg-[var(--gold)] flex-shrink-0" />
-              {ex}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </motion.div>
-  );
-}
-
-function EventTimeline() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-10% 0px" });
-
-  const phases = EVENTS_TIMELINE;
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.9 }}
-    >
-      <p className="eyebrow mb-10 text-center">How It Works</p>
-
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-0 relative">
-        <div
-          className="hidden md:block absolute top-8 left-[10%] right-[10%] h-[1px] 
-                        bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent"
-        />
-
-        {phases.map((ph, i) => (
-          <motion.div
-            key={ph.step}
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.2 + i * 0.12, duration: 0.7 }}
-            className="relative flex flex-col items-center text-center px-3 pt-4"
-          >
-            <div
-              className="w-16 h-16 rounded-full border border-[var(--gold)] 
-                            flex items-center justify-center mb-4 relative z-10
-                            bg-[var(--moa-black)] group-hover:bg-[var(--gold-glow)]
-                            transition-colors duration-300"
-            >
-              <span className="eyebrow text-[var(--gold)]">{ph.step}</span>
-            </div>
-
-            <h4 className="text-[var(--moa-white)] font-medium text-sm mb-2">
-              {ph.title}
-            </h4>
-            <p className="text-[var(--moa-muted)] text-xs leading-loose">
-              {ph.desc}
-            </p>
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
   );
 }
