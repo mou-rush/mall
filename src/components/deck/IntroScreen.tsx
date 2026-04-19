@@ -105,6 +105,7 @@ function IconChevron() {
 interface YTInfo {
   currentTime?: number;
   duration?: number;
+  playerState?: number;
 }
 interface YTMessage {
   event?: string;

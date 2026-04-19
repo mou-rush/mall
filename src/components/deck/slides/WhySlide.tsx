@@ -1,9 +1,9 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
-import { STATS } from "@/lib/constants";
 import { useCountUp } from "@/hooks/useCountUp";
 import { parseNumeric } from "@/lib/utils";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { LEASING_DEVELOPMENT } from "@/lib/moa-website-content";
 
 interface WhySlideProps {
   readonly isActive: boolean;
@@ -143,10 +143,17 @@ function AnimatedStat({
 }
 
 export default function WhySlide({ isActive }: WhySlideProps) {
+  const stats = LEASING_DEVELOPMENT.why.stats;
+
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    if (stats.length === 0) return;
+    setSelectedIndex((current) => (current >= stats.length ? 0 : current));
+  }, [stats.length]);
   const selected = useMemo(
-    () => STATS[selectedIndex] ?? STATS[0],
-    [selectedIndex],
+    () => stats[selectedIndex] ?? stats[0],
+    [selectedIndex, stats],
   );
 
   return (
@@ -170,7 +177,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
             animate={isActive ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            The Numbers Don&rsquo;t Lie
+            {LEASING_DEVELOPMENT.why.eyebrow}
           </motion.p>
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
@@ -184,7 +191,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
                 ease: [0.19, 1, 0.22, 1],
               }}
             >
-              Why This Property
+              {LEASING_DEVELOPMENT.why.title}
             </motion.h2>
 
             <motion.p
@@ -193,8 +200,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
               animate={isActive ? { opacity: 1 } : {}}
               transition={{ delay: 0.3, duration: 0.8 }}
             >
-              No other property delivers this concentration of foot traffic,
-              brand diversity, and repeat visitation.
+              {LEASING_DEVELOPMENT.why.subtitle}
             </motion.p>
           </div>
 
@@ -212,7 +218,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-6 lg:gap-8 items-start">
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-            {STATS.map((stat, i) => (
+            {stats.map((stat, i) => (
               <AnimatedStat
                 key={stat.label}
                 {...stat}
@@ -225,11 +231,13 @@ export default function WhySlide({ isActive }: WhySlideProps) {
           </div>
 
           <AnimatePresence mode="wait">
-            <FeaturedStat
-              key={selected.label}
-              {...selected}
-              active={isActive}
-            />
+            {selected && (
+              <FeaturedStat
+                key={selected.label}
+                {...selected}
+                active={isActive}
+              />
+            )}
           </AnimatePresence>
         </div>
 
@@ -240,17 +248,33 @@ export default function WhySlide({ isActive }: WhySlideProps) {
           className="mt-8 glass-card rounded-[2px] p-6 lg:p-8 relative overflow-hidden"
         >
           <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--gold-glow)] rounded-full blur-[80px] pointer-events-none" />
-          <blockquote
+          <p
             className="font-extralight text-[var(--moa-white)] leading-snug relative z-10"
             style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.4rem)" }}
           >
-            &ldquo;Mall of America draws more visitors annually than Walt Disney
-            World, Disneyland, and the Grand Canyon{" "}
-            <span className="text-gold-gradient">combined</span>.&rdquo;
-          </blockquote>
-          <p className="mt-3 text-[var(--moa-muted)] text-xs tracking-wider relative z-10">
-            — Retail Market Intelligence, 2024
+            {LEASING_DEVELOPMENT.why.contact.line}
           </p>
+          <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 relative z-10">
+            {LEASING_DEVELOPMENT.why.contact.phone && (
+              <a
+                className="text-[0.7rem] uppercase tracking-[0.28em] text-white/70 hover:text-white transition-colors"
+                href={`tel:${LEASING_DEVELOPMENT.why.contact.phone.replace(/\./g, "")}`}
+              >
+                {LEASING_DEVELOPMENT.why.contact.phone}
+              </a>
+            )}
+            {LEASING_DEVELOPMENT.why.contact.email && (
+              <a
+                className="text-[0.7rem] uppercase tracking-[0.28em] text-white/70 hover:text-white transition-colors"
+                href={`mailto:${LEASING_DEVELOPMENT.why.contact.email}`}
+              >
+                {LEASING_DEVELOPMENT.why.contact.email}
+              </a>
+            )}
+            <span className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--gold)]/70">
+              Source: mallofamerica.com
+            </span>
+          </div>
         </motion.div>
       </div>
     </div>
