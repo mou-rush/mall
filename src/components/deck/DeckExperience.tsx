@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useDeckNavigation } from "@/hooks/useDeckNavigation";
 import EntryScreen from "./EntryScreen";
+import IntroScreen from "./IntroScreen";
 import DeckNav from "./DeckNav";
 import SlideWrapper from "./SlideWrapper";
 import HeroSlide from "./slides/HeroSlide";
@@ -25,13 +26,17 @@ const SLIDES = [
   { id: "cta", Component: CTASlide },
 ] as const;
 
-type Stage = "entry" | "deck";
+type Stage = "entry" | "intro" | "deck";
 
 export default function DeckExperience() {
   const [stage, setStage] = useState<Stage>("entry");
   const nav = useDeckNavigation(SLIDES.length, stage === "deck");
 
   const handleEnter = useCallback(() => {
+    setStage("intro");
+  }, []);
+
+  const handleSkip = useCallback(() => {
     setStage("deck");
   }, []);
 
@@ -46,6 +51,10 @@ export default function DeckExperience() {
 
   if (stage === "entry") {
     return <EntryScreen onEnter={handleEnter} />;
+  }
+
+  if (stage === "intro") {
+    return <IntroScreen onSkip={handleSkip} />;
   }
 
   const { Component } = SLIDES[nav.current];
