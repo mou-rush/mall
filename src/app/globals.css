@@ -217,3 +217,20 @@ body {
   outline: 2px solid var(--gold);
   outline-offset: 4px;
 }
+
+.deck-input {
+  width: 100%;
+  background: var(--moa-surface);
+  border: 1px solid var(--moa-border);
+  border-radius: 2px;
+  padding: 0.625rem 1rem;
+  color: var(--moa-white);
+  font-size: 0.875rem;
+}
+.deck-input::placeholder {
+  color: var(--moa-muted);
+}
+.deck-input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
