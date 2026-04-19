@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useDeckNavigation } from "@/hooks/useDeckNavigation";
 import EntryScreen from "./EntryScreen";
@@ -15,16 +15,24 @@ import EntertainmentSlide from "./slides/EntertainmentSlide";
 import EventsSlide from "./slides/EventsSlide";
 import CTASlide from "./slides/CTASlide";
 
-const SLIDES = [
-  { id: "hero", Component: HeroSlide },
-  { id: "why", Component: WhySlide },
-  { id: "retail", Component: RetailSlide },
-  { id: "luxury", Component: LuxurySlide },
-  { id: "dining", Component: DiningSlide },
-  { id: "entertainment", Component: EntertainmentSlide },
-  { id: "events", Component: EventsSlide },
-  { id: "cta", Component: CTASlide },
-] as const;
+type SlideProps = {
+  isActive: boolean;
+  onNext?: () => void;
+  goTo?: (idx: number) => void;
+  currentSlide?: number;
+};
+type SlideComponent = React.ComponentType<SlideProps>;
+
+const SLIDES: ReadonlyArray<{ id: string; Component: SlideComponent }> = [
+  { id: "hero", Component: HeroSlide as SlideComponent },
+  { id: "why", Component: WhySlide as SlideComponent },
+  { id: "retail", Component: RetailSlide as SlideComponent },
+  { id: "luxury", Component: LuxurySlide as SlideComponent },
+  { id: "dining", Component: DiningSlide as SlideComponent },
+  { id: "entertainment", Component: EntertainmentSlide as SlideComponent },
+  { id: "events", Component: EventsSlide as SlideComponent },
+  { id: "cta", Component: CTASlide as SlideComponent },
+];
 
 type Stage = "entry" | "intro" | "deck";
 
@@ -64,7 +72,12 @@ export default function DeckExperience() {
       <div className="relative w-full h-full">
         <AnimatePresence mode="wait" custom={nav.direction}>
           <SlideWrapper key={nav.current} direction={nav.direction}>
-            <Component isActive />
+            <Component
+              isActive
+              onNext={nav.next}
+              goTo={nav.goTo}
+              currentSlide={nav.current}
+            />
           </SlideWrapper>
         </AnimatePresence>
       </div>

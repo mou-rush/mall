@@ -1,98 +1,286 @@
 "use client";
-import { motion } from "framer-motion";
-import VideoBackground from "@/components/ui/VideoBackground";
-import { VIDEOS, TICKER_FACTS } from "@/lib/constants";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { useState } from "react";
+
+const EASE_PREMIUM: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+const NAV_ITEMS = [
+  {
+    label: "Why MoA",
+    slideIndex: 1,
+    description: "The heartbeat of retail innovation.",
+  },
+  {
+    label: "Retail",
+    slideIndex: 2,
+    description: "A curatated world of flagships.",
+  },
+  { label: "Luxury", slideIndex: 3, description: "The evolution of elegance." },
+  {
+    label: "Dining",
+    slideIndex: 4,
+    description: "Culinary artistry redefined.",
+  },
+  {
+    label: "Entertainment",
+    slideIndex: 5,
+    description: "Boundless imagination.",
+  },
+  {
+    label: "Events",
+    slideIndex: 6,
+    description: "Global moments, local stage.",
+  },
+  { label: "Partner", slideIndex: 7, description: "Your future starts here." },
+] as const;
+
+const SOCIALS = [
+  {
+    label: "Instagram",
+    href: "https://instagram.com/mallofamerica",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+      </svg>
+    ),
+  },
+  {
+    label: "X",
+    href: "https://twitter.com/mallofamerica",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.85L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+      </svg>
+    ),
+  },
+  {
+    label: "LinkedIn",
+    href: "https://linkedin.com/company/mall-of-america",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+      </svg>
+    ),
+  },
+] as const;
 
 interface HeroSlideProps {
   readonly isActive: boolean;
+  readonly onNext?: () => void;
+  readonly goTo?: (idx: number) => void;
 }
 
-export default function HeroSlide({ isActive }: HeroSlideProps) {
+export default function HeroSlide({ isActive, onNext, goTo }: HeroSlideProps) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden bg-[var(--moa-black)]">
-      <VideoBackground
-        src={VIDEOS.hero}
-        overlayOpacity={0.6}
-        overlayColor="6,6,8"
-      />
+    <div className="relative w-full h-full flex flex-col overflow-hidden bg-black font-sans selection:bg-[var(--gold)] selection:text-black">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ scale: 1.1, opacity: 0 }}
+        animate={isActive ? { scale: 1, opacity: 1 } : {}}
+        transition={{ duration: 3, ease: EASE_PREMIUM }}
+      >
+        <Image
+          src="/images/Home/home.png"
+          alt="Mall of America cinematic"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+          quality={100}
+        />
 
-      <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[var(--moa-black)] to-transparent z-10 pointer-events-none" />
-      <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[var(--moa-black)] to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-[30vh] bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[40vh] bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
+      </motion.div>
 
-      <div className="relative z-20 text-center px-6 max-w-5xl mx-auto">
-        <motion.p
-          className="eyebrow mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isActive ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-        >
-          Bloomington, Minnesota · Est. 1992
-        </motion.p>
-
-        <motion.h1
-          className="font-extralight tracking-[-0.04em] leading-[0.92] mb-8"
-          style={{ fontSize: "clamp(3.5rem, 10vw, 9rem)" }}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isActive ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.4, duration: 1, ease: [0.19, 1, 0.22, 1] }}
-        >
-          <span className="block text-[var(--moa-white)]">America&rsquo;s</span>
-          <span className="block text-gold-gradient font-thin pb-[0.12em]">
-            Stage
-          </span>
-        </motion.h1>
-
-        <motion.p
-          className="text-[var(--moa-muted)] font-light max-w-2xl mx-auto leading-relaxed mb-10"
-          style={{ fontSize: "clamp(1rem, 2vw, 1.2rem)" }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isActive ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.7, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-        >
-          40 million visitors. 500+ world-class brands. Every category. Every
-          experience. One address that changes what retail can be.
-        </motion.p>
-
+      <div className="absolute top-12 left-12 z-50">
         <motion.div
-          className="flex items-center justify-center gap-8 text-[var(--moa-muted)]"
-          initial={{ opacity: 0 }}
-          animate={isActive ? { opacity: 1 } : {}}
-          transition={{ delay: 1, duration: 0.8 }}
+          initial={{ opacity: 0, x: -20 }}
+          animate={isActive ? { opacity: 1, x: 0 } : {}}
+          transition={{ delay: 1, duration: 1.5, ease: EASE_PREMIUM }}
+          className="relative w-28 h-12 md:w-40 md:h-16"
         >
-          {["40M+ Visitors", "$2B+ Sales", "500+ Brands"].map((stat, i) => (
-            <span key={stat} className="flex items-center gap-3">
-              {i > 0 && (
-                <span className="w-1 h-1 rounded-full bg-[var(--gold)] opacity-60" />
-              )}
-              <span className="text-xs tracking-[0.15em] uppercase font-medium">
-                {stat}
-              </span>
-            </span>
-          ))}
+          <Image
+            src="/images/moa-logo.png"
+            alt="MOA"
+            fill
+            className="object-contain object-left drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]"
+          />
         </motion.div>
       </div>
 
-      <motion.div
-        className="absolute bottom-12 inset-x-0 z-20 flex items-center h-10 overflow-hidden border-t border-white/5"
-        initial={{ opacity: 0 }}
-        animate={isActive ? { opacity: 1 } : {}}
-        transition={{ delay: 1.2, duration: 0.8 }}
-      >
+      <div className="absolute top-20 bottom-16 right-6 md:top-20 md:bottom-16 md:right-16 z-30 flex flex-col justify-center pointer-events-none">
         <motion.div
-          className="flex items-center gap-10 whitespace-nowrap"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+          initial={{ opacity: 0, x: 40 }}
+          animate={isActive ? { opacity: 1, x: 0 } : {}}
+          transition={{ delay: 1.1, duration: 1.2, ease: EASE_PREMIUM }}
+          className="pointer-events-auto relative max-h-full overflow-hidden rounded-[28px] border border-white/12 bg-black/30 px-6 py-6 md:px-8 md:py-7 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.45)]"
         >
-          {[...TICKER_FACTS, ...TICKER_FACTS].map((fact, i) => (
-            <span key={`${fact}-${i}`} className="flex items-center gap-10">
-              <span className="eyebrow text-[0.6rem] text-[var(--moa-muted)]">
-                {fact}
-              </span>
-              <span className="w-1 h-1 rounded-full bg-[var(--gold)] opacity-40" />
-            </span>
-          ))}
+          <div className="absolute inset-y-6 left-0 w-px bg-gradient-to-b from-transparent via-[var(--gold)]/70 to-transparent" />
+          <div className="mb-6 flex items-center justify-end gap-4">
+            <div className="h-px w-14 bg-gradient-to-r from-transparent to-[var(--gold)]/80" />
+            <div className="text-right">
+              <p className="text-[0.55rem] uppercase tracking-[0.45em] text-[var(--gold)]/80">
+                Presentation
+              </p>
+              <p className="text-[0.8rem] uppercase tracking-[0.38em] text-white/95">
+                Chapters
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-5 md:gap-6 items-end overflow-y-auto pr-1">
+            {NAV_ITEMS.map((item, i) => (
+              <motion.div
+                key={item.label}
+                className="relative flex items-center justify-end group cursor-pointer"
+                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseLeave={() => setHoveredIdx(null)}
+                onClick={() => goTo?.(item.slideIndex)}
+                initial={{ opacity: 0, x: 60 }}
+                animate={isActive ? { opacity: 1, x: 0 } : {}}
+                transition={{
+                  delay: 1.2 + i * 0.1,
+                  duration: 1,
+                  ease: EASE_PREMIUM,
+                }}
+              >
+                <AnimatePresence>
+                  {hoveredIdx === i && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20, filter: "blur(10px)" }}
+                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                      exit={{ opacity: 0, x: 10, filter: "blur(10px)" }}
+                      className="absolute right-full mr-12 hidden lg:block text-right"
+                    >
+                      <span className="text-[0.65rem] text-[var(--gold)] uppercase tracking-[0.5em] font-bold drop-shadow-lg">
+                        {item.description}
+                      </span>
+                      <motion.div
+                        className="h-px bg-[var(--gold)] mt-2 ml-auto"
+                        initial={{ width: 0 }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 0.6 }}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <div className="flex items-center gap-6 rounded-full border border-transparent bg-white/[0.03] pl-5 pr-3 py-3 transition-all duration-500 group-hover:border-white/10 group-hover:bg-white/[0.06]">
+                  <span
+                    className={`text-[0.72rem] md:text-[0.86rem] uppercase tracking-[0.5em] font-medium transition-all duration-500 drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]
+                  ${hoveredIdx === i ? "text-[var(--gold)] scale-110" : "text-white/80 group-hover:text-white"}`}
+                  >
+                    {item.label}
+                  </span>
+
+                  <div className="w-16 md:w-20 h-px bg-white/20 group-hover:bg-[var(--gold)] transition-colors duration-500 overflow-hidden relative">
+                    <motion.div
+                      className="absolute inset-0 bg-[var(--gold)]"
+                      initial={{ x: "-100%" }}
+                      whileHover={{ x: "0%" }}
+                      animate={hoveredIdx === i ? { x: "0%" } : { x: "-100%" }}
+                      transition={{ duration: 0.4 }}
+                    />
+                  </div>
+
+                  <span
+                    className={`font-serif italic text-2xl md:text-3xl transition-all duration-700 select-none drop-shadow-[0_4px_16px_rgba(0,0,0,0.35)]
+                  ${hoveredIdx === i ? "text-white opacity-100" : "text-white/35"}`}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
-      </motion.div>
+      </div>
+
+      <div className="absolute left-12 bottom-12 z-40">
+        <motion.button
+          onClick={onNext}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isActive ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 2.2, duration: 1.5, ease: EASE_PREMIUM }}
+          whileHover={{ y: -4 }}
+          whileTap={{ scale: 0.985 }}
+          className="group relative overflow-hidden rounded-[28px] border border-white/15 bg-black/25 px-5 py-4 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.35)] cursor-pointer"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,transparent_35%,rgba(201,168,76,0.14)_50%,transparent_65%,transparent_100%)] translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-1000 ease-out" />
+          <div className="relative mb-3 flex items-center gap-3">
+            <span className="h-px w-10 bg-gradient-to-r from-[var(--gold)] to-transparent" />
+            <span className="text-[0.52rem] uppercase tracking-[0.45em] text-[var(--gold)]/90">
+              Opening Scene
+            </span>
+          </div>
+
+          <div className="relative flex items-center gap-5">
+            <div className="relative w-11 h-11 md:w-12 md:h-12 rounded-full border border-white/30 bg-white/[0.03] flex items-center justify-center transition-all duration-500 group-hover:border-[var(--gold)] group-hover:shadow-[0_0_28px_rgba(201,168,76,0.28)]">
+              <motion.div
+                className="absolute inset-[5px] rounded-full border border-[var(--gold)]/30"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+              />
+              <motion.div
+                className="w-1.5 h-1.5 bg-white group-hover:bg-[var(--gold)] rounded-full"
+                animate={{ scale: [1, 1.8, 1], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                className="absolute inset-0 w-full h-full -rotate-90 opacity-40 group-hover:opacity-100 transition-opacity duration-500"
+              >
+                <motion.circle
+                  cx="8"
+                  cy="8"
+                  r="7.5"
+                  stroke="var(--gold)"
+                  strokeWidth="0.5"
+                  strokeDasharray="48"
+                  initial={{ strokeDashoffset: 48 }}
+                  whileHover={{ strokeDashoffset: 0 }}
+                  transition={{ duration: 0.8 }}
+                />
+              </svg>
+            </div>
+            <div className="flex flex-col items-start">
+              <span className="text-[0.72rem] md:text-[0.8rem] uppercase tracking-[0.46em] text-white/95 transition-colors duration-300 group-hover:text-white">
+                Enter The Mall
+              </span>
+              <div className="mt-2 flex items-center gap-3">
+                <span className="text-[0.52rem] uppercase tracking-[0.35em] text-white/45 group-hover:text-[var(--gold)]/90 transition-colors duration-500">
+                  Start Presentation
+                </span>
+                <div className="h-px w-8 bg-white/20 group-hover:w-16 group-hover:bg-[var(--gold)] transition-all duration-700 ease-in-out" />
+              </div>
+            </div>
+          </div>
+        </motion.button>
+      </div>
+
+      <div className="absolute right-12 bottom-12 z-40 flex flex-col gap-5">
+        {SOCIALS.map((social, i) => (
+          <motion.a
+            key={social.label}
+            href={social.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, y: 10 }}
+            animate={isActive ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 2.8 + i * 0.1, duration: 0.8 }}
+            className="relative w-11 h-11 flex items-center justify-center rounded-full border border-white/30 text-white/85 hover:text-[var(--gold)] hover:border-[var(--gold)] transition-all duration-500 hover:-translate-y-1 bg-black/30 shadow-[0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-md group"
+            aria-label={social.label}
+          >
+            <div className="absolute inset-0 rounded-full bg-[var(--gold)] opacity-0 group-hover:opacity-10 transition-opacity" />
+            {social.icon}
+          </motion.a>
+        ))}
+      </div>
     </div>
   );
 }
