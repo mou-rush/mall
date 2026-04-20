@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Image from "next/image";
-import { ENTERTAINMENT_ITEMS } from "@/lib/constants";
+import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
 
 interface EntertainmentSlideProps {
   readonly isActive: boolean;
@@ -11,12 +11,13 @@ interface EntertainmentSlideProps {
 export default function EntertainmentSlide({
   isActive,
 }: EntertainmentSlideProps) {
+  const content = DECK_WEBSITE_CONTENT.entertainment;
   const [activeTab, setActiveTab] = useState(0);
-  const item = ENTERTAINMENT_ITEMS[activeTab];
+  const item = content.items[activeTab];
 
   return (
     <div className="relative w-full h-full flex items-center overflow-hidden bg-[var(--moa-black)]">
-      {ENTERTAINMENT_ITEMS.map((ent, i) => (
+      {content.items.map((ent, i) => (
         <motion.div
           key={ent.name}
           className="absolute inset-0"
@@ -41,7 +42,7 @@ export default function EntertainmentSlide({
           animate={isActive ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          Entertainment Ecosystem
+          {content.eyebrow}
         </motion.p>
         <motion.h2
           className="section-title mb-8"
@@ -53,12 +54,21 @@ export default function EntertainmentSlide({
             ease: [0.19, 1, 0.22, 1],
           }}
         >
-          No Screen Can Replace This
+          {content.title}
         </motion.h2>
+
+        <motion.p
+          className="text-[var(--moa-muted)] max-w-xl text-sm leading-relaxed mb-8"
+          initial={{ opacity: 0 }}
+          animate={isActive ? { opacity: 1 } : {}}
+          transition={{ delay: 0.25, duration: 0.8 }}
+        >
+          {content.subtitle}
+        </motion.p>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-10 items-start">
           <div className="space-y-2">
-            {ENTERTAINMENT_ITEMS.map((ent, i) => (
+            {content.items.map((ent, i) => (
               <motion.button
                 key={ent.name}
                 onClick={() => setActiveTab(i)}
@@ -67,12 +77,11 @@ export default function EntertainmentSlide({
                 transition={{ delay: 0.3 + i * 0.08, duration: 0.6 }}
                 className={`w-full text-left p-4 rounded-[2px] border transition-all duration-300 ${
                   activeTab === i
-                    ? "border-opacity-50 bg-white/5"
+                    ? "bg-white/5"
                     : "border-transparent hover:bg-white/[0.03]"
                 }`}
                 style={{
-                  borderColor:
-                    activeTab === i ? `${ent.color}60` : "transparent",
+                  borderColor: activeTab === i ? ent.color : "transparent",
                 }}
               >
                 <div className="flex items-center gap-3">
@@ -104,15 +113,14 @@ export default function EntertainmentSlide({
               animate={isActive ? { opacity: 1 } : {}}
               transition={{ delay: 0.7, duration: 0.8 }}
             >
-              <p
-                className="text-gold-gradient font-thin leading-none"
-                style={{ fontSize: "clamp(3rem, 8vw, 5rem)" }}
+              <a
+                href={content.cta.href}
+                className="btn-primary justify-center w-full"
+                target="_blank"
+                rel="noreferrer"
               >
-                20M+
-              </p>
-              <p className="text-[var(--moa-muted)] text-[0.6rem] tracking-[0.15em] uppercase mt-1">
-                Entertainment Visits / Year
-              </p>
+                {content.cta.label}
+              </a>
             </motion.div>
           </div>
 
@@ -138,7 +146,7 @@ export default function EntertainmentSlide({
               <span
                 className="eyebrow text-[0.55rem] inline-block px-3 py-1 rounded-full border mb-4"
                 style={{
-                  borderColor: `${item.color}60`,
+                  borderColor: item.color,
                   color: item.color,
                 }}
               >

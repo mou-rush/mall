@@ -2,8 +2,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useCountUp } from "@/hooks/useCountUp";
 import { parseNumeric } from "@/lib/utils";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { LEASING_DEVELOPMENT } from "@/lib/moa-website-content";
+import CinematicBackground from "@/components/ui/CinematicBackground";
+import { VIDEOS } from "@/lib/constants";
 
 interface WhySlideProps {
   readonly isActive: boolean;
@@ -147,17 +149,15 @@ export default function WhySlide({ isActive }: WhySlideProps) {
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  useEffect(() => {
-    if (stats.length === 0) return;
-    setSelectedIndex((current) => (current >= stats.length ? 0 : current));
-  }, [stats.length]);
+  const safeSelectedIndex = selectedIndex >= stats.length ? 0 : selectedIndex;
   const selected = useMemo(
-    () => stats[selectedIndex] ?? stats[0],
-    [selectedIndex, stats],
+    () => stats[safeSelectedIndex] ?? stats[0],
+    [safeSelectedIndex, stats],
   );
 
   return (
     <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-[var(--moa-black)]">
+      <CinematicBackground isActive={isActive} videoSrc={VIDEOS.hero} />
       <motion.div
         className="absolute -inset-24 opacity-60 pointer-events-none"
         animate={isActive ? { x: [0, 28, 0], y: [0, -18, 0] } : { x: 0, y: 0 }}
@@ -223,8 +223,8 @@ export default function WhySlide({ isActive }: WhySlideProps) {
                 key={stat.label}
                 {...stat}
                 index={i}
+                selected={i === safeSelectedIndex}
                 active={isActive}
-                selected={i === selectedIndex}
                 onSelect={() => setSelectedIndex(i)}
               />
             ))}

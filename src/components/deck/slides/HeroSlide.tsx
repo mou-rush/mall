@@ -1,39 +1,8 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
 
 const EASE_PREMIUM: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
-const NAV_ITEMS = [
-  {
-    label: "Why MoA",
-    slideIndex: 1,
-    description: "The heartbeat of retail innovation.",
-  },
-  {
-    label: "Retail",
-    slideIndex: 2,
-    description: "A curatated world of flagships.",
-  },
-  { label: "Luxury", slideIndex: 3, description: "The evolution of elegance." },
-  {
-    label: "Dining",
-    slideIndex: 4,
-    description: "Culinary artistry redefined.",
-  },
-  {
-    label: "Entertainment",
-    slideIndex: 5,
-    description: "Boundless imagination.",
-  },
-  {
-    label: "Events",
-    slideIndex: 6,
-    description: "Global moments, local stage.",
-  },
-  { label: "Partner", slideIndex: 7, description: "Your future starts here." },
-] as const;
 
 const SOCIALS = [
   {
@@ -68,23 +37,20 @@ const SOCIALS = [
 interface HeroSlideProps {
   readonly isActive: boolean;
   readonly onNext?: () => void;
-  readonly goTo?: (idx: number) => void;
 }
 
-export default function HeroSlide({ isActive, onNext, goTo }: HeroSlideProps) {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-
+export default function HeroSlide({ isActive, onNext }: HeroSlideProps) {
   return (
-    <div className="relative w-full h-full flex flex-col overflow-hidden bg-black font-sans selection:bg-[var(--gold)] selection:text-black">
+    <div className="relative w-full h-full flex flex-col overflow-hidden bg-[var(--moa-black)] font-sans selection:bg-[var(--gold)] selection:text-black">
       <motion.div
         className="absolute inset-0 z-0"
-        initial={{ scale: 1.1, opacity: 0 }}
+        initial={{ scale: 1.05, opacity: 0 }}
         animate={isActive ? { scale: 1, opacity: 1 } : {}}
-        transition={{ duration: 3, ease: EASE_PREMIUM }}
+        transition={{ duration: 2.5, ease: EASE_PREMIUM }}
       >
         <Image
           src="/images/Home/home.png"
-          alt="Mall of America cinematic"
+          alt="Mall of America"
           fill
           priority
           sizes="100vw"
@@ -92,8 +58,22 @@ export default function HeroSlide({ isActive, onNext, goTo }: HeroSlideProps) {
           quality={100}
         />
 
-        <div className="absolute inset-x-0 top-0 h-[30vh] bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-[40vh] bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[rgba(var(--moa-blue-rgb),0.85)] via-[rgba(var(--moa-blue-rgb),0.35)] to-[rgba(var(--moa-blue-rgb),0.75)]" />
+        <div className="absolute inset-x-0 top-0 h-[35vh] bg-gradient-to-b from-[rgba(var(--moa-blue-rgb),0.60)] to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[45vh] bg-gradient-to-t from-[rgba(var(--moa-blue-rgb),0.85)] to-transparent pointer-events-none" />
+
+        <motion.div
+          className="absolute -inset-32 opacity-40 pointer-events-none"
+          animate={
+            isActive ? { x: [0, 30, 0], y: [0, -20, 0] } : { x: 0, y: 0 }
+          }
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            background:
+              "radial-gradient(50% 50% at 25% 30%, rgba(var(--moa-yellow-rgb), 0.15), transparent 65%), radial-gradient(60% 60% at 75% 40%, rgba(255,255,255,0.08), transparent 70%)",
+            filter: "blur(2px)",
+          }}
+        />
       </motion.div>
 
       <div className="absolute top-12 left-12 z-50">
@@ -109,94 +89,6 @@ export default function HeroSlide({ isActive, onNext, goTo }: HeroSlideProps) {
             fill
             className="object-contain object-left drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]"
           />
-        </motion.div>
-      </div>
-
-      <div className="absolute top-20 bottom-16 right-6 md:top-20 md:bottom-16 md:right-16 z-30 flex flex-col justify-center pointer-events-none">
-        <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          animate={isActive ? { opacity: 1, x: 0 } : {}}
-          transition={{ delay: 1.1, duration: 1.2, ease: EASE_PREMIUM }}
-          className="pointer-events-auto relative max-h-full overflow-hidden rounded-[28px] border border-white/12 bg-black/30 px-6 py-6 md:px-8 md:py-7 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.45)]"
-        >
-          <div className="absolute inset-y-6 left-0 w-px bg-gradient-to-b from-transparent via-[var(--gold)]/70 to-transparent" />
-          <div className="mb-6 flex items-center justify-end gap-4">
-            <div className="h-px w-14 bg-gradient-to-r from-transparent to-[var(--gold)]/80" />
-            <div className="text-right">
-              <p className="text-[0.55rem] uppercase tracking-[0.45em] text-[var(--gold)]/80">
-                Presentation
-              </p>
-              <p className="text-[0.8rem] uppercase tracking-[0.38em] text-white/95">
-                Chapters
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-5 md:gap-6 items-end overflow-y-auto pr-1">
-            {NAV_ITEMS.map((item, i) => (
-              <motion.div
-                key={item.label}
-                className="relative flex items-center justify-end group cursor-pointer"
-                onMouseEnter={() => setHoveredIdx(i)}
-                onMouseLeave={() => setHoveredIdx(null)}
-                onClick={() => goTo?.(item.slideIndex)}
-                initial={{ opacity: 0, x: 60 }}
-                animate={isActive ? { opacity: 1, x: 0 } : {}}
-                transition={{
-                  delay: 1.2 + i * 0.1,
-                  duration: 1,
-                  ease: EASE_PREMIUM,
-                }}
-              >
-                <AnimatePresence>
-                  {hoveredIdx === i && (
-                    <motion.div
-                      initial={{ opacity: 0, x: 20, filter: "blur(10px)" }}
-                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, x: 10, filter: "blur(10px)" }}
-                      className="absolute right-full mr-12 hidden lg:block text-right"
-                    >
-                      <span className="text-[0.65rem] text-[var(--gold)] uppercase tracking-[0.5em] font-bold drop-shadow-lg">
-                        {item.description}
-                      </span>
-                      <motion.div
-                        className="h-px bg-[var(--gold)] mt-2 ml-auto"
-                        initial={{ width: 0 }}
-                        animate={{ width: "100%" }}
-                        transition={{ duration: 0.6 }}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <div className="flex items-center gap-6 rounded-full border border-transparent bg-white/[0.03] pl-5 pr-3 py-3 transition-all duration-500 group-hover:border-white/10 group-hover:bg-white/[0.06]">
-                  <span
-                    className={`text-[0.72rem] md:text-[0.86rem] uppercase tracking-[0.5em] font-medium transition-all duration-500 drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]
-                  ${hoveredIdx === i ? "text-[var(--gold)] scale-110" : "text-white/80 group-hover:text-white"}`}
-                  >
-                    {item.label}
-                  </span>
-
-                  <div className="w-16 md:w-20 h-px bg-white/20 group-hover:bg-[var(--gold)] transition-colors duration-500 overflow-hidden relative">
-                    <motion.div
-                      className="absolute inset-0 bg-[var(--gold)]"
-                      initial={{ x: "-100%" }}
-                      whileHover={{ x: "0%" }}
-                      animate={hoveredIdx === i ? { x: "0%" } : { x: "-100%" }}
-                      transition={{ duration: 0.4 }}
-                    />
-                  </div>
-
-                  <span
-                    className={`font-serif italic text-2xl md:text-3xl transition-all duration-700 select-none drop-shadow-[0_4px_16px_rgba(0,0,0,0.35)]
-                  ${hoveredIdx === i ? "text-white opacity-100" : "text-white/35"}`}
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </motion.div>
       </div>
 

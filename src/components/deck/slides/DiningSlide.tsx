@@ -1,14 +1,39 @@
 "use client";
 import { motion } from "framer-motion";
-import { DINING_CATEGORIES, LIFESTYLE_METRICS } from "@/lib/constants";
+import type { ComponentType } from "react";
+import {
+  LuChefHat,
+  LuCoffee,
+  LuSparkles,
+  LuUtensilsCrossed,
+} from "react-icons/lu";
+import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
+import CinematicBackground from "@/components/ui/CinematicBackground";
+import { VIDEOS } from "@/lib/constants";
 
 interface DiningSlideProps {
   readonly isActive: boolean;
 }
 
 export default function DiningSlide({ isActive }: DiningSlideProps) {
+  const content = DECK_WEBSITE_CONTENT.dining;
+
+  const iconById: Record<string, ComponentType<{ className?: string }>> = {
+    "full-service": LuChefHat,
+    "food-court": LuUtensilsCrossed,
+    "coffee-tea": LuCoffee,
+    sweets: LuSparkles,
+    "fast-casual": LuUtensilsCrossed,
+    breakfast: LuCoffee,
+  };
+
   return (
     <div className="relative w-full h-full flex items-center overflow-hidden bg-[var(--moa-dark)]">
+      <CinematicBackground
+        isActive={isActive}
+        videoSrc={VIDEOS.hero}
+        variant="gold"
+      />
       <div className="relative z-10 max-w-[1300px] mx-auto px-8 lg:px-16 w-full">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
           <div>
@@ -18,7 +43,7 @@ export default function DiningSlide({ isActive }: DiningSlideProps) {
               animate={isActive ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6 }}
             >
-              Dining &amp; Lifestyle
+              {content.eyebrow}
             </motion.p>
             <motion.h2
               className="section-title"
@@ -30,7 +55,7 @@ export default function DiningSlide({ isActive }: DiningSlideProps) {
                 ease: [0.19, 1, 0.22, 1],
               }}
             >
-              Stay Longer. Spend More.
+              {content.title}
             </motion.h2>
           </div>
           <motion.p
@@ -39,14 +64,13 @@ export default function DiningSlide({ isActive }: DiningSlideProps) {
             animate={isActive ? { opacity: 1 } : {}}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            Dining and lifestyle experiences drive our industry-leading dwell
-            time. Retail benefits from being inside that experience.
+            {content.subtitle}
           </motion.p>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {DINING_CATEGORIES.map((cat, i) => {
-            const Icon = cat.icon;
+          {content.categories.map((cat, i) => {
+            const Icon = iconById[cat.id] ?? LuUtensilsCrossed;
             return (
               <motion.div
                 key={cat.title}
@@ -66,9 +90,11 @@ export default function DiningSlide({ isActive }: DiningSlideProps) {
                   <h3 className="text-[var(--moa-white)] font-medium text-sm">
                     {cat.title}
                   </h3>
-                  <span className="eyebrow text-[0.5rem] px-2 py-0.5 bg-[var(--gold-glow)] border border-[var(--gold)] rounded-full ml-auto">
-                    {cat.count}
-                  </span>
+                  {cat.tag ? (
+                    <span className="eyebrow text-[0.5rem] text-[var(--moa-muted)] ml-auto">
+                      {cat.tag}
+                    </span>
+                  ) : null}
                 </div>
                 <p className="text-[var(--moa-muted)] text-xs leading-relaxed">
                   {cat.desc}
@@ -82,29 +108,26 @@ export default function DiningSlide({ isActive }: DiningSlideProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={isActive ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.8, duration: 0.8 }}
-          className="glass-card rounded-[2px] p-6"
+          className="glass-card rounded-[2px] p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6"
         >
-          <p className="eyebrow mb-6 text-center text-[0.55rem]">
-            Engagement Metrics
-          </p>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {LIFESTYLE_METRICS.map((m) => (
-              <div key={m.label} className="text-center">
-                <p
-                  className="text-gold-gradient font-thin mb-1"
-                  style={{
-                    fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
-                    letterSpacing: "-0.04em",
-                  }}
-                >
-                  {m.value}
-                </p>
-                <p className="text-[var(--moa-muted)] text-[0.6rem] tracking-wider uppercase">
-                  {m.label}
-                </p>
-              </div>
-            ))}
+          <div>
+            <p className="eyebrow text-[0.55rem] mb-2">Featured Restaurant</p>
+            <p className="text-[var(--moa-white)] text-lg font-light tracking-tight">
+              {content.featured.name}
+            </p>
+            <p className="text-[var(--moa-muted)] text-xs tracking-[0.12em] uppercase mt-1">
+              {content.featured.location}
+            </p>
           </div>
+
+          <a
+            href={content.featured.link.href}
+            className="btn-outline"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {content.featured.link.label}
+          </a>
         </motion.div>
       </div>
     </div>

@@ -10,10 +10,7 @@ export function useCountUp(
   const raf = useRef(0);
 
   useEffect(() => {
-    if (!active) {
-      setCount(0);
-      return;
-    }
+    if (!active) return;
 
     const start = performance.now();
     const step = (now: number) => {
@@ -27,5 +24,5 @@ export function useCountUp(
     return () => cancelAnimationFrame(raf.current);
   }, [active, end, duration]);
 
-  return count;
+  return active ? count : 0;
 }

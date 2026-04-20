@@ -221,7 +221,7 @@ export default function IntroScreen({ onSkip }: IntroScreenProps) {
   const displayTime = scrubbing ? scrubValue : currentTime;
   const progress = duration > 0 ? (displayTime / duration) * 100 : 0;
 
-  const videoSrc = `https://www.youtube-nocookie.com/embed/${VIDEOS.hero}?autoplay=1&mute=1&controls=0&loop=0&playsinline=1&rel=0&enablejsapi=1&origin=${typeof window !== "undefined" ? window.location.origin : ""}`;
+  const videoSrc = `https://www.youtube-nocookie.com/embed/${VIDEOS.intro}?autoplay=1&mute=1&controls=0&loop=0&playsinline=1&rel=0&enablejsapi=1&origin=${typeof window !== "undefined" ? window.location.origin : ""}`;
 
   return (
     <motion.div

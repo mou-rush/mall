@@ -23,9 +23,12 @@ export function useDeckNavigation(
   const lockRef = useRef(false);
   const currentRef = useRef(0);
   const touchY = useRef<number | null>(null);
+  const wheelAccumRef = useRef(0);
+  const wheelResetTimer = useRef<number | null>(null);
 
-  // keep ref in sync so callbacks always read the latest slide index
-  currentRef.current = current;
+  useEffect(() => {
+    currentRef.current = current;
+  }, [current]);
 
   const navigate = useCallback(
     (idx: number) => {
@@ -49,15 +52,19 @@ export function useDeckNavigation(
   useEffect(() => {
     if (!enabled) return;
 
-    const handleKey = (e: KeyboardEvent) => {
-      // Don't hijack keys when user is typing in a form field
-      const el = e.target as HTMLElement;
-      if (
+    const isTypingTarget = (target: EventTarget | null) => {
+      const el = target as HTMLElement | null;
+      if (!el) return false;
+      return (
         el.tagName === "INPUT" ||
         el.tagName === "TEXTAREA" ||
         el.tagName === "SELECT" ||
         el.isContentEditable
-      ) {
+      );
+    };
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (isTypingTarget(e.target)) {
         return;
       }
 
@@ -71,9 +78,29 @@ export function useDeckNavigation(
     };
 
     const handleWheel = (e: WheelEvent) => {
+      if (isTypingTarget(e.target)) return;
+      if (e.ctrlKey || e.metaKey) return;
+
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 15) return;
-      if (e.deltaY > 0) next();
+
+      const dy = e.deltaY;
+      if (Math.abs(dy) < 2) return;
+
+      wheelAccumRef.current += dy;
+
+      if (wheelResetTimer.current) {
+        window.clearTimeout(wheelResetTimer.current);
+      }
+      wheelResetTimer.current = window.setTimeout(() => {
+        wheelAccumRef.current = 0;
+      }, 180);
+
+      const THRESHOLD = 120;
+      if (Math.abs(wheelAccumRef.current) < THRESHOLD) return;
+
+      const dir = wheelAccumRef.current > 0 ? 1 : -1;
+      wheelAccumRef.current = 0;
+      if (dir > 0) next();
       else prev();
     };
 
@@ -100,6 +127,11 @@ export function useDeckNavigation(
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchend", handleTouchEnd);
+
+      if (wheelResetTimer.current) {
+        window.clearTimeout(wheelResetTimer.current);
+        wheelResetTimer.current = null;
+      }
     };
   }, [next, prev, enabled]);
 
