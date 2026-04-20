@@ -92,11 +92,10 @@ const PartnerCover: SlideComponent = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
     title="Partner With Us"
-    imageSrc="/images/Home/home.png"
+    imageSrc="/images/Partner/Partner_Cover.jpg"
   />
 );
 
-// Map slide IDs to components
 const SLIDE_COMPONENTS: Record<SlideId, SlideComponent> = {
   hero: HeroSlide as SlideComponent,
   "why-cover": WhyCover,

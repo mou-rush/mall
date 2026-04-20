@@ -49,7 +49,7 @@ export default function HeroSlide({ isActive, onNext }: HeroSlideProps) {
         transition={{ duration: 2.5, ease: EASE_PREMIUM }}
       >
         <Image
-          src="/images/Home/home.png"
+          src="/images/Home/home.jpg"
           alt="Mall of America"
           fill
           priority
