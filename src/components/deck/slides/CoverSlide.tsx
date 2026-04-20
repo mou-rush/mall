@@ -48,15 +48,6 @@ export default function CoverSlide({
             transition={{ delay: 0.4, duration: 0.8, ease: EASE }}
             className="h-[2px] w-32 mx-auto bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent"
           />
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isActive ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-            className="text-white/50 text-sm uppercase tracking-[0.3em] mt-8"
-          >
-            Scroll or use arrows to explore
-          </motion.p>
         </motion.div>
       </div>
 

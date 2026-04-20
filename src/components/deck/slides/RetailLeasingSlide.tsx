@@ -1,7 +1,7 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { LEASING_DEVELOPMENT } from "@/lib/moa-website-content";
 
 interface RetailSlideProps {
@@ -22,7 +22,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
         transition={{ duration: 1.8, ease: [0.19, 1, 0.22, 1] }}
       >
         <Image
-          src="/images/retail/flagship.png"
+          src="/images/retail/Leasing_image.png"
           alt="Retail flagship opportunity at Mall of America"
           fill
           priority
@@ -129,7 +129,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
                     transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
                   >
                     <Image
-                      src="/images/retail/flagship.png"
+                      src="/images/retail/Leasing_image.png"
                       alt="Retail scene"
                       fill
                       sizes="(min-width: 1024px) 40vw, 0vw"
