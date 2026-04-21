@@ -230,7 +230,7 @@ export const EVENTS_CATEGORIES = [
 export const VIDEOS = {
   hero: "ZRvKDndEG8g",
   events: "ZRvKDndEG8g",
-  intro: "3Z9sCTOk9L0",
+  intro: "ZRvKDndEG8g",
 } as const;
 
 export const TICKER_FACTS = [

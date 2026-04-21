@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   MENU_STRUCTURE,
   type MenuItem,
@@ -11,6 +11,7 @@ import {
 interface SideMenuProps {
   readonly isOpen: boolean;
   readonly onToggle: () => void;
+  readonly onClose: () => void;
   readonly currentSlideId: SlideId;
   readonly onNavigate: (slideId: SlideId) => void;
 }
@@ -20,10 +21,51 @@ const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 export default function SideMenu({
   isOpen,
   onToggle,
+  onClose,
   currentSlideId,
   onNavigate,
 }: SideMenuProps) {
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const getParentSection = useMemo(
+    () => (slideId: SlideId) =>
+      MENU_STRUCTURE.find(
+        (item) =>
+          item.slideId === slideId ||
+          item.subItems?.some((subItem) => subItem.slideId === slideId),
+      )?.id,
+    [],
+  );
+
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(
+    () =>
+      new Set(
+        getParentSection(currentSlideId)
+          ? [getParentSection(currentSlideId)!]
+          : [],
+      ),
+  );
+
+  useEffect(() => {
+    const currentParent = getParentSection(currentSlideId);
+    if (!currentParent) return;
+
+    setExpandedItems((prev) => {
+      if (prev.has(currentParent)) return prev;
+      return new Set(prev).add(currentParent);
+    });
+  }, [currentSlideId, getParentSection]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   const toggleExpand = (itemId: string) => {
     setExpandedItems((prev) => {
@@ -39,25 +81,23 @@ export default function SideMenu({
 
   const handleNavigate = (slideId: SlideId) => {
     onNavigate(slideId);
-
-    if (window.innerWidth < 1024) {
-      onToggle();
-    }
+    onClose();
   };
 
   return (
     <>
       <motion.button
         onClick={onToggle}
-        className="fixed top-6 left-6 z-[80] flex items-center gap-2 px-4 py-2.5
-                   rounded-full border border-white/10 bg-black/30 backdrop-blur-xl
-                   text-white/80 hover:text-white transition-colors duration-200
-                   shadow-[0_20px_70px_rgba(0,0,0,0.35)]"
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.4, ease: EASE }}
+        className="fixed right-6 top-6 z-[80] flex items-center gap-3 rounded-full border border-white/12 bg-[linear-gradient(135deg,rgba(8,16,35,0.72),rgba(0,0,0,0.35))] px-4 py-3 text-white/88 backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.38)] transition-all duration-300 hover:border-[var(--gold)]/45 hover:text-white md:right-8 md:top-8"
+        initial={{ opacity: 0, x: 14, filter: "blur(8px)" }}
+        animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.5, ease: EASE }}
         aria-label={isOpen ? "Close menu" : "Open menu"}
       >
+        <span className="hidden text-[0.56rem] uppercase tracking-[0.38em] text-[var(--gold)]/85 sm:block">
+          Deck Map
+        </span>
+        <span className="hidden h-5 w-px bg-white/10 sm:block" />
         <svg
           width="16"
           height="16"
@@ -73,7 +113,7 @@ export default function SideMenu({
             strokeLinecap="round"
           />
         </svg>
-        <span className="text-[0.65rem] font-semibold tracking-[0.16em] uppercase">
+        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em]">
           Menu
         </span>
       </motion.button>
@@ -81,12 +121,12 @@ export default function SideMenu({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-[75] bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[75] bg-[rgba(2,6,16,0.68)] backdrop-blur-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            onClick={onToggle}
+            onClick={onClose}
           />
         )}
       </AnimatePresence>
@@ -94,24 +134,68 @@ export default function SideMenu({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed left-0 top-0 bottom-0 z-[80] w-[min(420px,85vw)]
-                       bg-[rgba(6,6,8,0.95)] backdrop-blur-2xl
-                       border-r border-white/10 shadow-[20px_0_80px_rgba(0,0,0,0.5)]
+            className="fixed right-0 top-0 bottom-0 z-[80] w-[min(460px,90vw)]
+                       border-l border-white/10 bg-[linear-gradient(180deg,rgba(5,10,20,0.96),rgba(6,6,8,0.96))] backdrop-blur-2xl
+                       shadow-[-20px_0_100px_rgba(0,0,0,0.55)]
                        overflow-y-auto"
-            initial={{ x: "-100%" }}
+            initial={{ x: "100%" }}
             animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
-            transition={{ duration: 0.4, ease: EASE }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.45, ease: EASE }}
           >
-            <div className="p-8 pt-24">
-              <div className="mb-8">
-                <h2 className="text-white/90 text-lg font-light tracking-[0.08em] uppercase mb-1">
-                  Navigation
-                </h2>
-                <div className="h-px bg-gradient-to-r from-white/20 via-white/10 to-transparent" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_20%,rgba(255,199,44,0.12),transparent_28%),radial-gradient(circle_at_76%_34%,rgba(0,163,255,0.12),transparent_24%)]" />
+
+            <div className="relative p-7 pt-24 md:p-8 md:pt-28">
+              <div className="mb-8 flex items-start justify-between gap-4">
+                <div>
+                  <p className="mb-3 text-[0.58rem] uppercase tracking-[0.42em] text-[var(--gold)]/88">
+                    Interactive Outline
+                  </p>
+                  <h2 className="mb-2 text-lg font-light uppercase tracking-[0.12em] text-white/92">
+                    Navigation
+                  </h2>
+                </div>
+
+                <button
+                  onClick={onClose}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/65 transition-colors duration-200 hover:border-white/20 hover:text-white"
+                  aria-label="Close menu"
+                >
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M4 4l8 8M12 4l-8 8"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
               </div>
 
-              <nav className="space-y-1">
+              <div className="mb-8 rounded-[28px] border border-white/10 bg-white/[0.03] px-5 py-4 backdrop-blur-xl">
+                <div className="flex items-center gap-3">
+                  <span className="h-2 w-2 rounded-full bg-[var(--gold)] shadow-[0_0_18px_rgba(255,199,44,0.7)]" />
+                  <span className="text-[0.58rem] uppercase tracking-[0.34em] text-white/45">
+                    Current Slide
+                  </span>
+                </div>
+                <div className="mt-3 h-px bg-gradient-to-r from-white/14 to-transparent" />
+                <p className="mt-3 text-sm uppercase tracking-[0.2em] text-white/82">
+                  {MENU_STRUCTURE.find(
+                    (item) =>
+                      item.slideId === currentSlideId ||
+                      item.subItems?.some(
+                        (subItem) => subItem.slideId === currentSlideId,
+                      ),
+                  )?.label ?? "Presentation"}
+                </p>
+              </div>
+
+              <div className="mb-6">
+                <div className="h-px bg-gradient-to-r from-white/18 via-white/8 to-transparent" />
+              </div>
+
+              <nav className="space-y-2">
                 {MENU_STRUCTURE.map((item) => (
                   <MenuItemComponent
                     key={item.id}
@@ -147,34 +231,47 @@ function MenuItemComponent({
   onNavigate,
 }: MenuItemComponentProps) {
   const hasSubItems = item.subItems && item.subItems.length > 0;
-  const isActive = currentSlideId === item.slideId;
+  const isActive =
+    currentSlideId === item.slideId ||
+    item.subItems?.some((subItem) => subItem.slideId === currentSlideId);
 
   return (
-    <div>
-      <div className="flex items-center">
+    <div className="rounded-[26px] border border-white/8 bg-white/[0.02] p-2 backdrop-blur-xl transition-colors duration-300 hover:border-white/12">
+      <div className="flex items-center gap-2">
         <button
-          onClick={() =>
-            hasSubItems ? onToggleExpand() : onNavigate(item.slideId)
-          }
-          className={`flex-1 flex items-center gap-3 px-4 py-3 rounded-lg
-                     transition-all duration-200 text-left
-                     ${
-                       isActive
-                         ? "bg-white/10 text-white"
-                         : "text-white/60 hover:bg-white/5 hover:text-white/90"
-                     }`}
+          onClick={() => onNavigate(item.slideId)}
+          className={`flex flex-1 items-center gap-3 rounded-[20px] px-4 py-3.5 text-left transition-all duration-300 ${
+            isActive
+              ? "bg-white/10 text-white shadow-[0_10px_30px_rgba(0,0,0,0.18)]"
+              : "text-white/62 hover:bg-white/[0.05] hover:text-white"
+          }`}
         >
-          <span className="text-[0.75rem] font-semibold tracking-[0.12em] uppercase">
+          <span
+            className={`h-2 w-2 rounded-full transition-all duration-300 ${
+              isActive
+                ? "bg-[var(--gold)] shadow-[0_0_16px_rgba(255,199,44,0.8)]"
+                : "bg-white/20"
+            }`}
+          />
+          <span className="text-[0.72rem] font-semibold uppercase tracking-[0.18em]">
             {item.label}
           </span>
+        </button>
 
-          {hasSubItems && (
+        {hasSubItems ? (
+          <button
+            onClick={onToggleExpand}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/8 bg-white/[0.03] text-white/60 transition-all duration-200 hover:border-white/16 hover:text-white"
+            aria-label={
+              isExpanded ? `Collapse ${item.label}` : `Expand ${item.label}`
+            }
+          >
             <svg
               width="12"
               height="12"
               viewBox="0 0 16 16"
               fill="none"
-              className="ml-auto transition-transform duration-200"
+              className="transition-transform duration-200"
               style={{
                 transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
               }}
@@ -187,11 +284,10 @@ function MenuItemComponent({
                 strokeLinejoin="round"
               />
             </svg>
-          )}
-        </button>
+          </button>
+        ) : null}
       </div>
 
-      {/* Sub-items */}
       {hasSubItems && (
         <AnimatePresence initial={false}>
           {isExpanded && (
@@ -202,22 +298,25 @@ function MenuItemComponent({
               transition={{ duration: 0.3, ease: EASE }}
               className="overflow-hidden"
             >
-              <div className="pl-6 pt-1 pb-2 space-y-1">
+              <div className="space-y-1.5 px-2 pb-2 pt-2">
                 {item.subItems!.map((subItem) => {
                   const isSubActive = currentSlideId === subItem.slideId;
                   return (
                     <button
                       key={subItem.id}
                       onClick={() => onNavigate(subItem.slideId)}
-                      className={`w-full flex items-center gap-2 px-4 py-2.5 rounded-lg
-                                 text-left transition-all duration-200
-                                 ${
-                                   isSubActive
-                                     ? "bg-white/8 text-white/95 border-l-2 border-white/40"
-                                     : "text-white/50 hover:bg-white/4 hover:text-white/80 border-l-2 border-transparent"
-                                 }`}
+                      className={`flex w-full items-center gap-3 rounded-[18px] px-4 py-3 text-left transition-all duration-200 ${
+                        isSubActive
+                          ? "bg-white/8 text-white shadow-[0_8px_24px_rgba(0,0,0,0.14)]"
+                          : "text-white/52 hover:bg-white/[0.04] hover:text-white/82"
+                      }`}
                     >
-                      <span className="text-[0.7rem] font-medium tracking-[0.08em]">
+                      <span
+                        className={`h-[5px] w-[5px] rounded-full ${
+                          isSubActive ? "bg-[var(--gold)]" : "bg-white/20"
+                        }`}
+                      />
+                      <span className="text-[0.68rem] font-medium tracking-[0.12em] uppercase">
                         {subItem.label}
                       </span>
                     </button>

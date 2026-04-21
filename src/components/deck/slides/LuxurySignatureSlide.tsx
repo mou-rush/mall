@@ -41,7 +41,7 @@ export default function LuxurySignatureSlide({ isActive }: SlideProps) {
     <div className="relative w-full h-full overflow-hidden bg-[var(--moa-black)]">
       <CinematicBackground
         isActive={isActive}
-        imageSrc="/images/luxury/ambience.png"
+        imageSrc="/images/retail/leasing_opportunity.jpg"
         variant="gold"
         overlayOpacity={0.24}
       />

@@ -7,6 +7,7 @@ interface NavigationArrowsProps {
   readonly onNext: () => void;
   readonly canGoPrev: boolean;
   readonly canGoNext: boolean;
+  readonly hideNext?: boolean;
 }
 
 export default function NavigationArrows({
@@ -14,6 +15,7 @@ export default function NavigationArrows({
   onNext,
   canGoPrev,
   canGoNext,
+  hideNext = false,
 }: NavigationArrowsProps) {
   return (
     <>
@@ -46,7 +48,7 @@ export default function NavigationArrows({
         </motion.button>
       )}
 
-      {canGoNext && (
+      {canGoNext && !hideNext && (
         <motion.button
           onClick={onNext}
           className="fixed right-6 top-1/2 -translate-y-1/2 z-[70]
@@ -107,7 +109,7 @@ export default function NavigationArrows({
           Swipe / Arrows
         </span>
 
-        {canGoNext && (
+        {canGoNext && !hideNext && (
           <button
             onClick={onNext}
             className="w-8 h-8 flex items-center justify-center

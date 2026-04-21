@@ -255,8 +255,8 @@ export default function IntroScreen({ onSkip }: IntroScreenProps) {
         <Image
           src="/images/moa-logo.png"
           alt="Mall of America"
-          width={88}
-          height={88}
+          width={250}
+          height={250}
           className="object-contain drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]"
           priority
         />

@@ -157,7 +157,6 @@ export default function WhySlide({ isActive }: WhySlideProps) {
 
   return (
     <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-[var(--moa-black)]">
-      <CinematicBackground isActive={isActive} videoSrc={VIDEOS.hero} />
       <motion.div
         className="absolute -inset-24 opacity-60 pointer-events-none"
         animate={isActive ? { x: [0, 28, 0], y: [0, -18, 0] } : { x: 0, y: 0 }}

@@ -183,6 +183,7 @@ export default function DeckExperience() {
       <SideMenu
         isOpen={menuOpen}
         onToggle={toggleMenu}
+        onClose={() => setMenuOpen(false)}
         currentSlideId={currentSlideId}
         onNavigate={handleNavigateToSlide}
       />
@@ -192,6 +193,7 @@ export default function DeckExperience() {
         onNext={nav.next}
         canGoPrev={nav.current > 0}
         canGoNext={nav.current < totalSlides - 1}
+        hideNext={currentSlideId === "hero"}
       />
 
       <div className="relative w-full h-full">

@@ -13,7 +13,7 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
   return (
     <div className="fixed inset-0 z-[100] bg-[var(--moa-black)] overflow-hidden">
       <VideoBackground
-        src={VIDEOS.hero}
+        src="/videos/mall_2.mp4"
         overlayOpacity={0.1}
         overlayColor="6,6,8"
       />

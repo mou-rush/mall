@@ -41,7 +41,7 @@ interface HeroSlideProps {
 
 export default function HeroSlide({ isActive, onNext }: HeroSlideProps) {
   return (
-    <div className="relative w-full h-full flex flex-col overflow-hidden bg-[var(--moa-black)] font-sans selection:bg-[var(--gold)] selection:text-black">
+    <div className="relative h-screen min-h-screen w-full overflow-hidden bg-[var(--moa-black)] font-sans selection:bg-[var(--gold)] selection:text-black">
       <motion.div
         className="absolute inset-0 z-0"
         initial={{ scale: 1.05, opacity: 0 }}
@@ -58,24 +58,11 @@ export default function HeroSlide({ isActive, onNext }: HeroSlideProps) {
           quality={100}
         />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[rgba(var(--moa-blue-rgb),0.85)] via-[rgba(var(--moa-blue-rgb),0.35)] to-[rgba(var(--moa-blue-rgb),0.75)]" />
-        <div className="absolute inset-x-0 top-0 h-[35vh] bg-gradient-to-b from-[rgba(var(--moa-blue-rgb),0.60)] to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-[45vh] bg-gradient-to-t from-[rgba(var(--moa-blue-rgb),0.85)] to-transparent pointer-events-none" />
-
-        <motion.div
-          className="absolute -inset-32 opacity-40 pointer-events-none"
-          animate={
-            isActive ? { x: [0, 30, 0], y: [0, -20, 0] } : { x: 0, y: 0 }
-          }
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            background:
-              "radial-gradient(50% 50% at 25% 30%, rgba(var(--moa-yellow-rgb), 0.15), transparent 65%), radial-gradient(60% 60% at 75% 40%, rgba(255,255,255,0.08), transparent 70%)",
-            filter: "blur(2px)",
-          }}
-        />
+        <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(14,18,28,0.56)_0%,rgba(12,16,26,0.22)_42%,rgba(4,8,18,0.6)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-[38vh] bg-gradient-to-b from-[rgba(255,199,44,0.12)] via-[rgba(255,255,255,0.04)] to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[48vh] bg-gradient-to-t from-[rgba(4,8,16,0.68)] via-[rgba(12,16,24,0.26)] to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_36%,rgba(255,199,44,0.16),transparent_24%),radial-gradient(circle_at_78%_30%,rgba(255,255,255,0.08),transparent_28%)]" />
       </motion.div>
-
       <div className="absolute top-12 left-12 z-50">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -92,26 +79,27 @@ export default function HeroSlide({ isActive, onNext }: HeroSlideProps) {
         </motion.div>
       </div>
 
-      <div className="absolute left-12 bottom-12 z-40">
+      <div className="absolute inset-x-0 bottom-0 z-30 h-[34vh] bg-gradient-to-t from-black/40 via-black/12 to-transparent pointer-events-none" />
+
+      <div className="absolute bottom-8 left-1/2 z-40 w-[min(92vw,520px)] -translate-x-1/2 md:bottom-10">
         <motion.button
           onClick={onNext}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isActive ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 2.2, duration: 1.5, ease: EASE_PREMIUM }}
-          whileHover={{ y: -4 }}
+          initial={{ opacity: 0, y: 28, scale: 0.96, filter: "blur(10px)" }}
+          animate={
+            isActive
+              ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+              : { opacity: 0, y: 28, scale: 0.96, filter: "blur(10px)" }
+          }
+          transition={{ delay: 1.25, duration: 1.1, ease: EASE_PREMIUM }}
+          whileHover={{ y: -6, scale: 1.01 }}
           whileTap={{ scale: 0.985 }}
-          className="group relative overflow-hidden rounded-[28px] border border-white/15 bg-black/25 px-5 py-4 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.35)] cursor-pointer"
+          className="group relative w-full cursor-pointer overflow-hidden rounded-[32px] border border-white/16 bg-[linear-gradient(135deg,rgba(18,18,24,0.54),rgba(0,0,0,0.26))] px-6 py-5 backdrop-blur-2xl shadow-[0_24px_90px_rgba(0,0,0,0.34)]"
         >
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,transparent_35%,rgba(201,168,76,0.14)_50%,transparent_65%,transparent_100%)] translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-1000 ease-out" />
-          <div className="relative mb-3 flex items-center gap-3">
-            <span className="h-px w-10 bg-gradient-to-r from-[var(--gold)] to-transparent" />
-            <span className="text-[0.52rem] uppercase tracking-[0.45em] text-[var(--gold)]/90">
-              Opening Scene
-            </span>
-          </div>
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,transparent_30%,rgba(255,199,44,0.22)_50%,transparent_70%,transparent_100%)] translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-1000 ease-out" />
+          <div className="pointer-events-none absolute inset-0 rounded-[32px] border border-white/8" />
 
-          <div className="relative flex items-center gap-5">
-            <div className="relative w-11 h-11 md:w-12 md:h-12 rounded-full border border-white/30 bg-white/[0.03] flex items-center justify-center transition-all duration-500 group-hover:border-[var(--gold)] group-hover:shadow-[0_0_28px_rgba(201,168,76,0.28)]">
+          <div className="relative flex items-center justify-center gap-5">
+            <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/[0.04] transition-all duration-500 group-hover:border-[var(--gold)] group-hover:shadow-[0_0_30px_rgba(201,168,76,0.3)] md:h-14 md:w-14">
               <motion.div
                 className="absolute inset-[5px] rounded-full border border-[var(--gold)]/30"
                 animate={{ rotate: 360 }}
@@ -125,7 +113,7 @@ export default function HeroSlide({ isActive, onNext }: HeroSlideProps) {
               <svg
                 viewBox="0 0 16 16"
                 fill="none"
-                className="absolute inset-0 w-full h-full -rotate-90 opacity-40 group-hover:opacity-100 transition-opacity duration-500"
+                className="absolute inset-0 h-full w-full -rotate-90 opacity-40 transition-opacity duration-500 group-hover:opacity-100"
               >
                 <motion.circle
                   cx="8"
@@ -140,38 +128,48 @@ export default function HeroSlide({ isActive, onNext }: HeroSlideProps) {
                 />
               </svg>
             </div>
-            <div className="flex flex-col items-start">
-              <span className="text-[0.72rem] md:text-[0.8rem] uppercase tracking-[0.46em] text-white/95 transition-colors duration-300 group-hover:text-white">
+            <div className="flex flex-col items-start pr-2 text-left">
+              <span className="text-[0.76rem] uppercase tracking-[0.42em] text-white/95 transition-colors duration-300 group-hover:text-white md:text-[0.82rem]">
                 Enter The Mall
               </span>
-              <div className="mt-2 flex items-center gap-3">
-                <span className="text-[0.52rem] uppercase tracking-[0.35em] text-white/45 group-hover:text-[var(--gold)]/90 transition-colors duration-500">
-                  Start Presentation
-                </span>
-                <div className="h-px w-8 bg-white/20 group-hover:w-16 group-hover:bg-[var(--gold)] transition-all duration-700 ease-in-out" />
-              </div>
             </div>
           </div>
         </motion.button>
       </div>
 
-      <div className="absolute right-12 bottom-12 z-40 flex flex-col gap-5">
-        {SOCIALS.map((social, i) => (
-          <motion.a
-            key={social.label}
-            href={social.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, y: 10 }}
-            animate={isActive ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 2.8 + i * 0.1, duration: 0.8 }}
-            className="relative w-11 h-11 flex items-center justify-center rounded-full border border-white/30 text-white/85 hover:text-[var(--gold)] hover:border-[var(--gold)] transition-all duration-500 hover:-translate-y-1 bg-black/30 shadow-[0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-md group"
-            aria-label={social.label}
-          >
-            <div className="absolute inset-0 rounded-full bg-[var(--gold)] opacity-0 group-hover:opacity-10 transition-opacity" />
-            {social.icon}
-          </motion.a>
-        ))}
+      <div className="absolute left-6 top-1/2 z-40 -translate-y-1/2 md:left-10">
+        <motion.div
+          initial={{ opacity: 0, x: -20, filter: "blur(8px)" }}
+          animate={
+            isActive
+              ? { opacity: 1, x: 0, filter: "blur(0px)" }
+              : { opacity: 0, x: -20, filter: "blur(8px)" }
+          }
+          transition={{ delay: 1.45, duration: 1, ease: EASE_PREMIUM }}
+          className="flex flex-col items-center gap-3 rounded-[28px]"
+        >
+          {SOCIALS.map((social, i) => (
+            <motion.a
+              key={social.label}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, x: -8, scale: 0.92 }}
+              animate={isActive ? { opacity: 1, x: 0, scale: 1 } : {}}
+              transition={{
+                delay: 1.55 + i * 0.08,
+                duration: 0.8,
+                ease: EASE_PREMIUM,
+              }}
+              whileHover={{ y: -5, scale: 1.05 }}
+              className="group relative flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[rgba(255,255,255,0.05)] text-white/88 shadow-[0_12px_30px_rgba(0,0,0,0.24)] transition-all duration-500 hover:border-[var(--gold)] hover:text-[var(--gold)] md:h-12 md:w-12"
+              aria-label={social.label}
+            >
+              <div className="absolute inset-0 rounded-full bg-[var(--gold)] opacity-0 transition-opacity group-hover:opacity-10" />
+              {social.icon}
+            </motion.a>
+          ))}
+        </motion.div>
       </div>
     </div>
   );

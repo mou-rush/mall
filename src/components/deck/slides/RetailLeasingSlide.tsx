@@ -21,17 +21,6 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
         animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0 }}
         transition={{ duration: 1.8, ease: [0.19, 1, 0.22, 1] }}
       >
-        <Image
-          src="/images/retail/Leasing_image.png"
-          alt="Retail flagship opportunity at Mall of America"
-          fill
-          priority
-          sizes="100vw"
-          quality={100}
-          className="object-cover"
-          style={{ objectPosition: scene?.imagePosition ?? "50% 45%" }}
-        />
-
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/25 to-black/60" />
         <div className="absolute inset-x-0 bottom-0 h-[40vh] bg-gradient-to-t from-black/75 to-transparent" />
       </motion.div>
@@ -129,7 +118,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
                     transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
                   >
                     <Image
-                      src="/images/retail/Leasing_image.png"
+                      src="/images/retail/leasing_opportunity_1.jpg"
                       alt="Retail scene"
                       fill
                       sizes="(min-width: 1024px) 40vw, 0vw"
