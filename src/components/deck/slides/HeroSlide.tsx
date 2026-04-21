@@ -1,6 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import CTAButton from "./CTAButton";
+import SocialDock from "./SocialDock";
 
 const EASE_PREMIUM: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -81,96 +83,9 @@ export default function HeroSlide({ isActive, onNext }: HeroSlideProps) {
 
       <div className="absolute inset-x-0 bottom-0 z-30 h-[34vh] bg-gradient-to-t from-black/40 via-black/12 to-transparent pointer-events-none" />
 
-      <div className="absolute bottom-8 left-1/2 z-40 w-[min(92vw,520px)] -translate-x-1/2 md:bottom-10">
-        <motion.button
-          onClick={onNext}
-          initial={{ opacity: 0, y: 28, scale: 0.96, filter: "blur(10px)" }}
-          animate={
-            isActive
-              ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
-              : { opacity: 0, y: 28, scale: 0.96, filter: "blur(10px)" }
-          }
-          transition={{ delay: 1.25, duration: 1.1, ease: EASE_PREMIUM }}
-          whileHover={{ y: -6, scale: 1.01 }}
-          whileTap={{ scale: 0.985 }}
-          className="group relative w-full cursor-pointer overflow-hidden rounded-[32px] border border-white/16 bg-[linear-gradient(135deg,rgba(18,18,24,0.54),rgba(0,0,0,0.26))] px-6 py-5 backdrop-blur-2xl shadow-[0_24px_90px_rgba(0,0,0,0.34)]"
-        >
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,transparent_30%,rgba(255,199,44,0.22)_50%,transparent_70%,transparent_100%)] translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-1000 ease-out" />
-          <div className="pointer-events-none absolute inset-0 rounded-[32px] border border-white/8" />
+      <CTAButton isActive={isActive} onNext={onNext} />
 
-          <div className="relative flex items-center justify-center gap-5">
-            <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/[0.04] transition-all duration-500 group-hover:border-[var(--gold)] group-hover:shadow-[0_0_30px_rgba(201,168,76,0.3)] md:h-14 md:w-14">
-              <motion.div
-                className="absolute inset-[5px] rounded-full border border-[var(--gold)]/30"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-              />
-              <motion.div
-                className="w-1.5 h-1.5 bg-white group-hover:bg-[var(--gold)] rounded-full"
-                animate={{ scale: [1, 1.8, 1], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              <svg
-                viewBox="0 0 16 16"
-                fill="none"
-                className="absolute inset-0 h-full w-full -rotate-90 opacity-40 transition-opacity duration-500 group-hover:opacity-100"
-              >
-                <motion.circle
-                  cx="8"
-                  cy="8"
-                  r="7.5"
-                  stroke="var(--gold)"
-                  strokeWidth="0.5"
-                  strokeDasharray="48"
-                  initial={{ strokeDashoffset: 48 }}
-                  whileHover={{ strokeDashoffset: 0 }}
-                  transition={{ duration: 0.8 }}
-                />
-              </svg>
-            </div>
-            <div className="flex flex-col items-start pr-2 text-left">
-              <span className="text-[0.76rem] uppercase tracking-[0.42em] text-white/95 transition-colors duration-300 group-hover:text-white md:text-[0.82rem]">
-                Enter The Mall
-              </span>
-            </div>
-          </div>
-        </motion.button>
-      </div>
-
-      <div className="absolute left-6 top-1/2 z-40 -translate-y-1/2 md:left-10">
-        <motion.div
-          initial={{ opacity: 0, x: -20, filter: "blur(8px)" }}
-          animate={
-            isActive
-              ? { opacity: 1, x: 0, filter: "blur(0px)" }
-              : { opacity: 0, x: -20, filter: "blur(8px)" }
-          }
-          transition={{ delay: 1.45, duration: 1, ease: EASE_PREMIUM }}
-          className="flex flex-col items-center gap-3 rounded-[28px]"
-        >
-          {SOCIALS.map((social, i) => (
-            <motion.a
-              key={social.label}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, x: -8, scale: 0.92 }}
-              animate={isActive ? { opacity: 1, x: 0, scale: 1 } : {}}
-              transition={{
-                delay: 1.55 + i * 0.08,
-                duration: 0.8,
-                ease: EASE_PREMIUM,
-              }}
-              whileHover={{ y: -5, scale: 1.05 }}
-              className="group relative flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[rgba(255,255,255,0.05)] text-white/88 shadow-[0_12px_30px_rgba(0,0,0,0.24)] transition-all duration-500 hover:border-[var(--gold)] hover:text-[var(--gold)] md:h-12 md:w-12"
-              aria-label={social.label}
-            >
-              <div className="absolute inset-0 rounded-full bg-[var(--gold)] opacity-0 transition-opacity group-hover:opacity-10" />
-              {social.icon}
-            </motion.a>
-          ))}
-        </motion.div>
-      </div>
+      <SocialDock isActive={isActive} socials={SOCIALS} />
     </div>
   );
 }

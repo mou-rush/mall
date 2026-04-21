@@ -5,6 +5,7 @@ import { EASE_OUT_EXPO } from "@/lib/motion";
 import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import InteractiveImageCard from "./InteractiveImageCard";
 
 interface SlideProps {
   readonly isActive: boolean;
@@ -100,45 +101,21 @@ export default function EntertainmentCrayolaSlide({ isActive }: SlideProps) {
           </motion.div>
 
           <div className="relative flex items-center justify-center lg:justify-end">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.86, rotate: -10, y: 36 }}
-              animate={
-                isActive
-                  ? { opacity: 1, scale: 1, rotate: -4, y: 0 }
-                  : { opacity: 0, scale: 0.86, rotate: -10, y: 36 }
-              }
-              transition={{ duration: 1.05, delay: 0.18, ease: EASE_OUT_EXPO }}
-              whileHover={{ scale: 1.03, rotate: -2, y: -8 }}
-              className="group relative h-[54vh] min-h-[360px] w-[min(68vw,720px)] max-w-[620px] overflow-hidden rounded-[2.25rem] border border-white/12 bg-black/20 shadow-[0_35px_120px_rgba(0,0,0,0.55)]"
+            <InteractiveImageCard
+              imageSrc="/images/entertainment/crayola_2.webp"
+              imageAlt="crayola play area at mall of america"
+              isActive={isActive}
+              delay={0.18}
+              hoverScale={1.03}
+              hoverY={-8}
+              priority
+              className="h-[54vh] min-h-[360px] w-[min(68vw,720px)] max-w-[620px] rounded-[2.25rem] border border-white/12 bg-black/20 shadow-[0_35px_120px_rgba(0,0,0,0.55)]"
               style={{ clipPath: "polygon(10% 0%,100% 0%,90% 100%,0% 100%)" }}
             >
               <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(255,255,255,0.18),transparent_24%,transparent_70%,rgba(255,199,44,0.18)_100%)] opacity-70" />
-              <motion.div
-                className="absolute inset-0"
-                animate={
-                  isActive
-                    ? { scale: [1, 1.06, 1], y: [0, -10, 0] }
-                    : { scale: 1, y: 0 }
-                }
-                transition={{
-                  duration: 10,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <Image
-                  // src={attraction.image}
-                  src="/images/entertainment/crayola_2.webp"
-                  alt={attraction.name}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 80vw, 620px"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-              </motion.div>
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,173,51,0.08),transparent_34%,rgba(7,7,12,0.72)_100%)]" />
               <div className="absolute inset-y-[10%] right-[8%] w-px bg-gradient-to-b from-transparent via-[#ffd35c] to-transparent opacity-70" />
-            </motion.div>
+            </InteractiveImageCard>
 
             <motion.div
               initial={{ opacity: 0, x: 40, y: 28, rotate: 9 }}
