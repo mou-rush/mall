@@ -1,17 +1,9 @@
 "use client";
-import { motion } from "framer-motion";
-import type { ComponentType } from "react";
-import {
-  LuCalendarDays,
-  LuHandshake,
-  LuMic,
-  LuSparkles,
-  LuStore,
-  LuTrophy,
-} from "react-icons/lu";
-import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
 import CinematicBackground from "@/components/ui/CinematicBackground";
-import { VIDEOS } from "@/lib/constants";
+import { EASE_OUT_EXPO } from "@/lib/motion";
+import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface EventsSlideProps {
   readonly isActive: boolean;
@@ -19,136 +11,220 @@ interface EventsSlideProps {
 
 export default function EventsSlide({ isActive }: EventsSlideProps) {
   const content = DECK_WEBSITE_CONTENT.events;
+  const imageById: Record<string, string> = {
+    celebrity: "/images/events/celebrity_appearances.jpg",
+    music: "/images/events/live_shows.jpg",
+    charity: "/images/events/charitable_initiatives.jpg",
+    launch: "/images/events/product_launch.jpg",
+    books: "/images/events/book_signings.jpg",
+    premieres: "/images/events/movie_premiers.jpg",
+  };
 
-  const iconById: Record<string, ComponentType<{ className?: string }>> = {
-    celebrity: LuSparkles,
-    music: LuMic,
-    charity: LuTrophy,
-    launch: LuStore,
-    books: LuCalendarDays,
-    premieres: LuHandshake,
+  const getOffsetClass = (index: number): string => {
+    if (index % 3 === 0) return "lg:-translate-y-8";
+    if (index % 3 === 1) return "lg:translate-y-4";
+    return "lg:-translate-y-2";
   };
 
   return (
-    <div className="relative w-full h-full flex items-center overflow-hidden bg-[var(--moa-black)]">
+    <div className="relative h-screen min-h-screen w-full overflow-hidden bg-[var(--moa-black)]">
       <CinematicBackground
         isActive={isActive}
-        videoSrc={VIDEOS.events}
-        imageSrc="/images/events/crowd.png"
+        imageSrc="/images/events/Events_Cover.jpg"
         imageAlt="Events at Mall of America"
-        imagePosition="50% 45%"
+        imagePosition="50% 50%"
+        overlayOpacity={0.28}
       />
-      <div className="relative z-10 max-w-[1300px] mx-auto px-8 lg:px-16 w-full">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
-          <div>
-            <motion.p
-              className="eyebrow mb-4"
-              initial={{ opacity: 0, y: 12 }}
-              animate={isActive ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6 }}
-            >
-              {content.eyebrow}
-            </motion.p>
-            <motion.h2
-              className="section-title"
-              initial={{ opacity: 0, y: 20 }}
-              animate={isActive ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                delay: 0.15,
-                duration: 0.8,
-                ease: [0.19, 1, 0.22, 1],
-              }}
-            >
-              {content.title}
-            </motion.h2>
-            <motion.p
-              className="text-[var(--moa-muted)] max-w-xl text-sm leading-relaxed mt-4"
-              initial={{ opacity: 0 }}
-              animate={isActive ? { opacity: 1 } : {}}
-              transition={{ delay: 0.25, duration: 0.8 }}
-            >
-              {content.subtitle}
-            </motion.p>
-          </div>
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,16,0.18)_0%,rgba(7,8,12,0.24)_28%,rgba(6,6,8,0.82)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(255,199,44,0.18),transparent_22%),radial-gradient(circle_at_82%_34%,rgba(255,77,148,0.16),transparent_24%),radial-gradient(circle_at_50%_80%,rgba(0,198,255,0.12),transparent_28%)]" />
 
+      <motion.div
+        className="pointer-events-none absolute -left-[8%] top-[10%] h-[32rem] w-[32rem] rounded-full bg-[radial-gradient(circle,rgba(255,199,44,0.16),transparent_62%)] blur-3xl"
+        animate={
+          isActive
+            ? { x: [0, 28, 0], y: [0, -12, 0], scale: [1, 1.06, 1] }
+            : { x: 0, y: 0, scale: 1 }
+        }
+        transition={{ duration: 8.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <motion.div
+        className="pointer-events-none absolute right-[-10%] top-[18%] h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(255,0,128,0.16),transparent_62%)] blur-3xl"
+        animate={
+          isActive
+            ? { x: [0, -24, 0], y: [0, 16, 0], scale: [1, 1.08, 1] }
+            : { x: 0, y: 0, scale: 1 }
+        }
+        transition={{ duration: 9.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <div className="relative z-10 flex h-full w-full flex-col justify-between px-6 py-8 md:px-10 lg:px-16 lg:py-10">
+        <div className="mx-auto flex w-full max-w-[1500px] flex-col">
           <motion.div
-            className="flex gap-4"
-            initial={{ opacity: 0 }}
-            animate={isActive ? { opacity: 1 } : {}}
-            transition={{ delay: 0.3, duration: 0.8 }}
+            initial={{ opacity: 0, y: 24, filter: "blur(10px)" }}
+            animate={
+              isActive
+                ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                : { opacity: 0, y: 24, filter: "blur(10px)" }
+            }
+            transition={{ duration: 0.95, ease: EASE_OUT_EXPO }}
+            className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
           >
-            {content.stats.map((s) => (
-              <div
-                key={s.lab}
-                className="glass-card px-4 py-3 rounded-[2px] text-center"
-              >
-                <p className="text-gold-gradient font-thin text-xl tracking-tight">
-                  {s.val}
-                </p>
-                <p className="text-[var(--moa-muted)] text-[0.55rem] tracking-wider uppercase">
-                  {s.lab}
-                </p>
-              </div>
-            ))}
+            <div className="max-w-4xl">
+              <p className="eyebrow mb-5">{content.eyebrow}</p>
+              <h2 className="max-w-[11ch] text-5xl font-extralight leading-[0.92] tracking-[-0.05em] text-white md:text-7xl lg:text-[6.1rem]">
+                {content.title}
+              </h2>
+              <p className="mt-6 max-w-3xl text-sm leading-relaxed text-white/66 md:text-base lg:text-lg">
+                {content.subtitle}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-4 self-start lg:self-end">
+              {content.stats.map((s) => (
+                <motion.div
+                  key={s.lab}
+                  initial={{ opacity: 0, scale: 0.9, y: 18 }}
+                  animate={
+                    isActive
+                      ? { opacity: 1, scale: 1, y: 0 }
+                      : { opacity: 0, scale: 0.9, y: 18 }
+                  }
+                  transition={{
+                    delay: 0.18,
+                    duration: 0.9,
+                    ease: EASE_OUT_EXPO,
+                  }}
+                  className="rounded-[28px] border border-white/12 bg-black/20 px-5 py-4 backdrop-blur-xl shadow-[0_20px_70px_rgba(0,0,0,0.32)]"
+                >
+                  <div className="text-3xl font-extralight tracking-[-0.04em] text-[#ffd35c] md:text-4xl">
+                    {s.val}
+                  </div>
+                  <div className="mt-1 text-[0.58rem] uppercase tracking-[0.24em] text-white/50">
+                    {s.lab}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={isActive ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.35, duration: 0.6 }}
-          className="grid grid-cols-2 lg:grid-cols-3 gap-4"
-        >
-          {content.categories.map((cat, i) => {
-            const Icon = iconById[cat.id] ?? LuSparkles;
-            return (
-              <motion.div
-                key={cat.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isActive ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.45 + i * 0.06, duration: 0.5 }}
-                className="glass-card group p-5 rounded-[2px]
-                           hover:border-[var(--gold)] transition-all
-                           duration-500 cursor-default"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <Icon className="w-5 h-5 text-[var(--gold)]" />
-                  <span className="eyebrow text-[0.5rem] text-[var(--moa-muted)] text-right leading-tight max-w-[120px]">
-                    Event Type
-                  </span>
-                </div>
-                <h3 className="text-[var(--moa-white)] font-medium text-sm mb-2">
-                  {cat.title}
-                </h3>
-                <p className="text-[var(--moa-muted)] text-xs leading-relaxed">
-                  {cat.desc}
-                </p>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+        <div className="mx-auto flex w-full max-w-[1500px] flex-1 items-center py-6 lg:py-8">
+          <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-3 lg:gap-5">
+            {content.categories.map((cat, i) => {
+              const imageSrc = imageById[cat.id] ?? "/images/events/crowd.png";
+              const offsetClass = getOffsetClass(i);
+
+              return (
+                <motion.div
+                  key={cat.title}
+                  initial={{ opacity: 0, y: 50, scale: 0.92, rotateX: -8 }}
+                  animate={
+                    isActive
+                      ? { opacity: 1, y: 0, scale: 1, rotateX: 0 }
+                      : { opacity: 0, y: 50, scale: 0.92, rotateX: -8 }
+                  }
+                  transition={{
+                    delay: 0.24 + i * 0.08,
+                    duration: 0.95,
+                    ease: EASE_OUT_EXPO,
+                  }}
+                  whileHover={{ y: -10, scale: 1.03 }}
+                  className={`group relative h-[23vh] min-h-[185px] overflow-hidden rounded-[2rem] border border-white/12 shadow-[0_26px_80px_rgba(0,0,0,0.46)] ${offsetClass}`}
+                  style={{ transformStyle: "preserve-3d" }}
+                >
+                  <motion.div
+                    className="absolute inset-0"
+                    whileHover={{ scale: 1.08 }}
+                    transition={{ duration: 0.9, ease: EASE_OUT_EXPO }}
+                  >
+                    <Image
+                      src={imageSrc}
+                      alt={cat.title}
+                      fill
+                      priority={i < 3}
+                      sizes="(max-width: 768px) 50vw, 33vw"
+                      className="object-cover"
+                    />
+                  </motion.div>
+
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(19,18,36,0.14)_30%,rgba(10,10,16,0.84)_100%)]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,199,44,0.16),transparent_34%,transparent_58%,rgba(255,0,128,0.20)_100%)] opacity-90" />
+
+                  <motion.div
+                    className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    style={{
+                      background:
+                        "radial-gradient(circle at 50% 120%, rgba(255,199,44,0.22), transparent 45%), radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08), transparent 40%)",
+                    }}
+                  />
+
+                  <div className="absolute inset-0 flex flex-col justify-between p-5 md:p-6">
+                    <div className="flex items-center justify-between">
+                      <span className="rounded-full border border-white/15 bg-black/20 px-3 py-1 text-[0.55rem] uppercase tracking-[0.28em] text-white/70 backdrop-blur-md">
+                        Event Type
+                      </span>
+                      <div className="h-8 w-8 rounded-full border border-white/15 bg-white/8 shadow-[0_0_22px_rgba(255,255,255,0.10)]" />
+                    </div>
+
+                    <div>
+                      <motion.h3
+                        className="max-w-[12ch] text-lg font-medium leading-tight text-white md:text-xl"
+                        animate={isActive ? { y: 0 } : { y: 8 }}
+                        transition={{ delay: 0.35 + i * 0.06, duration: 0.7 }}
+                      >
+                        {cat.title}
+                      </motion.h3>
+                      <motion.p
+                        initial={{ opacity: 0, y: 16 }}
+                        whileHover={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
+                        className="mt-3 max-w-[24ch] text-xs leading-relaxed text-white/78 opacity-0 group-hover:opacity-100 md:text-sm"
+                      >
+                        {cat.desc}
+                      </motion.p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
 
         <motion.div
-          className="mt-6 flex flex-col sm:flex-row gap-3 justify-end"
-          initial={{ opacity: 0 }}
-          animate={isActive ? { opacity: 1 } : {}}
-          transition={{ delay: 0.75, duration: 0.6 }}
+          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+          animate={
+            isActive
+              ? { opacity: 1, y: 0, filter: "blur(0px)" }
+              : { opacity: 0, y: 24, filter: "blur(8px)" }
+          }
+          transition={{ delay: 0.76, duration: 0.95, ease: EASE_OUT_EXPO }}
+          className="mx-auto flex w-full max-w-[1500px] items-end justify-between gap-5 border-t border-white/10 pt-5"
         >
+          <div className="text-[0.62rem] uppercase tracking-[0.38em] text-white/42">
+            {content.partnerCta.label}
+          </div>
+
           <a
             href={content.partnerCta.href}
-            className="btn-outline justify-center"
             target="_blank"
             rel="noreferrer"
+            className="group inline-flex items-center gap-4 rounded-full border border-white/14 bg-white/[0.04] px-5 py-3 text-white shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl transition-all duration-500 hover:border-[var(--gold)] hover:shadow-[0_0_35px_rgba(255,199,44,0.22)]"
           >
-            {content.partnerCta.label}
-          </a>
-          <a
-            href={content.cta.href}
-            className="btn-primary justify-center"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {content.cta.label}
+            <span className="text-[0.72rem] uppercase tracking-[0.22em]">
+              Host your next event at Mall of America
+            </span>
+            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/12 bg-white/[0.04] transition-transform duration-500 group-hover:translate-x-1 group-hover:border-[var(--gold)]">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M6 3.5L11 8L6 12.5"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
           </a>
         </motion.div>
       </div>
