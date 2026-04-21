@@ -1,7 +1,7 @@
 "use client";
 import CinematicBackground from "@/components/ui/CinematicBackground";
 import { EASE_OUT_EXPO } from "@/lib/motion";
-import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
+import { getEventsContent } from "@/lib/data-service";
 import { motion } from "framer-motion";
 import EventTile from "./EventTile";
 
@@ -10,7 +10,7 @@ interface EventsSlideProps {
 }
 
 export default function EventsSlide({ isActive }: EventsSlideProps) {
-  const content = DECK_WEBSITE_CONTENT.events;
+  const content = getEventsContent();
   const imageById: Record<string, string> = {
     celebrity: "/images/events/celebrity_appearances.jpg",
     music: "/images/events/live_shows.jpg",

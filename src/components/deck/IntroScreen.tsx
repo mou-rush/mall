@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { VIDEOS } from "@/lib/constants";
+import { getVideos } from "@/lib/data-service";
 import { fmt } from "@/lib/utils";
 
 interface IntroScreenProps {
@@ -113,6 +113,7 @@ interface YTMessage {
 }
 
 export default function IntroScreen({ onSkip }: IntroScreenProps) {
+  const videos = getVideos();
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const [playing, setPlaying] = useState(true);
@@ -221,7 +222,7 @@ export default function IntroScreen({ onSkip }: IntroScreenProps) {
   const displayTime = scrubbing ? scrubValue : currentTime;
   const progress = duration > 0 ? (displayTime / duration) * 100 : 0;
 
-  const videoSrc = `https://www.youtube-nocookie.com/embed/${VIDEOS.intro}?autoplay=1&mute=1&controls=0&loop=0&playsinline=1&rel=0&enablejsapi=1&origin=${typeof window !== "undefined" ? window.location.origin : ""}`;
+  const videoSrc = `https://www.youtube-nocookie.com/embed/${videos.intro}?autoplay=1&mute=1&controls=0&loop=0&playsinline=1&rel=0&enablejsapi=1&origin=${typeof window !== "undefined" ? window.location.origin : ""}`;
 
   return (
     <motion.div

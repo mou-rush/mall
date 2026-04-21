@@ -1,6 +1,6 @@
 "use client";
 import ArrowIcon from "@/components/ui/ArrowIcon";
-import { CTA_FORM_LABELS } from "@/lib/constants";
+import { getFormLabels } from "@/lib/data-service";
 import FormField from "./FormField";
 
 interface ContactFormProps {
@@ -12,7 +12,7 @@ export default function ContactForm({
   type,
   onClose,
 }: Readonly<ContactFormProps>) {
-  const labels = CTA_FORM_LABELS;
+  const labels = getFormLabels();
 
   return (
     <div className="max-w-2xl mx-auto">

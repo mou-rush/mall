@@ -3,7 +3,7 @@
 import CinematicBackground from "@/components/ui/CinematicBackground";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { LEASING_DEVELOPMENT } from "@/lib/moa-website-content";
+import { getRetailScene } from "@/lib/data-service";
 
 interface SlideProps {
   readonly isActive: boolean;
@@ -14,7 +14,7 @@ const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 export default function RetailExpansionHospitalitySlide({
   isActive,
 }: SlideProps) {
-  const scene = LEASING_DEVELOPMENT.retail.scenes[2];
+  const scene = getRetailScene("expansion-1");
   const getStatDelay = (label: string): number => {
     if (label === "Planned") return 0.2;
     if (label === "Concepts") return 0.32;

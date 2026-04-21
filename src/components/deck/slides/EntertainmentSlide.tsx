@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Image from "next/image";
-import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
+import { getEntertainmentContent } from "@/lib/data-service";
 
 interface EntertainmentSlideProps {
   readonly isActive: boolean;
@@ -11,7 +11,7 @@ interface EntertainmentSlideProps {
 export default function EntertainmentSlide({
   isActive,
 }: EntertainmentSlideProps) {
-  const content = DECK_WEBSITE_CONTENT.entertainment;
+  const content = getEntertainmentContent();
   const [activeTab, setActiveTab] = useState(0);
   const item = content.items[activeTab];
 

@@ -2,7 +2,7 @@
 
 import CinematicBackground from "@/components/ui/CinematicBackground";
 import { EASE_OUT_EXPO } from "@/lib/motion";
-import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
+import { getEntertainmentContent } from "@/lib/data-service";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -11,7 +11,7 @@ interface SlideProps {
 }
 
 export default function EntertainmentFlyoverSlide({ isActive }: SlideProps) {
-  const content = DECK_WEBSITE_CONTENT.entertainment;
+  const content = getEntertainmentContent();
   const attraction = content.items[3];
 
   return (

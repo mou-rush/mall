@@ -3,7 +3,7 @@
 import CinematicBackground from "@/components/ui/CinematicBackground";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { LEASING_DEVELOPMENT } from "@/lib/moa-website-content";
+import { getLeasingContent } from "@/lib/data-service";
 
 interface SlideProps {
   readonly isActive: boolean;
@@ -12,7 +12,7 @@ interface SlideProps {
 const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
 export default function RetailPhaseIISlide({ isActive }: SlideProps) {
-  const scene = LEASING_DEVELOPMENT.retail.scenes[1];
+  const scene = getLeasingContent().retail.scenes[1];
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-black">

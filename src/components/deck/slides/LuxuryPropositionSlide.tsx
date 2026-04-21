@@ -4,7 +4,7 @@ import CinematicBackground from "@/components/ui/CinematicBackground";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
-import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
+import { getLuxuryContent } from "@/lib/data-service";
 
 interface SlideProps {
   readonly isActive: boolean;
@@ -13,7 +13,7 @@ interface SlideProps {
 const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
 export default function LuxuryPropositionSlide({ isActive }: SlideProps) {
-  const content = DECK_WEBSITE_CONTENT.luxury;
+  const content = getLuxuryContent();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const pillars = content.pillars;

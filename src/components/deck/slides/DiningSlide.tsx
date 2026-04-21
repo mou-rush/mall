@@ -10,7 +10,7 @@ import {
   LuSparkles,
   LuUtensilsCrossed,
 } from "react-icons/lu";
-import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
+import { getDiningContent, type DeckCategory } from "@/lib/data-service";
 import CinematicBackground from "@/components/ui/CinematicBackground";
 import { VIDEOS } from "@/lib/constants";
 import AnimatedText from "@/components/ui/AnimatedText";
@@ -211,7 +211,7 @@ function DiningImageSlider({
 }
 
 export default function DiningSlide({ isActive }: DiningSlideProps) {
-  const content = DECK_WEBSITE_CONTENT.dining;
+  const content = getDiningContent();
 
   const iconById: Record<string, ComponentType<{ className?: string }>> = {
     "full-service": LuChefHat,
@@ -296,7 +296,7 @@ export default function DiningSlide({ isActive }: DiningSlideProps) {
                   ease: [0.19, 1, 0.22, 1],
                 }}
               >
-                {content.categories.slice(0, 6).map((cat, i) => {
+                {content.categories.slice(0, 6).map((cat: DeckCategory, i) => {
                   const Icon = iconById[cat.id] ?? LuUtensilsCrossed;
                   return (
                     <motion.div

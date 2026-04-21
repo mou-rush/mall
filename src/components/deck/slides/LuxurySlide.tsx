@@ -2,14 +2,17 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
-import { BRAND_LOGO_MAP } from "@/lib/constants";
-import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
+import {
+  getBrandNames,
+  getBrandLogoMap,
+  getLuxuryContent,
+} from "@/lib/data-service";
 
 interface LuxurySlideProps {
   readonly isActive: boolean;
 }
 
-const brands = Object.keys(BRAND_LOGO_MAP);
+const brands = getBrandNames();
 const brandMarquee = [
   ...brands.map((name) => ({ name, run: 0 as const })),
   ...brands.map((name) => ({ name, run: 1 as const })),
@@ -44,7 +47,7 @@ const scenes: Array<{
 ];
 
 export default function LuxurySlide({ isActive }: LuxurySlideProps) {
-  const content = DECK_WEBSITE_CONTENT.luxury;
+  const content = getLuxuryContent();
   const [sceneIndex, setSceneIndex] = useState(0);
   const [activePillar, setActivePillar] = useState(0);
 
@@ -158,7 +161,7 @@ export default function LuxurySlide({ isActive }: LuxurySlideProps) {
                 transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
               >
                 {brandMarquee.map(({ name, run }) => {
-                  const logo = BRAND_LOGO_MAP[name];
+                  const logo = getBrandLogoMap()[name];
                   return logo ? (
                     <div
                       key={`${name}-${run}`}

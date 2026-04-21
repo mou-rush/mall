@@ -5,8 +5,11 @@ import AnimatedText from "@/components/ui/AnimatedText";
 import { useCountUp } from "@/hooks/useCountUp";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { BRAND_LOGO_MAP } from "@/lib/constants";
-import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
+import {
+  getBrandNames,
+  getBrandLogoMap,
+  getLuxuryContent,
+} from "@/lib/data-service";
 
 interface SlideProps {
   readonly isActive: boolean;
@@ -14,14 +17,14 @@ interface SlideProps {
 
 const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
-const brands = Object.keys(BRAND_LOGO_MAP);
+const brands = getBrandNames();
 const brandMarquee = [
   ...brands.map((name) => ({ name, run: 0 as const })),
   ...brands.map((name) => ({ name, run: 1 as const })),
 ];
 
 export default function LuxurySignatureSlide({ isActive }: SlideProps) {
-  const content = DECK_WEBSITE_CONTENT.luxury;
+  const content = getLuxuryContent();
   const storesCount = Math.round(useCountUp(520, 1800, isActive));
   const departmentCount = Math.round(useCountUp(2, 1600, isActive));
 
@@ -135,7 +138,7 @@ export default function LuxurySignatureSlide({ isActive }: SlideProps) {
               transition={{ duration: 34, repeat: Infinity, ease: "linear" }}
             >
               {brandMarquee.map(({ name, run }) => {
-                const logo = BRAND_LOGO_MAP[name];
+                const logo = getBrandLogoMap()[name];
                 return logo ? (
                   <div
                     key={`${name}-${run}`}

@@ -4,7 +4,7 @@ import type { ComponentType, CSSProperties } from "react";
 import { useState } from "react";
 import ArrowIcon from "@/components/ui/ArrowIcon";
 import { LuCalendarDays, LuHandshake, LuStore } from "react-icons/lu";
-import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
+import { getPartnerContent } from "@/lib/data-service";
 import CinematicBackground from "@/components/ui/CinematicBackground";
 import { VIDEOS } from "@/lib/constants";
 import { ContactForm as DynamicContactForm } from "@/lib/lazy-slides";
@@ -14,7 +14,7 @@ interface CTASlideProps {
 }
 
 export default function CTASlide({ isActive }: CTASlideProps) {
-  const content = DECK_WEBSITE_CONTENT.partner;
+  const content = getPartnerContent();
   const [activeForm, setActiveForm] = useState<string | null>(null);
 
   const colorByAccent: Record<string, string> = {

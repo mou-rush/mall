@@ -1,15 +1,14 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useMemo } from "react";
-import { LEASING_DEVELOPMENT } from "@/lib/moa-website-content";
+import { getLeasingContent } from "@/lib/data-service";
 
 interface RetailSlideProps {
   readonly isActive: boolean;
 }
 
 export default function RetailSlide({ isActive }: RetailSlideProps) {
-  const scenes = useMemo(() => LEASING_DEVELOPMENT.retail.scenes, []);
+  const scenes = getLeasingContent().retail.scenes;
 
   const scene = scenes[0];
 

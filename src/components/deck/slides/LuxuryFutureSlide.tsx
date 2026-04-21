@@ -2,7 +2,7 @@
 
 import CinematicBackground from "@/components/ui/CinematicBackground";
 import { motion } from "framer-motion";
-import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
+import { getLuxuryContent } from "@/lib/data-service";
 
 interface SlideProps {
   readonly isActive: boolean;
@@ -11,7 +11,7 @@ interface SlideProps {
 const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
 export default function LuxuryFutureSlide({ isActive }: SlideProps) {
-  const content = DECK_WEBSITE_CONTENT.luxury;
+  const content = getLuxuryContent();
   const futurePillar = content.pillars[2];
 
   const getStatDelay = (label: string): number => {

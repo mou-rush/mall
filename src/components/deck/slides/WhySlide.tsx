@@ -3,7 +3,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCountUp } from "@/hooks/useCountUp";
 import { parseNumeric } from "@/lib/utils";
 import { useMemo, useState } from "react";
-import { LEASING_DEVELOPMENT } from "@/lib/moa-website-content";
+import {
+  getLeasingStats,
+  getLeasingContact,
+  getLeasingContent,
+} from "@/lib/data-service";
 
 interface WhySlideProps {
   readonly isActive: boolean;
@@ -143,7 +147,9 @@ function AnimatedStat({
 }
 
 export default function WhySlide({ isActive }: WhySlideProps) {
-  const stats = LEASING_DEVELOPMENT.why.stats;
+  const stats = getLeasingStats();
+  const contact = getLeasingContact();
+  const content = getLeasingContent().why;
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -174,7 +180,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
             animate={isActive ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            {LEASING_DEVELOPMENT.why.eyebrow}
+            {content.eyebrow}
           </motion.p>
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
@@ -188,7 +194,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
                 ease: [0.19, 1, 0.22, 1],
               }}
             >
-              {LEASING_DEVELOPMENT.why.title}
+              {content.title}
             </motion.h2>
 
             <motion.p
@@ -197,7 +203,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
               animate={isActive ? { opacity: 1 } : {}}
               transition={{ delay: 0.3, duration: 0.8 }}
             >
-              {LEASING_DEVELOPMENT.why.subtitle}
+              {content.subtitle}
             </motion.p>
           </div>
 
@@ -249,23 +255,23 @@ export default function WhySlide({ isActive }: WhySlideProps) {
             className="font-extralight text-[var(--moa-white)] leading-snug relative z-10"
             style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.4rem)" }}
           >
-            {LEASING_DEVELOPMENT.why.contact.line}
+            {contact.line}
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 relative z-10">
-            {LEASING_DEVELOPMENT.why.contact.phone && (
+            {contact.phone && (
               <a
                 className="text-[0.7rem] uppercase tracking-[0.28em] text-white/70 hover:text-white transition-colors"
-                href={`tel:${LEASING_DEVELOPMENT.why.contact.phone.replace(/\./g, "")}`}
+                href={`tel:${contact.phone.replace(/\./g, "")}`}
               >
-                {LEASING_DEVELOPMENT.why.contact.phone}
+                {contact.phone}
               </a>
             )}
-            {LEASING_DEVELOPMENT.why.contact.email && (
+            {contact.email && (
               <a
                 className="text-[0.7rem] uppercase tracking-[0.28em] text-white/70 hover:text-white transition-colors"
-                href={`mailto:${LEASING_DEVELOPMENT.why.contact.email}`}
+                href={`mailto:${contact.email}`}
               >
-                {LEASING_DEVELOPMENT.why.contact.email}
+                {contact.email}
               </a>
             )}
             <span className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--gold)]/70">
