@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, FC } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useDeckNavigation } from "@/hooks/useDeckNavigation";
 import {
@@ -10,37 +10,33 @@ import {
 } from "@/lib/slide-registry";
 import EntryScreen from "./EntryScreen";
 import IntroScreen from "./IntroScreen";
-import SideMenu from "./SideMenu";
 import NavigationArrows from "./NavigationArrows";
 import SlideWrapper from "./SlideWrapper";
 
-import HeroSlide from "./slides/HeroSlide";
-import WhySlide from "./slides/WhySlide";
+import {
+  HeroSlide,
+  WhySlide,
+  RetailLeasingSlide,
+  RetailPhaseIISlide,
+  RetailExpansionHospitalitySlide,
+  RetailExpansionWellnessSlide,
+  LuxurySignatureSlide,
+  LuxuryPropositionSlide,
+  LuxuryFutureSlide,
+  DiningSlide,
+  EntertainmentNickelodeonSlide,
+  EntertainmentSealifeSlide,
+  EntertainmentCrayolaSlide,
+  EntertainmentFlyoverSlide,
+  EventsSlide,
+  CTASlide,
+  SideMenu,
+  type SlideComponent,
+} from "@/lib/lazy-slides";
+
 import CoverSlide from "./slides/CoverSlide";
-import RetailLeasingSlide from "./slides/RetailLeasingSlide";
-import RetailPhaseIISlide from "./slides/RetailPhaseIISlide";
-import RetailExpansionHospitalitySlide from "./slides/RetailExpansionHospitalitySlide";
-import RetailExpansionWellnessSlide from "./slides/RetailExpansionWellnessSlide";
-import LuxurySignatureSlide from "./slides/LuxurySignatureSlide";
-import LuxuryPropositionSlide from "./slides/LuxuryPropositionSlide";
-import LuxuryFutureSlide from "./slides/LuxuryFutureSlide";
-import DiningSlide from "./slides/DiningSlide";
-import EntertainmentNickelodeonSlide from "./slides/EntertainmentNickelodeonSlide";
-import EntertainmentSealifeSlide from "./slides/EntertainmentSealifeSlide";
-import EntertainmentCrayolaSlide from "./slides/EntertainmentCrayolaSlide";
-import EntertainmentFlyoverSlide from "./slides/EntertainmentFlyoverSlide";
-import EventsSlide from "./slides/EventsSlide";
-import CTASlide from "./slides/CTASlide";
 
-type SlideProps = {
-  isActive: boolean;
-  onNext?: () => void;
-  goTo?: (idx: number) => void;
-  currentSlide?: number;
-};
-type SlideComponent = React.ComponentType<SlideProps>;
-
-const WhyCover: SlideComponent = ({ isActive }) => (
+const WhyCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
     title="Why MOA"
@@ -48,7 +44,7 @@ const WhyCover: SlideComponent = ({ isActive }) => (
   />
 );
 
-const RetailCover: SlideComponent = ({ isActive }) => (
+const RetailCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
     title="Retail Leasing"
@@ -56,7 +52,7 @@ const RetailCover: SlideComponent = ({ isActive }) => (
   />
 );
 
-const LuxuryCover: SlideComponent = ({ isActive }) => (
+const LuxuryCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
     title="Luxury"
@@ -64,7 +60,7 @@ const LuxuryCover: SlideComponent = ({ isActive }) => (
   />
 );
 
-const DiningCover: SlideComponent = ({ isActive }) => (
+const DiningCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
     title="Dining"
@@ -72,7 +68,7 @@ const DiningCover: SlideComponent = ({ isActive }) => (
   />
 );
 
-const EntertainmentCover: SlideComponent = ({ isActive }) => (
+const EntertainmentCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
     title="Attractions + Entertainment"
@@ -80,7 +76,7 @@ const EntertainmentCover: SlideComponent = ({ isActive }) => (
   />
 );
 
-const EventsCover: SlideComponent = ({ isActive }) => (
+const EventsCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
     title="Events"
@@ -88,7 +84,7 @@ const EventsCover: SlideComponent = ({ isActive }) => (
   />
 );
 
-const PartnerCover: SlideComponent = ({ isActive }) => (
+const PartnerCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
     title="Partner With Us"
@@ -97,30 +93,29 @@ const PartnerCover: SlideComponent = ({ isActive }) => (
 );
 
 const SLIDE_COMPONENTS: Record<SlideId, SlideComponent> = {
-  hero: HeroSlide as SlideComponent,
+  hero: HeroSlide,
   "why-cover": WhyCover,
-  why: WhySlide as SlideComponent,
+  why: WhySlide,
   "retail-cover": RetailCover,
-  "retail-leasing": RetailLeasingSlide as SlideComponent,
-  "retail-phase-ii": RetailPhaseIISlide as SlideComponent,
-  "retail-expansion-hospitality":
-    RetailExpansionHospitalitySlide as SlideComponent,
-  "retail-expansion-wellness": RetailExpansionWellnessSlide as SlideComponent,
+  "retail-leasing": RetailLeasingSlide,
+  "retail-phase-ii": RetailPhaseIISlide,
+  "retail-expansion-hospitality": RetailExpansionHospitalitySlide,
+  "retail-expansion-wellness": RetailExpansionWellnessSlide,
   "luxury-cover": LuxuryCover,
-  "luxury-signature": LuxurySignatureSlide as SlideComponent,
-  "luxury-proposition": LuxuryPropositionSlide as SlideComponent,
-  "luxury-future": LuxuryFutureSlide as SlideComponent,
+  "luxury-signature": LuxurySignatureSlide,
+  "luxury-proposition": LuxuryPropositionSlide,
+  "luxury-future": LuxuryFutureSlide,
   "dining-cover": DiningCover,
-  dining: DiningSlide as SlideComponent,
+  dining: DiningSlide,
   "entertainment-cover": EntertainmentCover,
-  "entertainment-nickelodeon": EntertainmentNickelodeonSlide as SlideComponent,
-  "entertainment-sealife": EntertainmentSealifeSlide as SlideComponent,
-  "entertainment-crayola": EntertainmentCrayolaSlide as SlideComponent,
-  "entertainment-flyover": EntertainmentFlyoverSlide as SlideComponent,
+  "entertainment-nickelodeon": EntertainmentNickelodeonSlide,
+  "entertainment-sealife": EntertainmentSealifeSlide,
+  "entertainment-crayola": EntertainmentCrayolaSlide,
+  "entertainment-flyover": EntertainmentFlyoverSlide,
   "events-cover": EventsCover,
-  events: EventsSlide as SlideComponent,
+  events: EventsSlide,
   "partner-cover": PartnerCover,
-  partner: CTASlide as SlideComponent,
+  partner: CTASlide,
 };
 
 type Stage = "entry" | "intro" | "deck";

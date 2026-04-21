@@ -1,7 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
 import VideoBackground from "@/components/ui/VideoBackground";
-import { VIDEOS } from "@/lib/constants";
 
 interface EntryScreenProps {
   readonly onEnter: () => void;

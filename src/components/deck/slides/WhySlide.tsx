@@ -4,8 +4,6 @@ import { useCountUp } from "@/hooks/useCountUp";
 import { parseNumeric } from "@/lib/utils";
 import { useMemo, useState } from "react";
 import { LEASING_DEVELOPMENT } from "@/lib/moa-website-content";
-import CinematicBackground from "@/components/ui/CinematicBackground";
-import { VIDEOS } from "@/lib/constants";
 
 interface WhySlideProps {
   readonly isActive: boolean;

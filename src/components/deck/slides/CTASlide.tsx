@@ -7,6 +7,7 @@ import { LuCalendarDays, LuHandshake, LuStore } from "react-icons/lu";
 import { DECK_WEBSITE_CONTENT } from "@/lib/moa-website-content";
 import CinematicBackground from "@/components/ui/CinematicBackground";
 import { VIDEOS } from "@/lib/constants";
+import { ContactForm as DynamicContactForm } from "@/lib/lazy-slides";
 
 interface CTASlideProps {
   readonly isActive: boolean;
@@ -154,57 +155,10 @@ export default function CTASlide({ isActive }: CTASlideProps) {
               className="overflow-hidden"
             >
               <div className="glass-card rounded-[2px] p-6 lg:p-8 mb-4">
-                <div className="max-w-xl mx-auto">
-                  <p className="eyebrow mb-5">
-                    {content.formLabels[
-                      activeForm as keyof typeof content.formLabels
-                    ] ?? "Inquiry"}
-                  </p>
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      alert(
-                        "Form submitted! Connect to CRM API in production.",
-                      );
-                    }}
-                    className="space-y-3"
-                  >
-                    <div className="grid grid-cols-2 gap-3">
-                      <input
-                        placeholder="First Name *"
-                        required
-                        className="deck-input"
-                      />
-                      <input
-                        placeholder="Last Name *"
-                        required
-                        className="deck-input"
-                      />
-                    </div>
-                    <input
-                      placeholder="Company *"
-                      required
-                      className="deck-input"
-                    />
-                    <input
-                      type="email"
-                      placeholder="Email *"
-                      required
-                      className="deck-input"
-                    />
-                    <textarea
-                      rows={2}
-                      placeholder="Tell us about your project…"
-                      className="deck-input resize-none"
-                    />
-                    <button
-                      type="submit"
-                      className="btn-primary w-full justify-center"
-                    >
-                      Send Inquiry <ArrowIcon />
-                    </button>
-                  </form>
-                </div>
+                <DynamicContactForm
+                  type={activeForm}
+                  onClose={() => setActiveForm(null)}
+                />
               </div>
             </motion.div>
           )}
