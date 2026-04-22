@@ -57,7 +57,7 @@ export default function LuxuryPropositionSlide({ isActive }: SlideProps) {
 
     const id = window.setInterval(() => {
       setActiveIndex((current) => (current + 1) % pillars.length);
-    }, 4200);
+    }, 2800);
 
     return () => window.clearInterval(id);
   }, [isActive, isPaused, pillars.length]);
