@@ -61,7 +61,7 @@ npm run lint
 
 ## Project Structure
 
-````
+```
 src/
 ├── app/                        # Next.js App Router (layout, page, globals)
 ├── components/
@@ -88,7 +88,7 @@ src/
 │   ├── navigation/             # Additional navigation utilities
 │   └── ui/                     # Shared UI primitives
 ├── Core Philosophy
-
+```
  Key principles:
 
 - **One idea per slide** — Each screen communicates a single concept
@@ -162,6 +162,6 @@ The easiest way to deploy is via [Vercel](https://vercel.com/new):
 
 ```bash
 npm run build
-````
+```
 
 Or connect the repository directly to Vercel for automatic deployments on push.
