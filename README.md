@@ -61,7 +61,7 @@ npm run lint
 
 ## Project Structure
 
-````
+```
 src/
 ├── app/                        # Next.js App Router (layout, page, globals)
 ├── components/
@@ -87,9 +87,11 @@ src/
 │   ├── sections/               # Legacy section components (still used)
 │   ├── navigation/             # Additional navigation utilities
 │   └── ui/                     # Shared UI primitives
-├── Core Philosophy
+```
 
- Key principles:
+### Core Philosophy
+
+Key principles:
 
 - **One idea per slide** — Each screen communicates a single concept
 - **Video-first storytelling** — Background video is primary, text is minimal
@@ -119,6 +121,7 @@ src/
 - **Scrollable content detection** — Navigation system checks `scrollHeight`, `scrollTop`, and DOM tree for scrollable ancestors before hijacking wheel events.
 - **Entry/intro sequences** — `EntryScreen` (loading) → `IntroScreen` (animated reveal) → Deck navigation.
 - **Menu with hierarchy** — `SideMenu` displays parent sections with expandable child slides for quick jump
+
 ---
 
 ## Design Decisions
@@ -136,7 +139,8 @@ src/
 - **Dark cinematic aesthetic** — Near-black backgrounds with gold gradients and glass-morphism cards create a premium, editorial feel appropriate for a luxury retail pitch.
 
 ### Animation
-Key Features
+
+#### Key Features
 
 - **20-40 discrete slides** — Each communicates one idea with video/image backdrop and minimal text
 - **Video-rich backgrounds** — Full-bleed video support via Next/Image or YouTube embeds
@@ -162,6 +166,6 @@ The easiest way to deploy is via [Vercel](https://vercel.com/new):
 
 ```bash
 npm run build
-````
+```
 
 Or connect the repository directly to Vercel for automatic deployments on push.
