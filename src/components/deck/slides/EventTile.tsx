@@ -8,6 +8,8 @@ interface EventTileProps {
   readonly title: string;
   readonly desc: string;
   readonly imageSrc: string;
+  readonly imagePosition?: string;
+  readonly imageClassName?: string;
   readonly index: number;
   readonly isActive: boolean;
   readonly offsetClass: string;
@@ -17,6 +19,8 @@ export default function EventTile({
   title,
   desc,
   imageSrc,
+  imagePosition = "50% 50%",
+  imageClassName = "object-cover",
   index,
   isActive,
   offsetClass,
@@ -39,7 +43,7 @@ export default function EventTile({
       style={{ transformStyle: "preserve-3d" }}
     >
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 bg-black/35"
         whileHover={{ scale: 1.08 }}
         transition={{ duration: 0.9, ease: EASE_OUT_EXPO }}
       >
@@ -49,7 +53,8 @@ export default function EventTile({
           fill
           priority={index < 3}
           sizes="(max-width: 768px) 50vw, 33vw"
-          className="object-cover"
+          className={imageClassName}
+          style={{ objectPosition: imagePosition }}
         />
       </motion.div>
 

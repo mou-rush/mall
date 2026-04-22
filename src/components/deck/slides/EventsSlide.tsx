@@ -19,6 +19,12 @@ export default function EventsSlide({ isActive }: EventsSlideProps) {
     books: "/images/events/book_signings.jpg",
     premieres: "/images/events/movie_premiers.jpg",
   };
+  const imagePositionById: Record<string, string> = {
+    celebrity: "50% 30%",
+  };
+  const imageClassNameById: Record<string, string> = {
+    celebrity: "object-contain object-top scale-[0.96]",
+  };
 
   const getOffsetClass = (index: number): string => {
     if (index % 3 === 0) return "lg:-translate-y-8";
@@ -113,6 +119,9 @@ export default function EventsSlide({ isActive }: EventsSlideProps) {
           <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-3 lg:gap-5">
             {content.categories.map((cat, i) => {
               const imageSrc = imageById[cat.id] ?? "/images/events/crowd.png";
+              const imagePosition = imagePositionById[cat.id] ?? "50% 50%";
+              const imageClassName =
+                imageClassNameById[cat.id] ?? "object-cover";
               const offsetClass = getOffsetClass(i);
 
               return (
@@ -121,6 +130,8 @@ export default function EventsSlide({ isActive }: EventsSlideProps) {
                   title={cat.title}
                   desc={cat.desc}
                   imageSrc={imageSrc}
+                  imagePosition={imagePosition}
+                  imageClassName={imageClassName}
                   index={i}
                   isActive={isActive}
                   offsetClass={offsetClass}

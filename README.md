@@ -1,6 +1,6 @@
-# Mall of America — Premium Sales Experience
+# Mall of America — Interactive Sales Deck
 
-A high-end, single-page marketing experience for Mall of America, designed to pitch leasing, sponsorship, and event partnerships to prospective brands. Built as a performant, animated web application with a cinematic dark aesthetic and gold accent palette.
+This is a cinematic, interactive presentation deck for Mall of America—designed to pitch leasing, sponsorship, and event partnerships to prospective brands. Built as a full-screen, slide-based experience inspired by premium presentation tools like Digideck, with video-rich storytelling, non-linear navigation, and luxury brand aesthetics.
 
 ---
 
@@ -8,12 +8,12 @@ A high-end, single-page marketing experience for Mall of America, designed to pi
 
 | Layer     | Technology                                                         |
 | --------- | ------------------------------------------------------------------ |
-| Framework | [Next.js 16](https://nextjs.org/) (App Router)                     |
+| Framework | [Next.js 15+](https://nextjs.org/) (App Router)                    |
 | Language  | [TypeScript](https://www.typescriptlang.org/)                      |
-| Styling   | [Tailwind CSS v4](https://tailwindcss.com/)                        |
+| Styling   | [Tailwind CSS](https://tailwindcss.com/)                           |
 | Animation | [Framer Motion](https://www.framer.com/motion/)                    |
 | Icons     | [React Icons (Lucide)](https://react-icons.github.io/react-icons/) |
-| Runtime   | [React 19](https://react.dev/)                                     |
+| Runtime   | [React 18+](https://react.dev/)                                    |
 | Linting   | ESLint with `eslint-config-next`                                   |
 
 ---
@@ -61,28 +61,64 @@ npm run lint
 
 ## Project Structure
 
-```
+````
 src/
 ├── app/                        # Next.js App Router (layout, page, globals)
 ├── components/
-│   ├── navigation/             # Floating nav with scroll progress
-│   ├── sections/               # Page sections (modular folder-per-section)
-│   │   ├── Hero/
-│   │   ├── WhyThisProperty/
-│   │   ├── Retail/
-│   │   ├── Entertainment/
-│   │   ├── DiningLifestyle/
-│   │   ├── Events/
-│   │   ├── Luxury/
-│   │   └── FinalCTA/
-│   └── ui/                     # Shared UI primitives (StatCard, AnimatedText, etc.)
-├── hooks/                      # Custom React hooks (useScrollTo, etc.)
-├── lib/                        # Constants, types, motion utilities, lazy loaders
-└── modules/                    # Domain modules (events, leasing, sponsorship)
-```
+│   ├── deck/                   # Core presentation deck system
+│   │   ├── DeckExperience.tsx  # Main deck orchestrator
+│   │   ├── DeckNav.tsx         # Navigation state management
+│   │   ├── EntryScreen.tsx     # Initial load screen
+│   │   ├── IntroScreen.tsx     # Animated intro sequence
+│   │   ├── SideMenu.tsx        # Collapsible slide navigation menu
+│   │   ├── NavigationArrows.tsx # Left/right navigation controls
+│   │   ├── SlideWrapper.tsx    # Individual slide container
+│   │   └── slides/             # Individual slide components
+│   │       ├── CoverSlide.tsx
+│   │       ├── HeroSlide.tsx
+│   │       ├── WhySlide.tsx
+│   │       ├── RetailSlide.tsx
+│   │       ├── EntertainmentSlide.tsx
+│   │       ├── DiningSlide.tsx
+│   │       ├── EventsSlide.tsx
+│   │       ├── LuxurySlide.tsx
+│   │       ├── CTASlide.tsx
+│   │       └── [...20+ more slides]
+│   ├── sections/               # Legacy section components (still used)
+│   ├── navigation/             # Additional navigation utilities
+│   └── ui/                     # Shared UI primitives
+├── Core Philosophy
 
-Each section follows a **folder-per-component** pattern: a main section file, its subcomponents in sibling files, and a barrel `index.ts` for clean imports.
+ Key principles:
 
+- **One idea per slide** — Each screen communicates a single concept
+- **Video-first storytelling** — Background video is primary, text is minimal
+- **Cinematic transitions** — Film-style cuts between slides, not page scrolls
+- **Non-linear navigation** — Jump to any slide via menu, keyboard, or arrows
+- **Premium aesthetics** — Inspired by Apple, Tesla, Disney presentations
+
+### Architecture
+
+- **Slide-based deck system** — 20-40 individual slide components orchestrated by `DeckExperience.tsx`. Each slide occupies full viewport (100vh).
+- **Centralized slide registry** — `slide-registry.ts` defines all slides, their metadata, parent/child relationships, and menu structure. Single source of truth for navigation.
+- **Cinematic timing** — All animations are deliberately slowed (1.4x baseline) for premium feel. Slide transitions: 0.9-2.1s delays, 1.0-1.5s durations.
+- **Framer Motion throughout** — Slide entrance animations, staggered text reveals, parallax effects, infinite marquees, and layout transitions.
+- **Shared easing constants** — Custom exponential ease-out curve (`EASE_OUT_EXPO`) defined in `lib/motion.ts` and reused across all animated components.
+- **`AnimatePresence` for slide transitions** — Smooth enter/exit animations between slides without layout shift. Side menu and overlays use exit animations.
+- **Pause controls** — Complex animated slides (e.g., `LuxuryPropositionSlide`) include pause/resume UI for user control.
+
+### TypeScript
+
+- **Strict typing** — All component props use named interfaces with `Readonly<>` wrappers. No `any` types allowed.
+- **Shared types** — `SlideId`, `SlideMetadata`, `MenuStructure` types in `lib/types.ts` ensure type-safe navigation and registration.
+
+### Navigation Features
+
+- **Multi-modal input** — Keyboard (Arrow keys, Space, Enter), mouse wheel, touch gestures all supported.
+- **Debounced navigation lock** — 700ms cooldown prevents accidental double-navigation.
+- **Scrollable content detection** — Navigation system checks `scrollHeight`, `scrollTop`, and DOM tree for scrollable ancestors before hijacking wheel events.
+- **Entry/intro sequences** — `EntryScreen` (loading) → `IntroScreen` (animated reveal) → Deck navigation.
+- **Menu with hierarchy** — `SideMenu` displays parent sections with expandable child slides for quick jump
 ---
 
 ## Design Decisions
@@ -100,29 +136,23 @@ Each section follows a **folder-per-component** pattern: a main section file, it
 - **Dark cinematic aesthetic** — Near-black backgrounds with gold gradients and glass-morphism cards create a premium, editorial feel appropriate for a luxury retail pitch.
 
 ### Animation
+Key Features
 
-- **Framer Motion throughout** — Scroll-triggered entrance animations (`useInView`), parallax effects (`useScroll` / `useTransform`), infinite marquees, and layout transitions are all handled by Framer Motion for consistency.
-- **Shared easing constants** — A custom exponential ease-out curve (`EASE_OUT_EXPO`) is defined in `lib/motion.ts` and reused across all animated components for a cohesive motion language.
-- **`AnimatePresence` for mount/unmount** — Components that conditionally render (modals, info panels) use `AnimatePresence` for smooth enter/exit transitions without layout shift.
+- **20-40 discrete slides** — Each communicates one idea with video/image backdrop and minimal text
+- **Video-rich backgrounds** — Full-bleed video support via Next/Image or YouTube embeds
+- **Non-linear navigation** — Jump to any slide via side menu, arrow navigation, or keyboard shortcuts
+- **Scroll-safe wheel navigation** — Respects input fields, scrollable overlays, and menu interactions
+- **Cinematic transitions** — Film-style cuts with staggered animations and motion blur
+- **Responsive touch gestures** — Swipe navigation on mobile with 180ms accumulator reset
+- **Entry/intro sequences** — Branded loading screen and animated reveal before deck access
+- **Pause controls** — User can pause auto-rotating content (e.g., luxury proposition pillars)
+- **Social media dock** — Floating Instagram/X/LinkedIn links with gold gradient styling
+- **Premium brand aesthetics** — Dark backgrounds, gold accents, glass-morphism, backdrop blur
 
-### TypeScript
 
 - **Strict typing** — All component props use named interfaces with `Readonly<>` wrappers. Shared types (`IconComponent`, `NavId`, `FloorId`) live in dedicated type files.
 - **No `any` types** — The codebase enforces explicit typing throughout.
 
-### Interactive Floor Plan
-
-- **SVG-based map** — The mall floor plan is rendered as an inline SVG with dynamic polygon data per floor, enabling hover highlights and click-to-select interactions without external mapping libraries.
-- **Floor-scoped keys** — Each store polygon uses a `floor-storeName` composite key to prevent React reconciliation bugs across level switches.
-
----
-
-## AI Tools Used
-
-| Tool               | Purpose                                                                                                                               |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| **GitHub Copilot** | Code generation, component scaffolding, refactoring, debugging, and architectural decisions throughout the entire development process |
-| **Google Gemini**  | Image generation (hero backgrounds, section imagery) and logo generation for luxury brand assets used in the marquee                  |
 
 ---
 
@@ -132,6 +162,6 @@ The easiest way to deploy is via [Vercel](https://vercel.com/new):
 
 ```bash
 npm run build
-```
+````
 
 Or connect the repository directly to Vercel for automatic deployments on push.
