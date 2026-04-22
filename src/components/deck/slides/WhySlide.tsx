@@ -1,166 +1,115 @@
 "use client";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useCountUp } from "@/hooks/useCountUp";
-import { parseNumeric } from "@/lib/utils";
-import { useMemo, useState } from "react";
-import {
-  getLeasingStats,
-  getLeasingContact,
-  getLeasingContent,
-} from "@/lib/data-service";
+import { getLeasingStats, getLeasingContent } from "@/lib/data-service";
+
+type SlideStat = ReturnType<typeof getLeasingStats>[number];
 
 interface WhySlideProps {
   readonly isActive: boolean;
 }
 
-function FeaturedStat({
-  value,
-  label,
-  sub,
+function formatMetricValue(stat: SlideStat, count: number) {
+  if (typeof stat.countTo !== "number") {
+    return stat.value;
+  }
+
+  const rounded = Math.round(count).toLocaleString();
+  return `${stat.prefix ?? ""}${rounded}${stat.suffix ?? ""}`;
+}
+
+function MetricPanel({
+  stat,
+  index,
   active,
+  className,
+  featured = false,
 }: Readonly<{
-  value: string;
-  label: string;
-  sub?: string;
+  stat: SlideStat;
+  index: number;
   active: boolean;
+  className?: string;
+  featured?: boolean;
 }>) {
-  const { num, prefix, suffix } = parseNumeric(value);
-  const count = useCountUp(num, 1600, active);
-  const display =
-    num % 1 === 0 ? Math.round(count).toString() : count.toFixed(1);
+  const count = useCountUp(stat.countTo ?? 0, featured ? 2200 : 1700, active);
 
   return (
     <motion.div
-      key={label}
-      initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      exit={{ opacity: 0, y: 12, filter: "blur(6px)" }}
-      transition={{ duration: 1.05, ease: [0.19, 1, 0.22, 1] }}
-      className="relative glass-card rounded-[2px] p-6 lg:p-7 overflow-hidden"
+      initial={{ opacity: 0, y: 40, scale: 0.98 }}
+      animate={active ? { opacity: 1, y: 0, scale: 1 } : {}}
+      transition={{
+        delay: 0.35 + index * 0.12,
+        duration: featured ? 1.25 : 1.05,
+        ease: [0.19, 1, 0.22, 1],
+      }}
+      whileHover={{ y: -10, scale: 1.01 }}
+      className={
+        "relative overflow-hidden rounded-[2px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-6 lg:p-8 transition-all duration-500 group " +
+        (featured
+          ? "min-h-[260px] lg:min-h-[320px]"
+          : "min-h-[145px] lg:min-h-[180px]") +
+        (className ? ` ${className}` : "")
+      }
     >
-      <div className="absolute -top-16 -right-16 w-48 h-48 bg-[var(--gold-glow)] rounded-full blur-[90px] opacity-80 pointer-events-none" />
-      <div className="absolute -bottom-20 -left-20 w-56 h-56 bg-[var(--gold-glow)] rounded-full blur-[110px] opacity-40 pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top_left,rgba(255,199,44,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(0,61,165,0.22),transparent_42%)] opacity-80" />
+      <div className="absolute inset-0 pointer-events-none opacity-40 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.06),transparent)] translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[1400ms]" />
+      <div className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-[var(--gold)] via-white/20 to-transparent" />
 
-      <p className="eyebrow text-[var(--gold)]/80 mb-4">Featured Proof</p>
-      <p className="stat-num text-gold-gradient mb-2 !text-[clamp(2.4rem,5vw,4.8rem)]">
-        {prefix}
-        {display}
-        {suffix}
-      </p>
-      <p className="text-[var(--moa-white)] font-medium text-sm mb-2">
-        {label}
-      </p>
-      {sub && (
-        <p className="text-[var(--moa-muted)] text-xs leading-relaxed max-w-[36ch]">
-          {sub}
-        </p>
-      )}
+      <div className="relative z-10 flex h-full flex-col justify-between">
+        <div>
+          <motion.p
+            className={
+              featured
+                ? "text-gold-gradient font-semibold leading-[0.88] tracking-[-0.05em] text-[clamp(4.5rem,11vw,9rem)]"
+                : "text-[var(--moa-white)] font-semibold leading-[0.9] tracking-[-0.04em] text-[clamp(2.9rem,7vw,5.5rem)]"
+            }
+          >
+            {formatMetricValue(stat, count)}
+          </motion.p>
+          <p className="mt-3 text-[0.8rem] lg:text-[0.95rem] uppercase tracking-[0.28em] text-white/82">
+            {stat.label}
+          </p>
+        </div>
 
-      <div className="mt-6 flex items-center gap-3">
-        <span className="h-px flex-1 bg-gradient-to-r from-[var(--gold)] via-[var(--gold-light)] to-transparent opacity-60" />
-        <span className="text-[0.6rem] uppercase tracking-[0.35em] text-white/35">
-          Click stats to explore
-        </span>
+        {stat.sub && (
+          <div className="mt-6 flex items-center gap-3">
+            <span className="h-px w-8 bg-[var(--gold)]/70" />
+            <p className="text-[0.62rem] uppercase tracking-[0.36em] text-[var(--gold)]/90">
+              {stat.sub}
+            </p>
+          </div>
+        )}
       </div>
     </motion.div>
   );
 }
 
-function AnimatedStat({
-  value,
-  label,
-  sub,
-  index,
-  active,
-  selected,
-  onSelect,
-}: Readonly<{
-  value: string;
-  label: string;
-  sub?: string;
-  index: number;
-  active: boolean;
-  selected: boolean;
-  onSelect: () => void;
-}>) {
-  const { num, prefix, suffix } = parseNumeric(value);
-  const count = useCountUp(num, 2000, active);
-  const display =
-    num % 1 === 0 ? Math.round(count).toString() : count.toFixed(1);
-
-  return (
-    <motion.button
-      type="button"
-      onClick={onSelect}
-      initial={{ opacity: 0, y: 30 }}
-      animate={active ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        delay: 0.42 + index * 0.12,
-        duration: 1.2,
-        ease: [0.19, 1, 0.22, 1],
-      }}
-      whileHover={{ y: -8, scale: 1.01 }}
-      whileTap={{ scale: 0.99 }}
-      className={
-        "relative text-left glass-card p-6 rounded-[2px] transition-all duration-500 group cursor-pointer overflow-hidden " +
-        (selected
-          ? "border-[var(--gold)] shadow-[0_0_40px_rgba(201,168,76,0.18)]"
-          : "hover:border-[var(--gold)]")
-      }
-    >
-      <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_20%_15%,rgba(201,168,76,0.18),transparent_45%)]" />
-      <div className="absolute -top-10 -right-10 w-32 h-32 bg-[var(--gold-glow)] rounded-full blur-[70px] opacity-0 group-hover:opacity-70 transition-opacity duration-700 pointer-events-none" />
-
-      <p className="stat-num text-gold-gradient mb-2 !text-[clamp(2rem,4.5vw,4.5rem)]">
-        {prefix}
-        {display}
-        {suffix}
-      </p>
-      <p className="text-[var(--moa-white)] font-medium text-sm mb-1">
-        {label}
-      </p>
-      {sub && (
-        <p className="text-[var(--moa-muted)] text-xs leading-relaxed">{sub}</p>
-      )}
-      <div className="mt-4 flex items-center gap-3">
-        <span
-          className={
-            "h-px flex-1 transition-all duration-700 " +
-            (selected
-              ? "bg-gradient-to-r from-[var(--gold)] via-[var(--gold-light)] to-transparent opacity-80"
-              : "bg-white/10 group-hover:bg-white/20")
-          }
-        />
-        <span
-          className={
-            "text-[0.55rem] uppercase tracking-[0.28em] transition-colors duration-500 " +
-            (selected
-              ? "text-[var(--gold)]/90"
-              : "text-white/30 group-hover:text-white/45")
-          }
-        >
-          {selected ? "Selected" : "Explore"}
-        </span>
-      </div>
-    </motion.button>
-  );
-}
-
 export default function WhySlide({ isActive }: WhySlideProps) {
   const stats = getLeasingStats();
-  const contact = getLeasingContact();
   const content = getLeasingContent().why;
-
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const safeSelectedIndex = selectedIndex >= stats.length ? 0 : selectedIndex;
-  const selected = useMemo(
-    () => stats[safeSelectedIndex] ?? stats[0],
-    [safeSelectedIndex, stats],
-  );
 
   return (
     <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-[var(--moa-black)]">
+      <motion.div
+        className="absolute inset-0 bg-[url('/images/why/Why_MOA_Cover.jpg')] bg-cover bg-center"
+        animate={
+          isActive ? { scale: [1, 1.04, 1], x: [0, -18, 0] } : { scale: 1 }
+        }
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(0,0,0,0.82),rgba(0,21,58,0.72)_45%,rgba(0,0,0,0.88))]" />
+      <motion.div
+        className="absolute inset-0 opacity-20 pointer-events-none"
+        animate={isActive ? { x: [0, 16, 0], y: [0, -10, 0] } : { x: 0, y: 0 }}
+        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)",
+          backgroundSize: "140px 140px",
+          maskImage:
+            "radial-gradient(circle at center, black 30%, transparent 78%)",
+        }}
+      />
       <motion.div
         className="absolute -inset-24 opacity-60 pointer-events-none"
         animate={isActive ? { x: [0, 28, 0], y: [0, -18, 0] } : { x: 0, y: 0 }}
@@ -170,10 +119,10 @@ export default function WhySlide({ isActive }: WhySlideProps) {
             "radial-gradient(60% 60% at 20% 20%, rgba(201,168,76,0.14), transparent 55%), radial-gradient(55% 55% at 80% 40%, rgba(201,168,76,0.10), transparent 60%), radial-gradient(70% 70% at 50% 85%, rgba(255,255,255,0.04), transparent 60%)",
         }}
       />
-      <div className="absolute inset-0 opacity-6 pointer-events-none bg-[url('/images/why/bg-texture.png')] bg-cover" />
+      <div className="absolute inset-0 opacity-8 pointer-events-none bg-[url('/images/why/bg-texture.png')] bg-cover" />
 
-      <div className="relative z-10 max-w-[1300px] mx-auto px-8 lg:px-16 w-full">
-        <div className="mb-10">
+      <div className="relative z-10 max-w-[1450px] mx-auto px-8 lg:px-16 w-full">
+        <div className="mb-10 lg:mb-12">
           <motion.p
             className="eyebrow mb-4"
             initial={{ opacity: 0, y: 12 }}
@@ -185,7 +134,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <motion.h2
-              className="section-title max-w-xl"
+              className="section-title max-w-2xl"
               initial={{ opacity: 0, y: 20 }}
               animate={isActive ? { opacity: 1, y: 0 } : {}}
               transition={{
@@ -197,14 +146,17 @@ export default function WhySlide({ isActive }: WhySlideProps) {
               {content.title}
             </motion.h2>
 
-            <motion.p
-              className="text-[var(--moa-muted)] leading-relaxed max-w-md lg:text-right text-sm"
-              initial={{ opacity: 0 }}
-              animate={isActive ? { opacity: 1 } : {}}
+            <motion.div
+              className="inline-flex items-center gap-3 self-start lg:self-auto rounded-full border border-white/15 bg-white/5 px-4 py-2 backdrop-blur-md"
+              initial={{ opacity: 0, x: 12 }}
+              animate={isActive ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: 0.42, duration: 1.1 }}
             >
-              {content.subtitle}
-            </motion.p>
+              <span className="h-2 w-2 rounded-full bg-[var(--gold)] shadow-[0_0_18px_rgba(255,199,44,0.8)]" />
+              <span className="text-[0.68rem] uppercase tracking-[0.34em] text-white/80">
+                {content.subtitle}
+              </span>
+            </motion.div>
           </div>
 
           <motion.div
@@ -219,66 +171,45 @@ export default function WhySlide({ isActive }: WhySlideProps) {
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-6 lg:gap-8 items-start">
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-            {stats.map((stat, i) => (
-              <AnimatedStat
-                key={stat.label}
-                {...stat}
-                index={i}
-                selected={i === safeSelectedIndex}
-                active={isActive}
-                onSelect={() => setSelectedIndex(i)}
-              />
-            ))}
-          </div>
-
-          <AnimatePresence mode="wait">
-            {selected && (
-              <FeaturedStat
-                key={selected.label}
-                {...selected}
-                active={isActive}
-              />
-            )}
-          </AnimatePresence>
+        <div className="grid grid-cols-12 gap-4 lg:gap-6 auto-rows-fr">
+          <MetricPanel
+            stat={stats[0]}
+            index={0}
+            active={isActive}
+            featured
+            className="col-span-12 lg:col-span-7"
+          />
+          <MetricPanel
+            stat={stats[1]}
+            index={1}
+            active={isActive}
+            className="col-span-12 md:col-span-6 lg:col-span-5"
+          />
+          <MetricPanel
+            stat={stats[2]}
+            index={2}
+            active={isActive}
+            className="col-span-12 md:col-span-6 lg:col-span-3"
+          />
+          <MetricPanel
+            stat={stats[3]}
+            index={3}
+            active={isActive}
+            className="col-span-12 md:col-span-6 lg:col-span-3"
+          />
+          <MetricPanel
+            stat={stats[4]}
+            index={4}
+            active={isActive}
+            className="col-span-12 md:col-span-6 lg:col-span-3"
+          />
+          <MetricPanel
+            stat={stats[5]}
+            index={5}
+            active={isActive}
+            className="col-span-12 md:col-span-6 lg:col-span-3"
+          />
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isActive ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 1.6, duration: 1.3 }}
-          className="mt-8 glass-card rounded-[2px] p-6 lg:p-8 relative overflow-hidden"
-        >
-          <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--gold-glow)] rounded-full blur-[80px] pointer-events-none" />
-          <p
-            className="font-extralight text-[var(--moa-white)] leading-snug relative z-10"
-            style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.4rem)" }}
-          >
-            {contact.line}
-          </p>
-          <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 relative z-10">
-            {contact.phone && (
-              <a
-                className="text-[0.7rem] uppercase tracking-[0.28em] text-white/70 hover:text-white transition-colors"
-                href={`tel:${contact.phone.replace(/\./g, "")}`}
-              >
-                {contact.phone}
-              </a>
-            )}
-            {contact.email && (
-              <a
-                className="text-[0.7rem] uppercase tracking-[0.28em] text-white/70 hover:text-white transition-colors"
-                href={`mailto:${contact.email}`}
-              >
-                {contact.email}
-              </a>
-            )}
-            <span className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--gold)]/70">
-              Source: mallofamerica.com
-            </span>
-          </div>
-        </motion.div>
       </div>
     </div>
   );

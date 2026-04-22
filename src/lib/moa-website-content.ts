@@ -2,6 +2,10 @@ export type MoaStat = {
   value: string;
   label: string;
   sub?: string;
+  detail?: string;
+  countTo?: number;
+  prefix?: string;
+  suffix?: string;
 };
 
 export type RetailScene = {
@@ -59,35 +63,56 @@ export const CORPORATE_PARTNERSHIPS_SOURCE =
   "https://www.mallofamerica.com/partnership-opportunities";
 export const LEASING_DEVELOPMENT = {
   why: {
-    eyebrow: "Leasing + Development",
-    title: "Leasing at Mall of America",
-    subtitle:
-      "Over 520 specialty stores alongside Macy's and Nordstrom create a high-intent shopping environment designed to convert.",
+    eyebrow: "Why This Property",
+    title: "Location. Access. Scale.",
+    subtitle: "Bloomington, MN",
+    summary:
+      "A leader in retail, entertainment and attractions, Mall of America is one of the top tourist destinations in the country and is known around the world.",
+    highlights: [
+      "78 acres of prime real estate",
+      "12-minute light-rail trip from MSP",
+      "More than 50 hotels within 10 minutes",
+    ],
     stats: [
       {
         value: "520+",
         label: "Specialty Stores",
-        sub: "Leasing + Development",
+        sub: "Retail depth",
+        countTo: 520,
+        suffix: "+",
       },
       {
-        value: "2",
-        label: "Department Stores",
-        sub: "Macy's + Nordstrom",
+        value: "50+",
+        label: "Hotels Nearby",
+        sub: "10 minutes",
+        countTo: 50,
+        suffix: "+",
       },
       {
-        value: "20M",
-        label: "Additional Visitors",
-        sub: "Phase II projection",
+        value: "12",
+        label: "Minutes from MSP",
+        sub: "Light rail",
+        countTo: 12,
       },
       {
         value: "60%",
-        label: "From Outside 150 Miles",
-        sub: "Phase II mix projection",
+        label: "Outside 150 Miles",
+        sub: "Regional draw",
+        countTo: 60,
+        suffix: "%",
       },
       {
-        value: "$4.3B",
-        label: "Estimated Economic Impact",
-        sub: "Projected with Phase II",
+        value: "8–82",
+        label: "Age Reach",
+        sub: "All ages",
+        countTo: 82,
+        prefix: "8–",
+      },
+      {
+        value: "78",
+        label: "Acres",
+        sub: "Prime site",
+        countTo: 78,
       },
     ] satisfies MoaStat[],
     contact: {
