@@ -33,7 +33,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
         className="absolute inset-0 z-0"
         initial={{ opacity: 0, scale: 1.06 }}
         animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0 }}
-        transition={{ duration: 1.8, ease: [0.19, 1, 0.22, 1] }}
+        transition={{ duration: 2.5, ease: [0.19, 1, 0.22, 1] }}
       >
         <Image
           src="/images/retail/flagship.png"
@@ -54,7 +54,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
         <motion.div
           initial={{ opacity: 0, x: -24 }}
           animate={isActive ? { opacity: 1, x: 0 } : {}}
-          transition={{ delay: 0.4, duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+          transition={{ delay: 0.56, duration: 1.3, ease: [0.19, 1, 0.22, 1] }}
           className="pointer-events-auto glass-card rounded-[22px] border border-white/10 bg-black/25 backdrop-blur-xl px-4 py-5 shadow-[0_18px_70px_rgba(0,0,0,0.35)]"
           aria-label="Retail sub-slides"
         >
@@ -131,13 +131,13 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
                   initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: -10, filter: "blur(6px)" }}
-                  transition={{ duration: 0.55, ease: [0.19, 1, 0.22, 1] }}
+                  transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
                 >
                   <motion.p
                     className="eyebrow mb-5"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.08, duration: 0.6 }}
+                    transition={{ delay: 0.11, duration: 0.85 }}
                   >
                     {scene?.eyebrow ?? "Leasing + Development"}
                   </motion.p>
@@ -160,7 +160,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
                     style={{ fontSize: "clamp(0.95rem, 1.25vw, 1.15rem)" }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.22, duration: 0.8 }}
+                    transition={{ delay: 0.31, duration: 1.1 }}
                   >
                     {scene?.body ?? ""}
                   </motion.p>
@@ -169,7 +169,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
                     className="mt-8 flex gap-8"
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 0.8 }}
+                    transition={{ delay: 0.42, duration: 1.1 }}
                   >
                     {(scene?.stats ?? []).map((s) => (
                       <div key={s.lab}>
@@ -187,7 +187,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
                     className="mt-8 flex items-center gap-4"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.42, duration: 0.8 }}
+                    transition={{ delay: 0.59, duration: 1.1 }}
                   >
                     <div className="h-px flex-1 bg-gradient-to-r from-[var(--gold)] via-[var(--gold-light)] to-transparent opacity-70" />
                     <span className="text-[0.6rem] uppercase tracking-[0.35em] text-white/35">
@@ -211,7 +211,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
                   <motion.div
                     className="relative h-[340px] rounded-[2px] overflow-hidden border border-white/10 shadow-[0_30px_120px_rgba(0,0,0,0.55)]"
                     whileHover={{ y: -8 }}
-                    transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+                    transition={{ duration: 0.85, ease: [0.19, 1, 0.22, 1] }}
                   >
                     <Image
                       src="/images/retail/flagship.png"
@@ -258,7 +258,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={isActive ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.7, duration: 0.9 }}
+            transition={{ delay: 0.98, duration: 1.3 }}
             className="flex items-center gap-3"
           >
             <span className="text-[0.6rem] uppercase tracking-[0.35em] text-white/35">
@@ -276,7 +276,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
         className="absolute right-8 md:right-14 bottom-16 z-20"
         initial={{ opacity: 0, y: 10 }}
         animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-        transition={{ delay: 0.75, duration: 0.85, ease: [0.19, 1, 0.22, 1] }}
+        transition={{ delay: 1.05, duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
       >
         <motion.button
           type="button"

@@ -10,6 +10,57 @@ interface DeckNavigationReturn {
   readonly prev: () => void;
 }
 
+function isTypingTarget(target: EventTarget | null): boolean {
+  const el = target as HTMLElement | null;
+  if (!el) return false;
+
+  return (
+    el.tagName === "INPUT" ||
+    el.tagName === "TEXTAREA" ||
+    el.tagName === "SELECT" ||
+    el.isContentEditable
+  );
+}
+
+function canElementScroll(el: HTMLElement, deltaY: number): boolean {
+  const style = window.getComputedStyle(el);
+  const overflowY = style.overflowY;
+  const overflowX = style.overflowX;
+  const isScrollable =
+    /(auto|scroll)/.test(overflowY) || /(auto|scroll)/.test(overflowX);
+
+  if (!isScrollable) return false;
+
+  const hasVerticalOverflow = el.scrollHeight > el.clientHeight + 1;
+  const hasHorizontalOverflow = el.scrollWidth > el.clientWidth + 1;
+
+  if (!hasVerticalOverflow && !hasHorizontalOverflow) return false;
+  if (deltaY === 0) return true;
+
+  if (deltaY > 0) {
+    return el.scrollTop + el.clientHeight < el.scrollHeight - 1;
+  }
+
+  return el.scrollTop > 1;
+}
+
+function isScrollableContent(
+  target: EventTarget | null,
+  deltaY: number,
+): boolean {
+  let el = target as HTMLElement | null;
+
+  while (el && el !== document.body) {
+    if (canElementScroll(el, deltaY)) {
+      return true;
+    }
+
+    el = el.parentElement;
+  }
+
+  return false;
+}
+
 /**
  * Full-screen deck navigation with keyboard, wheel, and touch support.
  * Debounces rapid input via a 700 ms lock to allow transitions to finish.
@@ -23,6 +74,7 @@ export function useDeckNavigation(
   const lockRef = useRef(false);
   const currentRef = useRef(0);
   const touchY = useRef<number | null>(null);
+  const touchTargetRef = useRef<EventTarget | null>(null);
   const wheelAccumRef = useRef(0);
   const wheelResetTimer = useRef<number | null>(null);
 
@@ -49,73 +101,97 @@ export function useDeckNavigation(
   const prev = useCallback(() => navigate(currentRef.current - 1), [navigate]);
   const goTo = useCallback((idx: number) => navigate(idx), [navigate]);
 
-  useEffect(() => {
-    if (!enabled) return;
+  const resetWheelAccumulator = useCallback(() => {
+    wheelAccumRef.current = 0;
 
-    const isTypingTarget = (target: EventTarget | null) => {
-      const el = target as HTMLElement | null;
-      if (!el) return false;
-      return (
-        el.tagName === "INPUT" ||
-        el.tagName === "TEXTAREA" ||
-        el.tagName === "SELECT" ||
-        el.isContentEditable
-      );
-    };
+    if (wheelResetTimer.current) {
+      window.clearTimeout(wheelResetTimer.current);
+      wheelResetTimer.current = null;
+    }
+  }, []);
 
-    const handleKey = (e: KeyboardEvent) => {
-      if (isTypingTarget(e.target)) {
-        return;
-      }
+  const scheduleWheelReset = useCallback(() => {
+    if (wheelResetTimer.current) {
+      window.clearTimeout(wheelResetTimer.current);
+    }
+
+    wheelResetTimer.current = window.setTimeout(() => {
+      wheelAccumRef.current = 0;
+    }, 180);
+  }, []);
+
+  const handleKey = useCallback(
+    (e: KeyboardEvent) => {
+      if (isTypingTarget(e.target)) return;
 
       if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === " ") {
         e.preventDefault();
         next();
-      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+        return;
+      }
+
+      if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
         e.preventDefault();
         prev();
       }
-    };
+    },
+    [next, prev],
+  );
 
-    const handleWheel = (e: WheelEvent) => {
+  const handleWheel = useCallback(
+    (e: WheelEvent) => {
       if (isTypingTarget(e.target)) return;
       if (e.ctrlKey || e.metaKey) return;
 
-      e.preventDefault();
-
       const dy = e.deltaY;
       if (Math.abs(dy) < 2) return;
-
-      wheelAccumRef.current += dy;
-
-      if (wheelResetTimer.current) {
-        window.clearTimeout(wheelResetTimer.current);
+      if (isScrollableContent(e.target, dy)) {
+        resetWheelAccumulator();
+        return;
       }
-      wheelResetTimer.current = window.setTimeout(() => {
-        wheelAccumRef.current = 0;
-      }, 180);
 
-      const THRESHOLD = 120;
-      if (Math.abs(wheelAccumRef.current) < THRESHOLD) return;
+      e.preventDefault();
+      wheelAccumRef.current += dy;
+      scheduleWheelReset();
+
+      const threshold = 120;
+      if (Math.abs(wheelAccumRef.current) < threshold) return;
 
       const dir = wheelAccumRef.current > 0 ? 1 : -1;
-      wheelAccumRef.current = 0;
+      resetWheelAccumulator();
+
       if (dir > 0) next();
       else prev();
-    };
+    },
+    [next, prev, resetWheelAccumulator, scheduleWheelReset],
+  );
 
-    const handleTouchStart = (e: TouchEvent) => {
-      touchY.current = e.touches[0].clientY;
-    };
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    touchY.current = e.touches[0].clientY;
+    touchTargetRef.current = e.target;
+  }, []);
 
-    const handleTouchEnd = (e: TouchEvent) => {
+  const handleTouchEnd = useCallback(
+    (e: TouchEvent) => {
       if (touchY.current === null) return;
+
       const dy = touchY.current - e.changedTouches[0].clientY;
+      const touchTarget = touchTargetRef.current;
+
       touchY.current = null;
+      touchTargetRef.current = null;
+
       if (Math.abs(dy) < 50) return;
+      if (isScrollableContent(touchTarget, dy)) return;
+
       if (dy > 0) next();
       else prev();
-    };
+    },
+    [next, prev],
+  );
+
+  useEffect(() => {
+    if (!enabled) return;
 
     window.addEventListener("keydown", handleKey);
     window.addEventListener("wheel", handleWheel, { passive: false });
@@ -128,12 +204,16 @@ export function useDeckNavigation(
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchend", handleTouchEnd);
 
-      if (wheelResetTimer.current) {
-        window.clearTimeout(wheelResetTimer.current);
-        wheelResetTimer.current = null;
-      }
+      resetWheelAccumulator();
     };
-  }, [next, prev, enabled]);
+  }, [
+    enabled,
+    handleKey,
+    handleTouchEnd,
+    handleTouchStart,
+    handleWheel,
+    resetWheelAccumulator,
+  ]);
 
   return { current, direction, total, goTo, next, prev };
 }

@@ -23,13 +23,13 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
         className="absolute top-0 inset-x-0 bg-[var(--moa-black)] z-20 pointer-events-none"
         initial={{ height: "50vh" }}
         animate={{ height: 0 }}
-        transition={{ delay: 0.1, duration: 1.1, ease: EASE }}
+        transition={{ delay: 0.1, duration: 1.4, ease: EASE }}
       />
       <motion.div
         className="absolute bottom-0 inset-x-0 bg-[var(--moa-black)] z-20 pointer-events-none"
         initial={{ height: "50vh" }}
         animate={{ height: 0 }}
-        transition={{ delay: 0.1, duration: 1.1, ease: EASE }}
+        transition={{ delay: 0.1, duration: 1.4, ease: EASE }}
       />
 
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none">
@@ -40,7 +40,7 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
               style={{ fontSize: "clamp(4rem, 12vw, 11rem)" }}
               initial={{ y: "110%", opacity: 0 }}
               animate={{ y: "0%", opacity: 1 }}
-              transition={{ delay: 1.0, duration: 1.0, ease: EASE }}
+              transition={{ delay: 1.05, duration: 1.25, ease: EASE }}
             >
               Mall of
             </motion.h1>
@@ -56,7 +56,7 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
               }}
               initial={{ y: "110%", opacity: 0 }}
               animate={{ y: "0%", opacity: 1 }}
-              transition={{ delay: 1.18, duration: 1.0, ease: EASE }}
+              transition={{ delay: 1.28, duration: 1.25, ease: EASE }}
             >
               America
             </motion.h1>
@@ -68,7 +68,7 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
           style={{ width: "clamp(120px, 20vw, 260px)" }}
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ delay: 1.9, duration: 0.9, ease: EASE }}
+          transition={{ delay: 2.1, duration: 1.15, ease: EASE }}
         />
       </div>
 
@@ -82,7 +82,7 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
                      hover:text-[var(--moa-black)] cursor-pointer"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.3, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+          transition={{ delay: 1.45, duration: 1.05, ease: [0.19, 1, 0.22, 1] }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >

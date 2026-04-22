@@ -67,7 +67,7 @@ export default function EventsSlide({ isActive }: EventsSlideProps) {
                 ? { opacity: 1, y: 0, filter: "blur(0px)" }
                 : { opacity: 0, y: 24, filter: "blur(10px)" }
             }
-            transition={{ duration: 0.95, ease: EASE_OUT_EXPO }}
+            transition={{ duration: 1.3, ease: EASE_OUT_EXPO }}
             className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
           >
             <div className="max-w-4xl">
@@ -92,7 +92,7 @@ export default function EventsSlide({ isActive }: EventsSlideProps) {
                   }
                   transition={{
                     delay: 0.18,
-                    duration: 0.9,
+                    duration: 1.3,
                     ease: EASE_OUT_EXPO,
                   }}
                   className="rounded-[28px] border border-white/12 bg-black/20 px-5 py-4 backdrop-blur-xl shadow-[0_20px_70px_rgba(0,0,0,0.32)]"
@@ -137,7 +137,7 @@ export default function EventsSlide({ isActive }: EventsSlideProps) {
               ? { opacity: 1, y: 0, filter: "blur(0px)" }
               : { opacity: 0, y: 24, filter: "blur(8px)" }
           }
-          transition={{ delay: 0.76, duration: 0.95, ease: EASE_OUT_EXPO }}
+          transition={{ delay: 1.06, duration: 1.3, ease: EASE_OUT_EXPO }}
           className="mx-auto flex w-full max-w-[1500px] items-end justify-between gap-5 border-t border-white/10 pt-5"
         >
           <div className="text-[0.62rem] uppercase tracking-[0.38em] text-white/42">

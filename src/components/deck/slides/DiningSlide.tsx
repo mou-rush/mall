@@ -114,7 +114,7 @@ function DiningImageSlider({
             ? { opacity: 1, x: 0, filter: "blur(0px)" }
             : { opacity: 0, x: 28, filter: "blur(6px)" }
         }
-        transition={{ delay: 0.45, duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+        transition={{ delay: 0.58, duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
         className="glass-card rounded-3xl border-white/10 overflow-hidden"
         onWheel={onWheel}
         onMouseEnter={() => setPaused(true)}
@@ -128,7 +128,7 @@ function DiningImageSlider({
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+              transition={{ duration: 1.05, ease: [0.4, 0, 0.2, 1] }}
               className="absolute inset-0 cursor-grab active:cursor-grabbing"
               drag={safeImages.length > 1 ? "x" : false}
               dragConstraints={{ left: 0, right: 0 }}

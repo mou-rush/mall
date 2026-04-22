@@ -68,7 +68,7 @@ export default function LuxurySlide({ isActive }: LuxurySlideProps) {
           initial={{ opacity: 0, scale: 1.06 }}
           animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0 }}
           exit={{ opacity: 0, scale: 1.02 }}
-          transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1] }}
+          transition={{ duration: 2.1, ease: [0.19, 1, 0.22, 1] }}
         >
           <motion.div
             className="absolute inset-0"
@@ -115,7 +115,7 @@ export default function LuxurySlide({ isActive }: LuxurySlideProps) {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={isActive ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+              transition={{ duration: 1.1, ease: [0.19, 1, 0.22, 1] }}
               className="flex items-center justify-between gap-6"
             >
               <div className="flex items-center gap-4">
@@ -151,7 +151,7 @@ export default function LuxurySlide({ isActive }: LuxurySlideProps) {
               className="mt-6 overflow-hidden border-y border-white/10 py-3 relative"
               initial={{ opacity: 0 }}
               animate={isActive ? { opacity: 1 } : {}}
-              transition={{ delay: 0.1, duration: 0.9 }}
+              transition={{ delay: 0.18, duration: 1.2 }}
             >
               <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[var(--moa-black)] to-transparent z-10" />
               <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[var(--moa-black)] to-transparent z-10" />
@@ -198,7 +198,7 @@ export default function LuxurySlide({ isActive }: LuxurySlideProps) {
                   initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: -12, filter: "blur(6px)" }}
-                  transition={{ duration: 0.55, ease: [0.19, 1, 0.22, 1] }}
+                  transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
                 >
                   <motion.p
                     className="eyebrow"
@@ -215,8 +215,8 @@ export default function LuxurySlide({ isActive }: LuxurySlideProps) {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
-                      delay: 0.12,
-                      duration: 0.9,
+                      delay: 0.18,
+                      duration: 1.2,
                       ease: [0.19, 1, 0.22, 1],
                     }}
                   >
@@ -228,7 +228,7 @@ export default function LuxurySlide({ isActive }: LuxurySlideProps) {
                     style={{ fontSize: "clamp(1rem, 1.35vw, 1.2rem)" }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.24, duration: 0.9 }}
+                    transition={{ delay: 0.34, duration: 1.2 }}
                   >
                     {content.subtitle}
                   </motion.p>
@@ -237,7 +237,7 @@ export default function LuxurySlide({ isActive }: LuxurySlideProps) {
                     className="mt-10 flex flex-wrap gap-4"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.32, duration: 0.8 }}
+                    transition={{ delay: 0.45, duration: 1.05 }}
                   >
                     {content.stats.map((s) => (
                       <div

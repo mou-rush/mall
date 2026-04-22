@@ -52,6 +52,20 @@ body {
   overflow-x: hidden;
 }
 
+button,
+a[href],
+[role="button"],
+summary {
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled {
+  cursor: not-allowed;
+}
+
 ::-webkit-scrollbar {
   width: 3px;
 }

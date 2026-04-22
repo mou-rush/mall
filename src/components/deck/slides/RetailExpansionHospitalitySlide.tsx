@@ -117,7 +117,7 @@ export default function RetailExpansionHospitalitySlide({
                       ? { opacity: 1, x: 0, y: 0, rotate: -1, scale: 1 }
                       : { opacity: 0, x: 24, y: 26, rotate: -1.8, scale: 0.94 }
                   }
-                  transition={{ delay: 0.34, duration: 0.92, ease: EASE }}
+                  transition={{ delay: 0.48, duration: 1.3, ease: EASE }}
                   className="absolute right-[8%] bottom-0 h-[32%] w-[42%] rounded-[24px] overflow-hidden border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] z-20 origin-top-left"
                   style={{ transformStyle: "preserve-3d" }}
                   whileHover={{ y: -7, x: 2, rotate: -0.4, scale: 1.015 }}
@@ -143,7 +143,7 @@ export default function RetailExpansionHospitalitySlide({
                       ? { opacity: 1, x: 0, y: 0 }
                       : { opacity: 0, x: -18, y: 10 }
                   }
-                  transition={{ delay: 0.48, duration: 0.9, ease: EASE }}
+                  transition={{ delay: 0.67, duration: 1.3, ease: EASE }}
                   className="absolute left-[8%] top-[8%] z-30 flex items-center gap-4"
                 >
                   <motion.div
@@ -168,7 +168,7 @@ export default function RetailExpansionHospitalitySlide({
                   ? { opacity: 1, x: 0, filter: "blur(0px)" }
                   : { opacity: 0, x: 26, filter: "blur(6px)" }
               }
-              transition={{ duration: 0.9, ease: EASE }}
+              transition={{ duration: 1.3, ease: EASE }}
               className="order-1 lg:order-2"
             >
               <p className="eyebrow mb-5">{scene.eyebrow}</p>

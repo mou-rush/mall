@@ -22,7 +22,7 @@ export default function EntertainmentSlide({
           key={ent.name}
           className="absolute inset-0"
           animate={{ opacity: activeTab === i ? 0.2 : 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1.2 }}
         >
           <Image
             src={ent.image}
@@ -40,7 +40,7 @@ export default function EntertainmentSlide({
           className="eyebrow mb-4"
           initial={{ opacity: 0, y: 12 }}
           animate={isActive ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.9 }}
         >
           {content.eyebrow}
         </motion.p>
@@ -49,8 +49,8 @@ export default function EntertainmentSlide({
           initial={{ opacity: 0, y: 20 }}
           animate={isActive ? { opacity: 1, y: 0 } : {}}
           transition={{
-            delay: 0.15,
-            duration: 0.8,
+            delay: 0.22,
+            duration: 1.1,
             ease: [0.19, 1, 0.22, 1],
           }}
         >
@@ -61,7 +61,7 @@ export default function EntertainmentSlide({
           className="text-[var(--moa-muted)] max-w-xl text-sm leading-relaxed mb-8"
           initial={{ opacity: 0 }}
           animate={isActive ? { opacity: 1 } : {}}
-          transition={{ delay: 0.25, duration: 0.8 }}
+          transition={{ delay: 0.35, duration: 1.1 }}
         >
           {content.subtitle}
         </motion.p>
@@ -74,7 +74,7 @@ export default function EntertainmentSlide({
                 onClick={() => setActiveTab(i)}
                 initial={{ opacity: 0, x: -20 }}
                 animate={isActive ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.3 + i * 0.08, duration: 0.6 }}
+                transition={{ delay: 0.42 + i * 0.1, duration: 0.85 }}
                 className={`w-full text-left p-4 rounded-[2px] border transition-all duration-300 ${
                   activeTab === i
                     ? "bg-white/5"
@@ -111,7 +111,7 @@ export default function EntertainmentSlide({
               className="pt-6 text-center"
               initial={{ opacity: 0 }}
               animate={isActive ? { opacity: 1 } : {}}
-              transition={{ delay: 0.7, duration: 0.8 }}
+              transition={{ delay: 0.95, duration: 1.1 }}
             >
               <a
                 href={content.cta.href}
@@ -130,7 +130,7 @@ export default function EntertainmentSlide({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+              transition={{ duration: 0.65, ease: [0.19, 1, 0.22, 1] }}
               className="glass-card p-8 rounded-[2px] relative overflow-hidden"
             >
               <motion.div
@@ -140,7 +140,7 @@ export default function EntertainmentSlide({
                 }}
                 initial={{ scaleX: 0, originX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.9 }}
               />
 
               <span

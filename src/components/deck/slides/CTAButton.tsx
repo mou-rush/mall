@@ -20,7 +20,7 @@ export default function CTAButton({ isActive, onNext }: CTAButtonProps) {
             ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
             : { opacity: 0, y: 28, scale: 0.96, filter: "blur(10px)" }
         }
-        transition={{ delay: 1.25, duration: 1.1, ease: EASE_PREMIUM }}
+        transition={{ delay: 1.7, duration: 1.5, ease: EASE_PREMIUM }}
         whileHover={{ y: -6, scale: 1.01 }}
         whileTap={{ scale: 0.985 }}
         className="group relative w-full cursor-pointer overflow-hidden rounded-[32px] border border-white/16 bg-[linear-gradient(135deg,rgba(18,18,24,0.54),rgba(0,0,0,0.26))] px-6 py-5 backdrop-blur-2xl shadow-[0_24px_90px_rgba(0,0,0,0.34)]"
@@ -54,7 +54,7 @@ export default function CTAButton({ isActive, onNext }: CTAButtonProps) {
                 strokeDasharray="48"
                 initial={{ strokeDashoffset: 48 }}
                 whileHover={{ strokeDashoffset: 0 }}
-                transition={{ duration: 0.8 }}
+                transition={{ duration: 1.1 }}
               />
             </svg>
           </div>

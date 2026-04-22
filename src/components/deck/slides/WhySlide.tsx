@@ -35,7 +35,7 @@ function FeaturedStat({
       initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       exit={{ opacity: 0, y: 12, filter: "blur(6px)" }}
-      transition={{ duration: 0.55, ease: [0.19, 1, 0.22, 1] }}
+      transition={{ duration: 1.05, ease: [0.19, 1, 0.22, 1] }}
       className="relative glass-card rounded-[2px] p-6 lg:p-7 overflow-hidden"
     >
       <div className="absolute -top-16 -right-16 w-48 h-48 bg-[var(--gold-glow)] rounded-full blur-[90px] opacity-80 pointer-events-none" />
@@ -95,8 +95,8 @@ function AnimatedStat({
       initial={{ opacity: 0, y: 30 }}
       animate={active ? { opacity: 1, y: 0 } : {}}
       transition={{
-        delay: 0.3 + index * 0.1,
-        duration: 0.7,
+        delay: 0.42 + index * 0.12,
+        duration: 1.2,
         ease: [0.19, 1, 0.22, 1],
       }}
       whileHover={{ y: -8, scale: 1.01 }}
@@ -164,7 +164,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
       <motion.div
         className="absolute -inset-24 opacity-60 pointer-events-none"
         animate={isActive ? { x: [0, 28, 0], y: [0, -18, 0] } : { x: 0, y: 0 }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         style={{
           background:
             "radial-gradient(60% 60% at 20% 20%, rgba(201,168,76,0.14), transparent 55%), radial-gradient(55% 55% at 80% 40%, rgba(201,168,76,0.10), transparent 60%), radial-gradient(70% 70% at 50% 85%, rgba(255,255,255,0.04), transparent 60%)",
@@ -178,7 +178,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
             className="eyebrow mb-4"
             initial={{ opacity: 0, y: 12 }}
             animate={isActive ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 1 }}
           >
             {content.eyebrow}
           </motion.p>
@@ -190,7 +190,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
               animate={isActive ? { opacity: 1, y: 0 } : {}}
               transition={{
                 delay: 0.15,
-                duration: 0.8,
+                duration: 1.1,
                 ease: [0.19, 1, 0.22, 1],
               }}
             >
@@ -201,7 +201,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
               className="text-[var(--moa-muted)] leading-relaxed max-w-md lg:text-right text-sm"
               initial={{ opacity: 0 }}
               animate={isActive ? { opacity: 1 } : {}}
-              transition={{ delay: 0.3, duration: 0.8 }}
+              transition={{ delay: 0.42, duration: 1.1 }}
             >
               {content.subtitle}
             </motion.p>
@@ -247,7 +247,7 @@ export default function WhySlide({ isActive }: WhySlideProps) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isActive ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 1, duration: 0.8 }}
+          transition={{ delay: 1.6, duration: 1.3 }}
           className="mt-8 glass-card rounded-[2px] p-6 lg:p-8 relative overflow-hidden"
         >
           <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--gold-glow)] rounded-full blur-[80px] pointer-events-none" />

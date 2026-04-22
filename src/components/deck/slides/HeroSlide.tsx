@@ -48,7 +48,7 @@ export default function HeroSlide({ isActive, onNext }: HeroSlideProps) {
         className="absolute inset-0 z-0"
         initial={{ scale: 1.05, opacity: 0 }}
         animate={isActive ? { scale: 1, opacity: 1 } : {}}
-        transition={{ duration: 2.5, ease: EASE_PREMIUM }}
+        transition={{ duration: 3.5, ease: EASE_PREMIUM }}
       >
         <Image
           src="/images/Home/moa_1.jpg"
@@ -69,7 +69,7 @@ export default function HeroSlide({ isActive, onNext }: HeroSlideProps) {
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={isActive ? { opacity: 1, x: 0 } : {}}
-          transition={{ delay: 1, duration: 1.5, ease: EASE_PREMIUM }}
+          transition={{ delay: 1.2, duration: 2, ease: EASE_PREMIUM }}
           className="relative w-28 h-12 md:w-40 md:h-16"
         >
           <Image

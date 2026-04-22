@@ -35,24 +35,19 @@ export default function SideMenu({
     [],
   );
 
+  const currentParent = getParentSection(currentSlideId);
+
   const [expandedItems, setExpandedItems] = useState<Set<string>>(
-    () =>
-      new Set(
-        getParentSection(currentSlideId)
-          ? [getParentSection(currentSlideId)!]
-          : [],
-      ),
+    () => new Set(currentParent ? [currentParent] : []),
   );
 
-  useEffect(() => {
-    const currentParent = getParentSection(currentSlideId);
-    if (!currentParent) return;
-
-    setExpandedItems((prev) => {
-      if (prev.has(currentParent)) return prev;
-      return new Set(prev).add(currentParent);
-    });
-  }, [currentSlideId, getParentSection]);
+  const visibleExpandedItems = useMemo(() => {
+    const next = new Set(expandedItems);
+    if (currentParent) {
+      next.add(currentParent);
+    }
+    return next;
+  }, [currentParent, expandedItems]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -201,7 +196,7 @@ export default function SideMenu({
                     key={item.id}
                     item={item}
                     currentSlideId={currentSlideId}
-                    isExpanded={expandedItems.has(item.id)}
+                    isExpanded={visibleExpandedItems.has(item.id)}
                     onToggleExpand={() => toggleExpand(item.id)}
                     onNavigate={handleNavigate}
                   />

@@ -230,7 +230,7 @@ export default function IntroScreen({ onSkip }: IntroScreenProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.6, ease: EASE }}
+      transition={{ duration: 0.9, ease: EASE }}
     >
       <iframe
         ref={iframeRef}
@@ -251,7 +251,7 @@ export default function IntroScreen({ onSkip }: IntroScreenProps) {
         className="absolute top-7 left-8 z-10"
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.6, ease: EASE }}
+        transition={{ duration: 1.1, delay: 0.75, ease: EASE }}
       >
         <Image
           src="/images/moa-logo.png"

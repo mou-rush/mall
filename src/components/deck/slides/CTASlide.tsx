@@ -62,7 +62,7 @@ export default function CTASlide({ isActive }: CTASlideProps) {
             className="eyebrow mb-4"
             initial={{ opacity: 0, y: 12 }}
             animate={isActive ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.9 }}
           >
             {content.eyebrow}
           </motion.p>
@@ -71,8 +71,8 @@ export default function CTASlide({ isActive }: CTASlideProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={isActive ? { opacity: 1, y: 0 } : {}}
             transition={{
-              delay: 0.15,
-              duration: 0.8,
+              delay: 0.22,
+              duration: 1.1,
               ease: [0.19, 1, 0.22, 1],
             }}
           >
@@ -82,7 +82,7 @@ export default function CTASlide({ isActive }: CTASlideProps) {
             className="text-[var(--moa-muted)] max-w-lg mx-auto mt-4 text-sm leading-relaxed"
             initial={{ opacity: 0 }}
             animate={isActive ? { opacity: 1 } : {}}
-            transition={{ delay: 0.3, duration: 0.8 }}
+            transition={{ delay: 0.42, duration: 1.1 }}
           >
             {content.subtitle}
           </motion.p>
@@ -100,8 +100,8 @@ export default function CTASlide({ isActive }: CTASlideProps) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={isActive ? { opacity: 1, y: 0 } : {}}
                 transition={{
-                  delay: 0.35 + i * 0.1,
-                  duration: 0.7,
+                  delay: 0.48 + i * 0.12,
+                  duration: 1,
                   ease: [0.19, 1, 0.22, 1],
                 }}
                 className={`glass-card p-6 rounded-[2px] text-left transition-all
@@ -151,7 +151,7 @@ export default function CTASlide({ isActive }: CTASlideProps) {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+              transition={{ duration: 0.65, ease: [0.19, 1, 0.22, 1] }}
               className="overflow-hidden"
             >
               <div className="glass-card rounded-[2px] p-6 lg:p-8 mb-4">
@@ -168,7 +168,7 @@ export default function CTASlide({ isActive }: CTASlideProps) {
           className="mt-4 text-center"
           initial={{ opacity: 0 }}
           animate={isActive ? { opacity: 1 } : {}}
-          transition={{ delay: 0.8, duration: 0.8 }}
+          transition={{ delay: 1.05, duration: 1.1 }}
         >
           <p className="text-gold-gradient font-black text-sm tracking-[0.12em] uppercase mb-1">
             Mall of America

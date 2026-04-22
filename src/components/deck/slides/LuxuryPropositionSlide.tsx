@@ -15,6 +15,7 @@ const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 export default function LuxuryPropositionSlide({ isActive }: SlideProps) {
   const content = getLuxuryContent();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const pillars = content.pillars;
   const visuals = useMemo(
@@ -52,12 +53,14 @@ export default function LuxuryPropositionSlide({ isActive }: SlideProps) {
 
   useEffect(() => {
     if (!isActive) return;
+    if (isPaused) return;
+
     const id = window.setInterval(() => {
       setActiveIndex((current) => (current + 1) % pillars.length);
     }, 4200);
 
     return () => window.clearInterval(id);
-  }, [isActive, pillars.length]);
+  }, [isActive, isPaused, pillars.length]);
 
   const activePillar = pillars[activeIndex];
   const activeVisual = visuals[activeIndex] ?? visuals[0];
@@ -93,12 +96,54 @@ export default function LuxuryPropositionSlide({ isActive }: SlideProps) {
                 Why premium brands belong here
               </h1>
 
+              <div className="mb-5 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsPaused((current) => !current)}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-black/25 px-3 py-2 text-[0.62rem] uppercase tracking-[0.22em] text-white/72 transition-all duration-300 hover:border-[var(--gold)]/45 hover:text-[var(--gold)]"
+                  aria-label={
+                    isPaused
+                      ? "Resume automatic rotation"
+                      : "Pause automatic rotation"
+                  }
+                >
+                  <span className="grid h-6 w-6 place-items-center rounded-full border border-white/12 bg-white/5 text-[var(--gold)]">
+                    {isPaused ? (
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        aria-hidden
+                      >
+                        <path d="M5 3.5l7 4.5-7 4.5v-9z" />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        aria-hidden
+                      >
+                        <rect x="3" y="3" width="3.5" height="10" rx="1" />
+                        <rect x="9.5" y="3" width="3.5" height="10" rx="1" />
+                      </svg>
+                    )}
+                  </span>
+                  <span>{isPaused ? "Paused" : "Auto"}</span>
+                </button>
+              </div>
+
               <div className="flex items-center gap-3">
                 {pillars.map((pillar, index) => (
                   <button
                     key={pillar.title}
                     type="button"
-                    onClick={() => setActiveIndex(index)}
+                    onClick={() => {
+                      setActiveIndex(index);
+                      setIsPaused(true);
+                    }}
                     className={
                       "h-[3px] rounded-full transition-all duration-500 " +
                       (index === activeIndex
@@ -118,13 +163,13 @@ export default function LuxuryPropositionSlide({ isActive }: SlideProps) {
                   initial={{ opacity: 0, y: 28, filter: "blur(8px)" }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: -18, filter: "blur(8px)" }}
-                  transition={{ duration: 0.8, ease: EASE }}
+                  transition={{ duration: 1.05, ease: EASE }}
                   className="absolute inset-0 flex flex-col items-center justify-center gap-8 md:gap-10 lg:gap-12"
                 >
                   <motion.div
                     initial={{ opacity: 0, y: 18, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ delay: 0.12, duration: 0.8, ease: EASE }}
+                    transition={{ delay: 0.18, duration: 1.05, ease: EASE }}
                     className="w-full max-w-[420px] md:max-w-[560px] lg:max-w-[680px] rounded-[32px] border border-white/10 bg-black/22 p-4 md:p-5 backdrop-blur-xl shadow-[0_24px_70px_rgba(0,0,0,0.38)]"
                   >
                     <div className="mb-4 text-[0.56rem] uppercase tracking-[0.28em] text-white/48">
@@ -150,7 +195,7 @@ export default function LuxuryPropositionSlide({ isActive }: SlideProps) {
                     <motion.h2
                       initial={{ opacity: 0, y: 14 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.08, duration: 0.75, ease: EASE }}
+                      transition={{ delay: 0.14, duration: 0.95, ease: EASE }}
                       className="text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tight text-white leading-[0.96] mb-5"
                     >
                       {activePillar.title}
@@ -158,7 +203,7 @@ export default function LuxuryPropositionSlide({ isActive }: SlideProps) {
                     <motion.p
                       initial={{ opacity: 0, y: 14 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.16, duration: 0.8, ease: EASE }}
+                      transition={{ delay: 0.24, duration: 1.05, ease: EASE }}
                       className="text-lg md:text-xl text-white/70 leading-relaxed"
                     >
                       {activePillar.desc}
