@@ -14,6 +14,7 @@ interface SideMenuProps {
   readonly onClose: () => void;
   readonly currentSlideId: SlideId;
   readonly onNavigate: (slideId: SlideId) => void;
+  readonly onGoToHub?: () => void;
 }
 
 const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
@@ -24,6 +25,7 @@ export default function SideMenu({
   onClose,
   currentSlideId,
   onNavigate,
+  onGoToHub,
 }: SideMenuProps) {
   const getParentSection = useMemo(
     () => (slideId: SlideId) =>
@@ -189,6 +191,29 @@ export default function SideMenu({
               <div className="mb-6">
                 <div className="h-px bg-gradient-to-r from-white/18 via-white/8 to-transparent" />
               </div>
+
+              {onGoToHub && (
+                <button
+                  onClick={() => {
+                    onGoToHub();
+                    onClose();
+                  }}
+                  className="mb-4 w-full flex items-center gap-2 px-4 py-2.5 rounded-lg
+                             border border-[var(--gold)]/20 text-[var(--gold)]/80
+                             text-[0.62rem] tracking-[0.28em] uppercase font-medium
+                             transition-all duration-300 hover:border-[var(--gold)]/60
+                             hover:text-[var(--gold)] hover:bg-[var(--gold)]/5"
+                >
+                  <svg
+                    viewBox="0 0 12 10"
+                    className="w-3 h-3 fill-none stroke-current stroke-[1.5]"
+                  >
+                    <polyline points="5 1 1 5 5 9" />
+                    <line x1="1" y1="5" x2="11" y2="5" />
+                  </svg>
+                  Back to Hub
+                </button>
+              )}
 
               <nav className="space-y-2">
                 {MENU_STRUCTURE.map((item) => (

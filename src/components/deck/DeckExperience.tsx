@@ -10,8 +10,11 @@ import {
 } from "@/lib/slide-registry";
 import EntryScreen from "./EntryScreen";
 import IntroScreen from "./IntroScreen";
+import HubNav from "./HubNav";
 import NavigationArrows from "./NavigationArrows";
 import SlideWrapper from "./SlideWrapper";
+import CustomCursor from "@/components/ui/CustomCursor";
+import LiveTicker from "@/components/ui/LiveTicker";
 
 import {
   HeroSlide,
@@ -43,7 +46,6 @@ const WhyCover: FC<{ isActive: boolean }> = ({ isActive }) => (
     imageSrc="/images/why/Why_MOA_Cover.jpg"
   />
 );
-
 const RetailCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
@@ -51,7 +53,6 @@ const RetailCover: FC<{ isActive: boolean }> = ({ isActive }) => (
     imageSrc="/images/retail/Retail_Leasing_Cover.jpg"
   />
 );
-
 const LuxuryCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
@@ -59,7 +60,6 @@ const LuxuryCover: FC<{ isActive: boolean }> = ({ isActive }) => (
     imageSrc="/images/luxury/Luxury_Cover.jpg"
   />
 );
-
 const DiningCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
@@ -67,7 +67,6 @@ const DiningCover: FC<{ isActive: boolean }> = ({ isActive }) => (
     imageSrc="/images/Dinning/Dinning_Cover.jpg"
   />
 );
-
 const EntertainmentCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
@@ -75,7 +74,6 @@ const EntertainmentCover: FC<{ isActive: boolean }> = ({ isActive }) => (
     imageSrc="/images/entertainment/Attractions_and_Entertainment_Cover.png"
   />
 );
-
 const EventsCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
@@ -83,7 +81,6 @@ const EventsCover: FC<{ isActive: boolean }> = ({ isActive }) => (
     imageSrc="/images/events/Events_Cover.jpg"
   />
 );
-
 const PartnerCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
     isActive={isActive}
@@ -118,11 +115,39 @@ const SLIDE_COMPONENTS: Record<SlideId, SlideComponent> = {
   partner: CTASlide,
 };
 
-type Stage = "entry" | "intro" | "deck";
+const SLIDE_TO_SECTION: Partial<Record<SlideId, string>> = {
+  "why-cover": "why",
+  why: "why",
+  "retail-cover": "retail",
+  "retail-leasing": "retail",
+  "retail-phase-ii": "retail",
+  "retail-expansion-hospitality": "retail",
+  "retail-expansion-wellness": "retail",
+  "luxury-cover": "luxury",
+  "luxury-signature": "luxury",
+  "luxury-proposition": "luxury",
+  "luxury-future": "luxury",
+  "dining-cover": "dining",
+  dining: "dining",
+  "entertainment-cover": "entertainment",
+  "entertainment-nickelodeon": "entertainment",
+  "entertainment-sealife": "entertainment",
+  "entertainment-crayola": "entertainment",
+  "entertainment-flyover": "entertainment",
+  "events-cover": "events",
+  events: "events",
+  "partner-cover": "partner",
+  partner: "partner",
+};
+
+type Stage = "entry" | "intro" | "hub" | "deck";
 
 export default function DeckExperience() {
   const [stage, setStage] = useState<Stage>("entry");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [visitedSections, setVisitedSections] = useState<Set<string>>(
+    new Set(),
+  );
   const totalSlides = getTotalSlides();
   const nav = useDeckNavigation(totalSlides, stage === "deck");
 
@@ -131,7 +156,7 @@ export default function DeckExperience() {
   }, []);
 
   const handleSkip = useCallback(() => {
-    setStage("deck");
+    setStage("hub");
   }, []);
 
   const toggleMenu = useCallback(() => {
@@ -140,13 +165,22 @@ export default function DeckExperience() {
 
   const handleNavigateToSlide = useCallback(
     (slideId: SlideId) => {
+      const sectionId = SLIDE_TO_SECTION[slideId];
+      if (sectionId) {
+        setVisitedSections((prev) => new Set([...prev, sectionId]));
+      }
       const index = getSlideIndex(slideId);
       if (index >= 0) {
         nav.goTo(index);
+        setStage("deck");
       }
     },
     [nav],
   );
+
+  const handleGoToHub = useCallback(() => {
+    setStage("hub");
+  }, []);
 
   useEffect(() => {
     if (stage !== "entry") return;
@@ -157,30 +191,84 @@ export default function DeckExperience() {
     return () => window.removeEventListener("keydown", handler);
   }, [stage, handleEnter]);
 
-  if (stage === "entry") {
-    return <EntryScreen onEnter={handleEnter} />;
-  }
+  useEffect(() => {
+    if (stage !== "deck") return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleGoToHub();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [stage, handleGoToHub]);
 
-  if (stage === "intro") {
-    return <IntroScreen onSkip={handleSkip} />;
-  }
+  return (
+    <>
+      <CustomCursor />
 
+      <AnimatePresence mode="wait">
+        {stage === "entry" && <EntryScreen key="entry" onEnter={handleEnter} />}
+
+        {stage === "intro" && <IntroScreen key="intro" onSkip={handleSkip} />}
+
+        {stage === "hub" && (
+          <HubNav
+            key="hub"
+            visitedSections={visitedSections}
+            onNavigate={handleNavigateToSlide}
+          />
+        )}
+
+        {stage === "deck" && (
+          <DeckStage
+            key="deck"
+            nav={nav}
+            totalSlides={totalSlides}
+            menuOpen={menuOpen}
+            toggleMenu={toggleMenu}
+            onCloseMenu={() => setMenuOpen(false)}
+            onNavigateToSlide={handleNavigateToSlide}
+            onGoToHub={handleGoToHub}
+          />
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+interface DeckStageProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  nav: any;
+  totalSlides: number;
+  menuOpen: boolean;
+  toggleMenu: () => void;
+  onCloseMenu: () => void;
+  onNavigateToSlide: (id: SlideId) => void;
+  onGoToHub: () => void;
+}
+
+function DeckStage({
+  nav,
+  totalSlides,
+  menuOpen,
+  toggleMenu,
+  onCloseMenu,
+  onNavigateToSlide,
+  onGoToHub,
+}: DeckStageProps) {
   const allSlides = getAllSlideIds();
   const currentSlideId = allSlides[nav.current];
   const Component = currentSlideId ? SLIDE_COMPONENTS[currentSlideId] : null;
 
-  if (!Component) {
-    return null;
-  }
+  if (!Component) return null;
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden touch-none select-none">
       <SideMenu
         isOpen={menuOpen}
         onToggle={toggleMenu}
-        onClose={() => setMenuOpen(false)}
+        onClose={onCloseMenu}
         currentSlideId={currentSlideId}
-        onNavigate={handleNavigateToSlide}
+        onNavigate={onNavigateToSlide}
+        onGoToHub={onGoToHub}
       />
 
       <NavigationArrows
@@ -205,15 +293,24 @@ export default function DeckExperience() {
       </div>
 
       <div
-        className="fixed bottom-6 right-6 z-[70] hidden md:flex items-center gap-2
-                      px-4 py-2 rounded-full border border-white/10 bg-black/25 backdrop-blur-xl
-                      shadow-[0_20px_70px_rgba(0,0,0,0.35)]"
+        className="fixed bottom-9 right-6 z-[70] hidden md:flex items-center gap-2
+                   px-4 py-2 rounded-full border border-white/10 bg-black/25 backdrop-blur-xl
+                   shadow-[0_20px_70px_rgba(0,0,0,0.35)]"
       >
+        <button
+          onClick={onGoToHub}
+          className="text-white/30 hover:text-[var(--gold)] text-[0.55rem] tracking-[0.22em] uppercase transition-colors duration-300 mr-2"
+          title="Back to Hub (Esc)"
+        >
+          ← Hub
+        </button>
         <span className="text-white/40 text-[0.6rem] tabular-nums tracking-[0.2em]">
           {String(nav.current + 1).padStart(2, "0")} /{" "}
           {String(totalSlides).padStart(2, "0")}
         </span>
       </div>
+
+      <LiveTicker />
     </div>
   );
 }

@@ -39,6 +39,19 @@ const variants = {
   }),
 };
 
+const wipeVariants = {
+  enter: (d: number) => ({ x: d > 0 ? "-100%" : "100%", opacity: 1 }),
+  center: {
+    x: "100%",
+    opacity: 1,
+    transition: {
+      duration: 0.55,
+      ease: [0.76, 0, 0.24, 1] as [number, number, number, number],
+    },
+  },
+  exit: { opacity: 0, transition: { duration: 0 } },
+};
+
 export default function SlideWrapper({
   children,
   direction,
@@ -53,6 +66,22 @@ export default function SlideWrapper({
       className="absolute inset-0 w-full h-full"
     >
       {children}
+
+      <motion.div
+        custom={direction}
+        variants={wipeVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+        className="absolute inset-0 pointer-events-none z-[60]"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent 0%, var(--gold) 49%, var(--gold) 51%, transparent 100%)",
+          backgroundSize: "8px 100%",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "left center",
+        }}
+      />
     </motion.div>
   );
 }

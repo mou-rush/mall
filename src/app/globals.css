@@ -248,3 +248,112 @@ select:disabled {
   outline: none;
   border-color: var(--gold);
 }
+
+@keyframes particle-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100vh) scale(0.3);
+    opacity: 0;
+  }
+}
+@keyframes particle-drift {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(32px);
+  }
+}
+.particle {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation:
+    particle-rise var(--dur, 8s) linear var(--delay, 0s) infinite,
+    particle-drift calc(var(--dur, 8s) * 0.6) ease-in-out var(--delay, 0s)
+      infinite;
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 38s linear infinite;
+  will-change: transform;
+}
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+@media (pointer: fine) {
+  *,
+  *::before,
+  *::after {
+    cursor: none !important;
+  }
+}
+
+.hub-node::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 30%,
+    rgba(6, 6, 8, 0.65) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.4s ease;
+}
+.hub-node:hover::after {
+  opacity: 0.5;
+}
+
+.video-vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(6, 6, 8, 0.8) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.video-grade-blue {
+  mix-blend-mode: overlay;
+  background: rgba(0, 61, 165, 0.18);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.video-grade-gold {
+  mix-blend-mode: overlay;
+  background: rgba(201, 168, 76, 0.12);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
