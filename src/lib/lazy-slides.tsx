@@ -23,6 +23,7 @@ export interface SlideProps {
   onNext?: () => void;
   goTo?: (idx: number) => void;
   currentSlide?: number;
+  onGoToHub?: () => void;
 }
 
 export type SlideComponent = ComponentType<SlideProps>;

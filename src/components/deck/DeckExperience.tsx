@@ -287,6 +287,7 @@ function DeckStage({
               onNext={nav.next}
               goTo={nav.goTo}
               currentSlide={nav.current}
+              onGoToHub={onGoToHub}
             />
           </SlideWrapper>
         </AnimatePresence>
