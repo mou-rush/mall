@@ -124,13 +124,13 @@ export function useDeckNavigation(
     (e: KeyboardEvent) => {
       if (isTypingTarget(e.target)) return;
 
-      if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === " ") {
+      if (e.key === "ArrowRight" || e.key === " ") {
         e.preventDefault();
         next();
         return;
       }
 
-      if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+      if (e.key === "ArrowLeft") {
         e.preventDefault();
         prev();
       }

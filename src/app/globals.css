@@ -321,14 +321,6 @@ select:disabled {
   animation-play-state: paused;
 }
 
-@media (pointer: fine) {
-  *,
-  *::before,
-  *::after {
-    cursor: none !important;
-  }
-}
-
 .hub-node::after {
   content: "";
   position: absolute;

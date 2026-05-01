@@ -13,7 +13,6 @@ import IntroScreen from "./IntroScreen";
 import HubNav from "./HubNav";
 import NavigationArrows from "./NavigationArrows";
 import SlideWrapper from "./SlideWrapper";
-import CustomCursor from "@/components/ui/CustomCursor";
 import LiveTicker from "@/components/ui/LiveTicker";
 
 import {
@@ -201,36 +200,32 @@ export default function DeckExperience() {
   }, [stage, handleGoToHub]);
 
   return (
-    <>
-      <CustomCursor />
+    <AnimatePresence mode="wait">
+      {stage === "entry" && <EntryScreen key="entry" onEnter={handleEnter} />}
 
-      <AnimatePresence mode="wait">
-        {stage === "entry" && <EntryScreen key="entry" onEnter={handleEnter} />}
+      {stage === "intro" && <IntroScreen key="intro" onSkip={handleSkip} />}
 
-        {stage === "intro" && <IntroScreen key="intro" onSkip={handleSkip} />}
+      {stage === "hub" && (
+        <HubNav
+          key="hub"
+          visitedSections={visitedSections}
+          onNavigate={handleNavigateToSlide}
+        />
+      )}
 
-        {stage === "hub" && (
-          <HubNav
-            key="hub"
-            visitedSections={visitedSections}
-            onNavigate={handleNavigateToSlide}
-          />
-        )}
-
-        {stage === "deck" && (
-          <DeckStage
-            key="deck"
-            nav={nav}
-            totalSlides={totalSlides}
-            menuOpen={menuOpen}
-            toggleMenu={toggleMenu}
-            onCloseMenu={() => setMenuOpen(false)}
-            onNavigateToSlide={handleNavigateToSlide}
-            onGoToHub={handleGoToHub}
-          />
-        )}
-      </AnimatePresence>
-    </>
+      {stage === "deck" && (
+        <DeckStage
+          key="deck"
+          nav={nav}
+          totalSlides={totalSlides}
+          menuOpen={menuOpen}
+          toggleMenu={toggleMenu}
+          onCloseMenu={() => setMenuOpen(false)}
+          onNavigateToSlide={handleNavigateToSlide}
+          onGoToHub={handleGoToHub}
+        />
+      )}
+    </AnimatePresence>
   );
 }
 
