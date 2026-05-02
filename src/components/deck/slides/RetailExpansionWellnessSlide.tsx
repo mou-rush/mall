@@ -20,7 +20,7 @@ export default function RetailExpansionWellnessSlide({ isActive }: SlideProps) {
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-[#060608]">
+    <div className="relative w-full h-screen min-h-screen overflow-hidden bg-[#060608]">
       <CinematicBackground
         isActive={isActive}
         imageSrc="/images/retail/aquatic.png"

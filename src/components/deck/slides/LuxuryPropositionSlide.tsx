@@ -66,7 +66,7 @@ export default function LuxuryPropositionSlide({ isActive }: SlideProps) {
   const activeVisual = visuals[activeIndex] ?? visuals[0];
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-black">
+    <div className="relative w-full h-screen min-h-screen overflow-hidden bg-black">
       <CinematicBackground
         isActive={isActive}
         imageSrc={activeVisual.src}

@@ -32,7 +32,7 @@ export default function CTASlide({ isActive }: CTASlideProps) {
   };
 
   return (
-    <div className="relative w-full h-full flex items-center overflow-hidden bg-[var(--moa-black)]">
+    <div className="relative w-full h-screen min-h-screen flex items-center overflow-hidden bg-[var(--moa-black)]">
       <CinematicBackground isActive={isActive} videoSrc={VIDEOS.hero} />
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[var(--gold-glow)] rounded-full blur-[180px] opacity-20" />

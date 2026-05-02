@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { getLeasingContent } from "@/lib/data-service";
+import CinematicBackground from "@/components/ui/CinematicBackground";
 
 interface RetailSlideProps {
   readonly isActive: boolean;
@@ -13,16 +14,13 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
   const scene = scenes[0];
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-black">
-      <motion.div
-        className="absolute inset-0 z-0"
-        initial={{ opacity: 0, scale: 1.06 }}
-        animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0 }}
-        transition={{ duration: 1.8, ease: [0.19, 1, 0.22, 1] }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/25 to-black/60" />
-        <div className="absolute inset-x-0 bottom-0 h-[40vh] bg-gradient-to-t from-black/75 to-transparent" />
-      </motion.div>
+    <div className="relative w-full h-screen min-h-screen overflow-hidden bg-black">
+      <CinematicBackground
+        isActive={isActive}
+        imageSrc="/images/retail/leasing_opportunity.jpg"
+        variant="noir"
+        overlayOpacity={0.35}
+      />
 
       <div className="relative z-10 h-full w-full">
         <div className="absolute inset-0 flex items-center">

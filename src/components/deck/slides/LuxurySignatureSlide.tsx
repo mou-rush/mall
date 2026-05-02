@@ -41,7 +41,7 @@ export default function LuxurySignatureSlide({ isActive }: SlideProps) {
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-[var(--moa-black)]">
+    <div className="relative w-full h-screen min-h-screen overflow-hidden bg-[var(--moa-black)]">
       <CinematicBackground
         isActive={isActive}
         imageSrc="/images/retail/leasing_opportunity.jpg"

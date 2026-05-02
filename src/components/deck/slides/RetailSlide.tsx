@@ -28,7 +28,7 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
     : undefined;
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-black">
+    <div className="relative w-full h-screen min-h-screen overflow-hidden bg-black">
       <motion.div
         className="absolute inset-0 z-0"
         initial={{ opacity: 0, scale: 1.06 }}

@@ -17,7 +17,7 @@ export default function CoverSlide({
   imageSrc,
 }: CoverSlideProps) {
   return (
-    <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+    <div className="relative w-full h-screen min-h-screen flex items-center justify-center overflow-hidden">
       <CinematicBackground
         isActive={isActive}
         imageSrc={imageSrc}

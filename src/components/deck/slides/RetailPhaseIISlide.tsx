@@ -15,7 +15,7 @@ export default function RetailPhaseIISlide({ isActive }: SlideProps) {
   const scene = getLeasingContent().retail.scenes[1];
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-black">
+    <div className="relative w-full h-screen min-h-screen overflow-hidden bg-black">
       <CinematicBackground
         isActive={isActive}
         imageSrc="/images/retail/Leasing_image.png"

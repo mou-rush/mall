@@ -22,7 +22,7 @@ export default function RetailExpansionHospitalitySlide({
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-black">
+    <div className="relative w-full h-screen min-h-screen overflow-hidden bg-black">
       <CinematicBackground
         isActive={isActive}
         imageSrc="/images/retail/retail_background.png"

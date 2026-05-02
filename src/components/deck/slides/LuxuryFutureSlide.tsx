@@ -21,7 +21,7 @@ export default function LuxuryFutureSlide({ isActive }: SlideProps) {
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-black">
+    <div className="relative w-full h-screen min-h-screen overflow-hidden bg-black">
       <CinematicBackground
         isActive={isActive}
         imageSrc="/images/luxury/ambience.png"

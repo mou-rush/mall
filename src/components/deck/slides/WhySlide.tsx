@@ -70,7 +70,7 @@ export default function WhySlide({ isActive }: SlideProps) {
   }
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[var(--moa-black)]">
+    <div className="relative h-screen min-h-screen w-full overflow-hidden bg-[var(--moa-black)]">
       <div
         ref={overlayRef}
         className="pointer-events-none fixed inset-0 z-[50] bg-black opacity-0"

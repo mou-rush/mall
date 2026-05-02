@@ -16,7 +16,7 @@ export default function EntertainmentSlide({
   const item = content.items[activeTab];
 
   return (
-    <div className="relative w-full h-full flex items-center overflow-hidden bg-[var(--moa-black)]">
+    <div className="relative w-full h-screen min-h-screen flex items-center overflow-hidden bg-[var(--moa-black)]">
       {content.items.map((ent, i) => (
         <motion.div
           key={ent.name}

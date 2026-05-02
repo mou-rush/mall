@@ -60,7 +60,7 @@ export default function LuxurySlide({ isActive }: LuxurySlideProps) {
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-[var(--moa-black)]">
+    <div className="relative w-full h-screen min-h-screen overflow-hidden bg-[var(--moa-black)]">
       <AnimatePresence mode="wait">
         <motion.div
           key={activeScene.id}

@@ -235,7 +235,7 @@ export default function DiningSlide({ isActive }: DiningSlideProps) {
   ];
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-black">
+    <div className="relative w-full h-screen min-h-screen overflow-hidden bg-black">
       <CinematicBackground
         isActive={isActive}
         imageSrc="/images/Dinning/Dinning_Cover.jpg"
