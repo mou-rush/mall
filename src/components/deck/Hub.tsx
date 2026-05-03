@@ -3,6 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import type { SlideId } from "@/lib/slide-registry";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSocialLinks } from "@/hooks/useSocialLinks";
+
+interface SocialItem {
+  readonly label: string;
+  readonly href: string;
+  readonly icon: React.ReactNode;
+}
 
 interface HubSection {
   id: string;
@@ -131,6 +138,17 @@ export default function Hub({
   const containerRef = useRef<HTMLDivElement>(null);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
+
+  const socialLinks = useSocialLinks();
+  const socials: SocialItem[] = socialLinks.map((link) => ({
+    label: link.label,
+    href: link.href,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+        <path d={link.iconPath} />
+      </svg>
+    ),
+  }));
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -411,18 +429,6 @@ export default function Hub({
                   {section.id === "entertainment" ? (
                     <>
                       <div className="rounded-2xl border border-cyan-400/20 bg-[linear-gradient(135deg,rgba(6,182,212,0.18),rgba(0,0,0,0.12)_55%,rgba(255,255,255,0.04)_100%)] p-5 md:p-6">
-                        <p className="text-white/50 text-xs uppercase tracking-wider">
-                          Enter experience
-                        </p>
-                        <h3 className="mt-3 text-2xl font-semibold text-white md:text-3xl">
-                          Start with the full four-tile entertainment reveal.
-                        </h3>
-                        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/68">
-                          The first screen is a full-viewport grid of
-                          Nickelodeon Universe, SEA LIFE Aquarium, Crayola
-                          Experience, and FlyOver America.
-                        </p>
-
                         <div className="mt-5 flex flex-wrap gap-2">
                           {section.subSlides.map((subSlide) => (
                             <span
@@ -439,7 +445,7 @@ export default function Hub({
                             setExpandedSection(null);
                             onNavigate(section.coverSlide, section.id);
                           }}
-                          className="mt-6 inline-flex items-center rounded-full bg-[#FFC72C] px-6 py-3 text-sm font-bold uppercase tracking-[0.14em] text-black transition hover:brightness-110"
+                          className="mt-6 inline-flex items-center  bg-[#FFC72C] px-6 py-3 text-sm font-bold uppercase tracking-[0.14em] text-black transition hover:brightness-110"
                         >
                           Enter Entertainment
                         </button>
@@ -474,17 +480,23 @@ export default function Hub({
       </AnimatePresence>
 
       <motion.div
-        className="hidden xl:block fixed bottom-6 right-6 z-20"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 1, type: "spring" }}
+        className="fixed bottom-6 left-6 z-20 flex gap-2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
       >
-        <button
-          className="w-14 h-14 rounded-full bg-[var(--gold)] text-black flex items-center justify-center shadow-2xl hover:scale-110 transition-transform"
-          title="Navigation Help"
-        >
-          <span className="text-2xl">?</span>
-        </button>
+        {socials.map((social) => (
+          <a
+            key={social.label}
+            href={social.href}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={social.label}
+            className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110"
+          >
+            {social.icon}
+          </a>
+        ))}
       </motion.div>
     </div>
   );
