@@ -62,6 +62,7 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
         src="/videos/moa_logo_video_reveal.mp4"
         overlayOpacity={0.1}
         overlayColor="6,6,8"
+        loop={false}
       />
 
       <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-[rgba(6,6,8,0.85)] to-transparent z-10 pointer-events-none" />

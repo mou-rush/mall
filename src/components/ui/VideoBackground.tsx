@@ -5,6 +5,7 @@ interface VideoBackgroundProps {
   poster?: string;
   overlayOpacity?: number;
   overlayColor?: string;
+  loop?: boolean;
 }
 
 function isYouTubeId(src: string): boolean {
@@ -16,6 +17,7 @@ export default function VideoBackground({
   poster,
   overlayOpacity = 0.55,
   overlayColor = "0,0,0",
+  loop = true,
 }: Readonly<VideoBackgroundProps>) {
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -33,7 +35,7 @@ export default function VideoBackground({
           poster={poster}
           autoPlay
           muted
-          loop
+          loop={loop}
           playsInline
         />
       )}
