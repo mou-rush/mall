@@ -1,15 +1,15 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
-
-const EASE_PREMIUM: [number, number, number, number] = [0.16, 1, 0.3, 1];
+import { EASE_PREMIUM } from "@/lib/animation";
 
 interface CTAButtonProps {
   readonly isActive: boolean;
   readonly onNext?: () => void;
 }
 
-export default function CTAButton({ isActive, onNext }: CTAButtonProps) {
+export default memo(function CTAButton({ isActive, onNext }: CTAButtonProps) {
   return (
     <div className="absolute bottom-8 left-1/2 z-40 w-[min(92vw,520px)] -translate-x-1/2 md:bottom-10">
       <motion.button
@@ -67,4 +67,4 @@ export default function CTAButton({ isActive, onNext }: CTAButtonProps) {
       </motion.button>
     </div>
   );
-}
+});

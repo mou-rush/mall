@@ -17,7 +17,7 @@ interface SideMenuProps {
   readonly onGoToHub?: () => void;
 }
 
-const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
+import { EASE_SMOOTH } from "@/lib/animation";
 
 export default function SideMenu({
   isOpen,
@@ -88,7 +88,7 @@ export default function SideMenu({
         className="fixed right-6 top-6 z-[80] flex items-center gap-3 rounded-full border border-white/12 bg-[linear-gradient(135deg,rgba(8,16,35,0.72),rgba(0,0,0,0.35))] px-4 py-3 text-white/88 backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.38)] transition-all duration-300 hover:border-[var(--gold)]/45 hover:text-white md:right-8 md:top-8"
         initial={{ opacity: 0, x: 14, filter: "blur(8px)" }}
         animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-        transition={{ duration: 0.5, ease: EASE }}
+        transition={{ duration: 0.5, ease: EASE_SMOOTH }}
         aria-label={isOpen ? "Close menu" : "Open menu"}
       >
         <span className="hidden text-[0.56rem] uppercase tracking-[0.38em] text-[var(--gold)]/85 sm:block">
@@ -138,7 +138,7 @@ export default function SideMenu({
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ duration: 0.45, ease: EASE }}
+            transition={{ duration: 0.45, ease: EASE_SMOOTH }}
           >
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_20%,rgba(255,199,44,0.12),transparent_28%),radial-gradient(circle_at_76%_34%,rgba(0,163,255,0.12),transparent_24%)]" />
 
@@ -315,7 +315,7 @@ function MenuItemComponent({
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: EASE }}
+              transition={{ duration: 0.3, ease: EASE_SMOOTH }}
               className="overflow-hidden"
             >
               <div className="space-y-1.5 px-2 pb-2 pt-2">

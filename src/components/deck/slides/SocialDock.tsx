@@ -1,5 +1,6 @@
 "use client";
 
+import {memo} from "react";
 import { motion, type Variants } from "framer-motion";
 import type { ReactNode } from "react";
 
@@ -38,7 +39,7 @@ const itemVariants: Variants = {
   },
 };
 
-export default function SocialDock({ isActive, socials }: SocialDockProps) {
+export default memo(function SocialDock({ isActive, socials }: SocialDockProps) {
   return (
     <motion.div
       variants={dockVariants}
@@ -65,4 +66,4 @@ export default function SocialDock({ isActive, socials }: SocialDockProps) {
       </div>
     </motion.div>
   );
-}
+});
