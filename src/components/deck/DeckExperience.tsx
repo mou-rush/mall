@@ -20,16 +20,18 @@ import {
   LuxuryPropositionSlide,
   LuxuryFutureSlide,
   DiningSlide,
-  EntertainmentNickelodeonSlide,
-  EntertainmentSealifeSlide,
-  EntertainmentCrayolaSlide,
-  EntertainmentFlyoverSlide,
+  EntertainmentImmersiveSlide,
   EventsSlide,
   CTASlide,
   type SlideComponent,
 } from "@/lib/lazy-slides";
 
 import CoverSlide from "./slides/CoverSlide";
+
+const EntertainmentExperience = EntertainmentImmersiveSlide as unknown as FC<{
+  isActive: boolean;
+  initialAttraction?: "nick" | "sealife" | "crayola" | "flyover";
+}>;
 
 const WhyCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
@@ -60,11 +62,19 @@ const DiningCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   />
 );
 const EntertainmentCover: FC<{ isActive: boolean }> = ({ isActive }) => (
-  <CoverSlide
-    isActive={isActive}
-    title="Attractions + Entertainment"
-    imageSrc="/images/entertainment/Attractions_and_Entertainment_Cover.png"
-  />
+  <EntertainmentExperience isActive={isActive} />
+);
+const EntertainmentNickelodeon: FC<{ isActive: boolean }> = ({ isActive }) => (
+  <EntertainmentExperience isActive={isActive} initialAttraction="nick" />
+);
+const EntertainmentSealife: FC<{ isActive: boolean }> = ({ isActive }) => (
+  <EntertainmentExperience isActive={isActive} initialAttraction="sealife" />
+);
+const EntertainmentCrayola: FC<{ isActive: boolean }> = ({ isActive }) => (
+  <EntertainmentExperience isActive={isActive} initialAttraction="crayola" />
+);
+const EntertainmentFlyover: FC<{ isActive: boolean }> = ({ isActive }) => (
+  <EntertainmentExperience isActive={isActive} initialAttraction="flyover" />
 );
 const EventsCover: FC<{ isActive: boolean }> = ({ isActive }) => (
   <CoverSlide
@@ -97,10 +107,10 @@ const SLIDE_COMPONENTS: Record<SlideId, SlideComponent> = {
   "dining-cover": DiningCover,
   dining: DiningSlide,
   "entertainment-cover": EntertainmentCover,
-  "entertainment-nickelodeon": EntertainmentNickelodeonSlide,
-  "entertainment-sealife": EntertainmentSealifeSlide,
-  "entertainment-crayola": EntertainmentCrayolaSlide,
-  "entertainment-flyover": EntertainmentFlyoverSlide,
+  "entertainment-nickelodeon": EntertainmentNickelodeon,
+  "entertainment-sealife": EntertainmentSealife,
+  "entertainment-crayola": EntertainmentCrayola,
+  "entertainment-flyover": EntertainmentFlyover,
   "events-cover": EventsCover,
   events: EventsSlide,
   "partner-cover": PartnerCover,

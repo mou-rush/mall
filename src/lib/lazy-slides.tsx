@@ -108,32 +108,8 @@ export const DiningSlide = dynamic(
   },
 ) as SlideComponent;
 
-export const EntertainmentNickelodeonSlide = dynamic(
-  () => import("@/components/deck/slides/EntertainmentNickelodeonSlide"),
-  {
-    ssr: false,
-    loading: SlideLoader,
-  },
-) as SlideComponent;
-
-export const EntertainmentSealifeSlide = dynamic(
-  () => import("@/components/deck/slides/EntertainmentSealifeSlide"),
-  {
-    ssr: false,
-    loading: SlideLoader,
-  },
-) as SlideComponent;
-
-export const EntertainmentCrayolaSlide = dynamic(
-  () => import("@/components/deck/slides/EntertainmentCrayolaSlide"),
-  {
-    ssr: false,
-    loading: SlideLoader,
-  },
-) as SlideComponent;
-
-export const EntertainmentFlyoverSlide = dynamic(
-  () => import("@/components/deck/slides/EntertainmentFlyoverSlide"),
+export const EntertainmentImmersiveSlide = dynamic(
+  () => import("@/components/deck/slides/EntertainmentImmersiveSlide"),
   {
     ssr: false,
     loading: SlideLoader,

@@ -78,7 +78,7 @@ const SECTIONS: HubSection[] = [
     id: "entertainment",
     label: "Entertainment",
     tagline: "Unmatched Attractions",
-    stat: "7 Major Attractions",
+    stat: "4 Signature Attractions",
     description:
       "World-class entertainment anchors that drive traffic and dwell time.",
     coverSlide: "entertainment-cover",
@@ -408,23 +408,64 @@ export default function Hub({
                     </button>
                   </div>
 
-                  <p className="text-white/50 text-xs uppercase tracking-wider mb-3">
-                    Choose a topic
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {section.subSlides.map((subSlide) => (
-                      <button
-                        key={subSlide.id}
-                        onClick={() => {
-                          setExpandedSection(null);
-                          onNavigate(subSlide.id, section.id);
-                        }}
-                        className="px-4 py-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/30 transition-all duration-300 text-white text-sm font-medium text-left"
-                      >
-                        {subSlide.label}
-                      </button>
-                    ))}
-                  </div>
+                  {section.id === "entertainment" ? (
+                    <>
+                      <div className="rounded-2xl border border-cyan-400/20 bg-[linear-gradient(135deg,rgba(6,182,212,0.18),rgba(0,0,0,0.12)_55%,rgba(255,255,255,0.04)_100%)] p-5 md:p-6">
+                        <p className="text-white/50 text-xs uppercase tracking-wider">
+                          Enter experience
+                        </p>
+                        <h3 className="mt-3 text-2xl font-semibold text-white md:text-3xl">
+                          Start with the full four-tile entertainment reveal.
+                        </h3>
+                        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/68">
+                          The first screen is a full-viewport grid of
+                          Nickelodeon Universe, SEA LIFE Aquarium, Crayola
+                          Experience, and FlyOver America.
+                        </p>
+
+                        <div className="mt-5 flex flex-wrap gap-2">
+                          {section.subSlides.map((subSlide) => (
+                            <span
+                              key={subSlide.id}
+                              className="rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-white/72"
+                            >
+                              {subSlide.label}
+                            </span>
+                          ))}
+                        </div>
+
+                        <button
+                          onClick={() => {
+                            setExpandedSection(null);
+                            onNavigate(section.coverSlide, section.id);
+                          }}
+                          className="mt-6 inline-flex items-center rounded-full bg-[#FFC72C] px-6 py-3 text-sm font-bold uppercase tracking-[0.14em] text-black transition hover:brightness-110"
+                        >
+                          Enter Entertainment
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-white/50 text-xs uppercase tracking-wider mb-3">
+                        Choose a topic
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {section.subSlides.map((subSlide) => (
+                          <button
+                            key={subSlide.id}
+                            onClick={() => {
+                              setExpandedSection(null);
+                              onNavigate(subSlide.id, section.id);
+                            }}
+                            className="px-4 py-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/30 transition-all duration-300 text-white text-sm font-medium text-left"
+                          >
+                            {subSlide.label}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </motion.div>
               );
             })()}
@@ -433,7 +474,7 @@ export default function Hub({
       </AnimatePresence>
 
       <motion.div
-        className="fixed bottom-8 right-8 z-20"
+        className="hidden xl:block fixed bottom-6 right-6 z-20"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 1, type: "spring" }}
