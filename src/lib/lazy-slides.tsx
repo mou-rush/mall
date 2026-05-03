@@ -45,7 +45,7 @@ export const WhySlide = dynamic(
 ) as SlideComponent;
 
 export const RetailLeasingSlide = dynamic(
-  () => import("@/components/deck/slides/RetailLeasingSlide"),
+  () => import("@/components/deck/slides/retail/RetailLeasingSlide"),
   {
     ssr: false,
     loading: SlideLoader,
@@ -53,7 +53,7 @@ export const RetailLeasingSlide = dynamic(
 ) as SlideComponent;
 
 export const RetailPhaseIISlide = dynamic(
-  () => import("@/components/deck/slides/RetailPhaseIISlide"),
+  () => import("@/components/deck/slides/retail/RetailPhaseIISlide"),
   {
     ssr: false,
     loading: SlideLoader,
@@ -61,7 +61,8 @@ export const RetailPhaseIISlide = dynamic(
 ) as SlideComponent;
 
 export const RetailExpansionHospitalitySlide = dynamic(
-  () => import("@/components/deck/slides/RetailExpansionHospitalitySlide"),
+  () =>
+    import("@/components/deck/slides/retail/RetailExpansionHospitalitySlide"),
   {
     ssr: false,
     loading: SlideLoader,
@@ -69,7 +70,7 @@ export const RetailExpansionHospitalitySlide = dynamic(
 ) as SlideComponent;
 
 export const RetailExpansionWellnessSlide = dynamic(
-  () => import("@/components/deck/slides/RetailExpansionWellnessSlide"),
+  () => import("@/components/deck/slides/retail/RetailExpansionWellnessSlide"),
   {
     ssr: false,
     loading: SlideLoader,
@@ -101,7 +102,7 @@ export const LuxuryFutureSlide = dynamic(
 ) as SlideComponent;
 
 export const DiningSlide = dynamic(
-  () => import("@/components/deck/slides/DiningSlide"),
+  () => import("@/components/deck/slides/dining/DiningSlide"),
   {
     ssr: false,
     loading: SlideLoader,
