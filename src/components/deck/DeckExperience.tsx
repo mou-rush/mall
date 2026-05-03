@@ -141,7 +141,6 @@ export default function DeckExperience() {
           explorationPath={nav.explorationPath}
           onNavigateToSlide={handleNavigateToSlide}
           onGoToHub={handleGoToHub}
-          onGoBack={handleGoBack}
           progress={progress}
           Component={nav.current ? SLIDE_COMPONENTS[nav.current] : null}
         />
@@ -149,4 +148,3 @@ export default function DeckExperience() {
     </AnimatePresence>
   );
 }
-

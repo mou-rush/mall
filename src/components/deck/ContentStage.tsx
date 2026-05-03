@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, FC } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { type SlideId } from "@/lib/slide-registry";
 import LiveTicker from "@/components/ui/LiveTicker";
@@ -16,7 +16,6 @@ interface ContentStageProps {
   }>;
   readonly onNavigateToSlide: (id: SlideId, section: string) => void;
   readonly onGoToHub: () => void;
-  readonly onGoBack: () => void;
   readonly progress: { readonly visited: number; readonly total: number };
   readonly Component: SlideComponent | null;
 }
@@ -26,7 +25,6 @@ function ContentStage({
   explorationPath,
   onNavigateToSlide,
   onGoToHub,
-  onGoBack,
   progress,
   Component,
 }: ContentStageProps) {
@@ -42,29 +40,7 @@ function ContentStage({
 
       <div className="fixed top-0 left-0 right-0 z-[80] pointer-events-none">
         <div className="max-w-screen-2xl mx-auto px-6 py-6 flex items-center justify-between pointer-events-auto">
-          <motion.button
-            onClick={onGoBack}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/30 transition-all group"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <svg
-              className="w-4 h-4 text-white/60 group-hover:text-white transition-colors"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            <span className="text-white/80 group-hover:text-white text-sm font-medium transition-colors">
-              Back
-            </span>
-          </motion.button>
+          <div className="flex items-center  group" />
 
           {/* Breadcrumbs */}
           <div className="relative">
@@ -119,10 +95,9 @@ function ContentStage({
               )}
             </AnimatePresence>
           </div>
-
           <motion.button
             onClick={onGoToHub}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-[var(--gold)]/10 backdrop-blur-xl border border-[var(--gold)]/30 hover:border-[var(--gold)]/60 transition-all group"
+            className="flex  items-center gap-2 px-4 py-2.5 rounded-full bg-[var(--gold)]/10 backdrop-blur-xl border border-[var(--gold)]/30 hover:border-[var(--gold)]/60 transition-all group"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -144,7 +119,7 @@ function ContentStage({
         </div>
       </div>
 
-      <div className="fixed bottom-6 right-6 z-[80] pointer-events-none">
+      <div className="fixed top-6 left-6 z-[80] pointer-events-none">
         <div className="px-5 py-3 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
           <div className="flex items-center gap-3">
             <span className="text-white/40 text-xs uppercase tracking-wider">
