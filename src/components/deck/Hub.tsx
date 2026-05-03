@@ -194,25 +194,9 @@ export default function Hub({
       </div>
 
       <div className="hub-header relative z-10 pt-20 pb-12 text-center px-6">
-        <motion.div
-          className="inline-block px-4 py-1.5 rounded-full mb-4"
-          style={{
-            background: "rgba(255,199,44,0.1)",
-            border: "1px solid rgba(255,199,44,0.3)",
-          }}
-        >
-          <span className="text-[0.65rem] tracking-[0.3em] uppercase text-[var(--gold)] font-medium">
-            Exploration Mode
-          </span>
-        </motion.div>
-
         <h1 className="text-5xl md:text-6xl font-extralight tracking-wide text-white mb-4">
           Choose Your Path
         </h1>
-        <p className="text-white/60 text-lg max-w-2xl mx-auto mb-6">
-          Click any section to explore. Hover for details, expand for
-          sub-topics.
-        </p>
 
         <div className="max-w-md mx-auto mt-8">
           <div className="flex justify-between items-center mb-2">
@@ -239,34 +223,20 @@ export default function Hub({
           {SECTIONS.map((section) => {
             const isVisited = visitedSlides.has(section.coverSlide);
             const isHovered = hoveredSection === section.id;
-            const isExpanded = expandedSection === section.id;
 
             return (
-              <motion.div
-                key={section.id}
-                className="hub-card"
-                layout
-                style={{
-                  gridColumn: isExpanded ? "1 / -1" : "auto",
-                }}
-              >
+              <motion.div key={section.id} className="hub-card" layout>
                 <button
                   className="relative group cursor-pointer w-full text-left"
                   onMouseEnter={() => setHoveredSection(section.id)}
                   onMouseLeave={() => setHoveredSection(null)}
-                  onClick={() => {
-                    if (isExpanded) {
-                      setExpandedSection(null);
-                    } else {
-                      setExpandedSection(section.id);
-                    }
-                  }}
-                  aria-label={`${isExpanded ? "Collapse" : "Expand"} ${section.label}`}
+                  onClick={() => setExpandedSection(section.id)}
+                  aria-label={`Explore ${section.label}`}
                 >
                   <div
                     className="relative overflow-hidden rounded-2xl transition-all duration-500"
                     style={{
-                      height: isExpanded ? "400px" : "320px",
+                      height: "320px",
                       background: "rgba(0,0,0,0.4)",
                       border: `1px solid ${isHovered ? section.color + "80" : "rgba(255,255,255,0.1)"}`,
                       boxShadow: isHovered
@@ -330,7 +300,7 @@ export default function Hub({
                         </div>
 
                         <AnimatePresence>
-                          {isHovered && !isExpanded && (
+                          {isHovered && (
                             <motion.p
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
@@ -360,59 +330,25 @@ export default function Hub({
                           </span>
                         </div>
 
-                        <AnimatePresence>
-                          {isExpanded && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.4 }}
-                              className="mt-4 space-y-2"
-                            >
-                              <p className="text-white/60 text-xs uppercase tracking-wider mb-3">
-                                Explore Topics
-                              </p>
-                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                                {section.subSlides.map((subSlide) => (
-                                  <button
-                                    key={subSlide.id}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      onNavigate(subSlide.id, section.id);
-                                    }}
-                                    className="px-4 py-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/30 transition-all duration-300 text-white text-sm font-medium group/btn"
-                                  >
-                                    <span className="group-hover/btn:translate-x-1 inline-block transition-transform">
-                                      {subSlide.label} →
-                                    </span>
-                                  </button>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-
-                        {!isExpanded && (
-                          <motion.button
-                            className="text-white/70 hover:text-white text-xs uppercase tracking-wider transition-colors flex items-center gap-2"
-                            whileHover={{ x: 5 }}
+                        <motion.div
+                          className="text-white/70 group-hover:text-white text-xs uppercase tracking-wider transition-colors flex items-center gap-2"
+                          whileHover={{ x: 5 }}
+                        >
+                          Explore
+                          <svg
+                            className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                           >
-                            {isExpanded ? "Collapse" : "Explore"}
-                            <svg
-                              className={`w-4 h-4 transition-transform ${isExpanded ? "rotate-180" : ""}`}
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 9l-7 7-7-7"
-                              />
-                            </svg>
-                          </motion.button>
-                        )}
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </motion.div>
                       </div>
                     </div>
                   </div>
@@ -422,6 +358,79 @@ export default function Hub({
           })}
         </div>
       </div>
+
+      <AnimatePresence>
+        {expandedSection && (
+          <motion.div
+            className="fixed inset-0 z-[70] flex items-center justify-center p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <button
+              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+              aria-label="Close section topics"
+              onClick={() => setExpandedSection(null)}
+            />
+
+            {(() => {
+              const section = SECTIONS.find((s) => s.id === expandedSection);
+              if (!section) return null;
+
+              return (
+                <motion.div
+                  initial={{ scale: 0.94, y: 20, opacity: 0 }}
+                  animate={{ scale: 1, y: 0, opacity: 1 }}
+                  exit={{ scale: 0.98, y: 8, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="relative z-10 w-full max-w-3xl rounded-2xl border border-white/20 bg-[#050A14]/95 p-6 md:p-8"
+                >
+                  <div className="flex items-start justify-between gap-4 mb-6">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.22em] mb-2"
+                        style={{ color: section.color }}
+                      >
+                        {section.tagline}
+                      </p>
+                      <h2 className="text-3xl md:text-4xl font-semibold text-white">
+                        {section.label}
+                      </h2>
+                      <p className="text-white/60 text-sm mt-2">
+                        {section.description}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setExpandedSection(null)}
+                      className="rounded-full border border-white/20 px-3 py-1.5 text-xs uppercase tracking-wider text-white/80 hover:text-white hover:border-white/40"
+                    >
+                      Close
+                    </button>
+                  </div>
+
+                  <p className="text-white/50 text-xs uppercase tracking-wider mb-3">
+                    Choose a topic
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {section.subSlides.map((subSlide) => (
+                      <button
+                        key={subSlide.id}
+                        onClick={() => {
+                          setExpandedSection(null);
+                          onNavigate(subSlide.id, section.id);
+                        }}
+                        className="px-4 py-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/30 transition-all duration-300 text-white text-sm font-medium text-left"
+                      >
+                        {subSlide.label}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              );
+            })()}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <motion.div
         className="fixed bottom-8 right-8 z-20"
