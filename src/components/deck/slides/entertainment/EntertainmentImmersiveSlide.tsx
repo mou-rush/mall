@@ -535,45 +535,48 @@ export default function EntertainmentImmersiveSlide({
               </div>
             </div>
 
-            <div className="absolute bottom-8 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3">
+            {/* Bottom navigation with labels */}
+            <div className="absolute bottom-12 left-1/2 z-50 flex -translate-x-1/2 items-center gap-5">
               {ATTRACTIONS.map((a) => (
                 <button
                   key={a.id}
                   type="button"
                   onClick={() => switchAttraction(a.id)}
                   aria-label={a.name}
-                  className="transition-all duration-300"
-                  style={{
-                    width: a.id === expandedId ? "2rem" : "0.35rem",
-                    height: "0.35rem",
-                    borderRadius: "9999px",
-                    background:
+                  className="group flex flex-col items-center gap-2 transition-all duration-300"
+                >
+                  <div
+                    className="transition-all duration-300"
+                    style={{
+                      width: a.id === expandedId ? "2rem" : "0.5rem",
+                      height: "0.5rem",
+                      borderRadius: "9999px",
+                      background:
+                        a.id === expandedId
+                          ? activeAttraction.accent
+                          : "rgba(255,255,255,0.3)",
+                      boxShadow:
+                        a.id === expandedId
+                          ? `0 0 12px ${activeAttraction.accent}80`
+                          : "none",
+                    }}
+                  />
+                  <span
+                    className={`text-[9px] font-bold uppercase tracking-[0.2em] transition-all duration-300 ${
                       a.id === expandedId
-                        ? activeAttraction.accent
-                        : "rgba(255,255,255,0.28)",
-                  }}
-                />
+                        ? "opacity-100"
+                        : "opacity-50 group-hover:opacity-80"
+                    }`}
+                    style={{
+                      color:
+                        a.id === expandedId ? activeAttraction.accent : "#fff",
+                    }}
+                  >
+                    {a.name.split(" ")[0]}
+                  </span>
+                </button>
               ))}
             </div>
-
-            <button
-              type="button"
-              onClick={closeExpanded}
-              aria-label="Close"
-              className="absolute left-7 top-7 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white/70 transition hover:bg-white/10 hover:text-white"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              >
-                <path d="M3 3l10 10M13 3L3 13" />
-              </svg>
-            </button>
 
             <div
               ref={panelRef}

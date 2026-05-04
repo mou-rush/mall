@@ -233,17 +233,6 @@ export const VIDEOS = {
   intro: "ZRvKDndEG8g",
 } as const;
 
-export const TICKER_FACTS = [
-  "40M+ Annual Visitors",
-  "500+ Stores & Restaurants",
-  "#1 US Tourism Destination",
-  "$2B+ Annual Sales",
-  "World's Largest Indoor Theme Park",
-  "60% Destination Shoppers",
-  "10,000 Free Parking Spaces",
-  "5.6M Sq Ft",
-] as const;
-
 export const LIFESTYLE_METRICS = [
   { value: "3.5h", label: "Avg. Visit Duration" },
   { value: "2.8×", label: "Avg. Return Visit Frequency" },

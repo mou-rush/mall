@@ -24,6 +24,11 @@ export interface SlideProps {
   goTo?: (idx: number) => void;
   currentSlide?: number;
   onGoToHub?: () => void;
+  onNavigateToSlide?: (
+    slideId: import("@/lib/slide-registry").SlideId,
+    section: string,
+  ) => void;
+  currentSection?: string;
 }
 
 export type SlideComponent = ComponentType<SlideProps>;

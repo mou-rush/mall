@@ -3,9 +3,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { type SlideId } from "@/lib/slide-registry";
-import LiveTicker from "@/components/ui/LiveTicker";
 import { ScrollProgressBar } from "@/components/ui/ScrollAnimations";
-import type { SlideComponent } from "@/lib/lazy-slides";
+import type { SlideComponent } from "@/types";
 
 interface ContentStageProps {
   readonly currentSlideId: SlideId;
@@ -33,6 +32,10 @@ function ContentStage({
   if (!Component) return null;
 
   const progressPercent = Math.round((progress.visited / progress.total) * 100);
+  const currentSection =
+    explorationPath.length > 0
+      ? explorationPath[explorationPath.length - 1].section
+      : "";
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden">
@@ -42,7 +45,6 @@ function ContentStage({
         <div className="max-w-screen-2xl mx-auto px-6 py-6 flex items-center justify-between pointer-events-auto">
           <div className="flex items-center  group" />
 
-          {/* Breadcrumbs */}
           <div className="relative">
             <button
               className="px-4 py-2.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/30 transition-all"
@@ -154,11 +156,11 @@ function ContentStage({
             goTo={() => {}}
             currentSlide={0}
             onGoToHub={onGoToHub}
+            onNavigateToSlide={onNavigateToSlide}
+            currentSection={currentSection}
           />
         </motion.div>
       </div>
-
-      <LiveTicker />
     </div>
   );
 }
