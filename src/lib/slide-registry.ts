@@ -1,21 +1,17 @@
 export type SlideId =
   | "hero"
   // Why MOA
-  | "why-cover"
   | "why"
   // Retail Leasing
-  | "retail-cover"
   | "retail-leasing"
   | "retail-phase-ii"
   | "retail-expansion-hospitality"
   | "retail-expansion-wellness"
   // Luxury
-  | "luxury-cover"
   | "luxury-signature"
   | "luxury-proposition"
   | "luxury-future"
   // Dining
-  | "dining-cover"
   | "dining"
   // Attractions + Entertainment
   | "entertainment-cover"
@@ -24,10 +20,8 @@ export type SlideId =
   | "entertainment-crayola"
   | "entertainment-flyover"
   // Events
-  | "events-cover"
   | "events"
   // Partner
-  | "partner-cover"
   | "partner";
 
 export interface MenuItem {
@@ -41,13 +35,13 @@ export const MENU_STRUCTURE: ReadonlyArray<MenuItem> = [
   {
     id: "why",
     label: "Why MOA",
-    slideId: "why-cover",
+    slideId: "why",
     subItems: [{ id: "why-content", label: "Overview", slideId: "why" }],
   },
   {
     id: "retail",
     label: "Retail Leasing",
-    slideId: "retail-cover",
+    slideId: "retail-leasing",
     subItems: [
       { id: "retail-leasing", label: "Leasing", slideId: "retail-leasing" },
       { id: "retail-phase-ii", label: "Phase II", slideId: "retail-phase-ii" },
@@ -66,7 +60,7 @@ export const MENU_STRUCTURE: ReadonlyArray<MenuItem> = [
   {
     id: "luxury",
     label: "Luxury",
-    slideId: "luxury-cover",
+    slideId: "luxury-signature",
     subItems: [
       {
         id: "luxury-signature",
@@ -84,7 +78,7 @@ export const MENU_STRUCTURE: ReadonlyArray<MenuItem> = [
   {
     id: "dining",
     label: "Dining",
-    slideId: "dining-cover",
+    slideId: "dining",
     subItems: [{ id: "dining-content", label: "Overview", slideId: "dining" }],
   },
   {
@@ -92,6 +86,11 @@ export const MENU_STRUCTURE: ReadonlyArray<MenuItem> = [
     label: "Attractions + Entertainment",
     slideId: "entertainment-cover",
     subItems: [
+      {
+        id: "entertainment-cover",
+        label: "Overview",
+        slideId: "entertainment-cover",
+      },
       {
         id: "entertainment-nickelodeon",
         label: "Nickelodeon Universe",
@@ -117,13 +116,13 @@ export const MENU_STRUCTURE: ReadonlyArray<MenuItem> = [
   {
     id: "events",
     label: "Events",
-    slideId: "events-cover",
+    slideId: "events",
     subItems: [{ id: "events-content", label: "Overview", slideId: "events" }],
   },
   {
     id: "partner",
     label: "Partner",
-    slideId: "partner-cover",
+    slideId: "partner",
     subItems: [
       { id: "partner-content", label: "Overview", slideId: "partner" },
     ],
@@ -135,8 +134,6 @@ export function getAllSlideIds(): ReadonlyArray<SlideId> {
 
   MENU_STRUCTURE.forEach((item) => {
     if (item.subItems && item.subItems.length > 0) {
-      slides.push(item.slideId);
-
       item.subItems.forEach((subItem) => {
         slides.push(subItem.slideId);
       });

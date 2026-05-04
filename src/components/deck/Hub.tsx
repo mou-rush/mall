@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import type { SlideId } from "@/lib/slide-registry";
 import { useSocialLinks } from "@/hooks/useSocialLinks";
 import CinematicTile, { type CinematicTileData } from "./CinematicTile";
@@ -31,8 +31,8 @@ const SECTIONS: HubSection[] = [
     stat: "40M+ Visitors",
     description:
       "The most visited destination in the U.S. with unmatched reach and impact.",
-    coverSlide: "why-cover",
-    subSlides: [{ id: "why", label: "Overview" }],
+    coverSlide: "why" as SlideId,
+    subSlides: [{ id: "why" as SlideId, label: "Overview" }],
     image: "/images/why/Why_MOA_Cover.jpg",
     color: "#003DA5",
   },
@@ -43,12 +43,15 @@ const SECTIONS: HubSection[] = [
     stat: "$2B+ Sales",
     description:
       "Unparalleled retail opportunities with proven performance and expansion plans.",
-    coverSlide: "retail-cover",
+    coverSlide: "retail-leasing" as SlideId,
     subSlides: [
-      { id: "retail-leasing", label: "Leasing" },
-      { id: "retail-phase-ii", label: "Phase II" },
-      { id: "retail-expansion-hospitality", label: "Hospitality + Stay" },
-      { id: "retail-expansion-wellness", label: "Water + Wellness" },
+      { id: "retail-leasing" as SlideId, label: "Leasing" },
+      { id: "retail-phase-ii" as SlideId, label: "Phase II" },
+      {
+        id: "retail-expansion-hospitality" as SlideId,
+        label: "Hospitality + Stay",
+      },
+      { id: "retail-expansion-wellness" as SlideId, label: "Water + Wellness" },
     ],
     image: "/images/retail/Retail_Leasing_Cover.jpg",
     color: "#FFC72C",
@@ -60,11 +63,11 @@ const SECTIONS: HubSection[] = [
     stat: "60% Destination Shoppers",
     description:
       "The ultimate luxury retail environment attracting global affluent shoppers.",
-    coverSlide: "luxury-cover",
+    coverSlide: "luxury-signature" as SlideId,
     subSlides: [
-      { id: "luxury-signature", label: "Signature" },
-      { id: "luxury-proposition", label: "Proposition" },
-      { id: "luxury-future", label: "Future" },
+      { id: "luxury-signature" as SlideId, label: "Signature" },
+      { id: "luxury-proposition" as SlideId, label: "Proposition" },
+      { id: "luxury-future" as SlideId, label: "Future" },
     ],
     image: "/images/luxury/Luxury_Cover.jpg",
     color: "#003DA5",
@@ -76,8 +79,8 @@ const SECTIONS: HubSection[] = [
     stat: "14 Distinctive Concepts",
     description:
       "From quick bites to fine dining, an extraordinary culinary destination.",
-    coverSlide: "dining-cover",
-    subSlides: [{ id: "dining", label: "Overview" }],
+    coverSlide: "dining" as SlideId,
+    subSlides: [{ id: "dining" as SlideId, label: "Overview" }],
     image: "/images/Dinning/Dinning_Cover.jpg",
     color: "#E63946",
   },
@@ -88,12 +91,16 @@ const SECTIONS: HubSection[] = [
     stat: "4 Signature Attractions",
     description:
       "World-class entertainment anchors that drive traffic and dwell time.",
-    coverSlide: "entertainment-cover",
+    coverSlide: "entertainment-cover" as SlideId,
     subSlides: [
-      { id: "entertainment-nickelodeon", label: "Nickelodeon Universe" },
-      { id: "entertainment-sealife", label: "Sea Life" },
-      { id: "entertainment-crayola", label: "Crayola Experience" },
-      { id: "entertainment-flyover", label: "Flyover America" },
+      { id: "entertainment-cover" as SlideId, label: "Overview" },
+      {
+        id: "entertainment-nickelodeon" as SlideId,
+        label: "Nickelodeon Universe",
+      },
+      { id: "entertainment-sealife" as SlideId, label: "Sea Life" },
+      { id: "entertainment-crayola" as SlideId, label: "Crayola Experience" },
+      { id: "entertainment-flyover" as SlideId, label: "Flyover America" },
     ],
     image: "/images/entertainment/Attractions_and_Entertainment_Cover.png",
     color: "#06B6D4",
@@ -105,8 +112,8 @@ const SECTIONS: HubSection[] = [
     stat: "Global Stage",
     description:
       "A premier events platform with massive reach and cultural impact.",
-    coverSlide: "events-cover",
-    subSlides: [{ id: "events", label: "Overview" }],
+    coverSlide: "events" as SlideId,
+    subSlides: [{ id: "events" as SlideId, label: "Overview" }],
     image: "/images/events/Events_Cover.jpg",
     color: "#10B981",
   },
@@ -117,8 +124,8 @@ const SECTIONS: HubSection[] = [
     stat: "Category Exclusivity Available",
     description:
       "Unlock unprecedented brand exposure through exclusive partnerships.",
-    coverSlide: "partner-cover",
-    subSlides: [{ id: "partner", label: "Overview" }],
+    coverSlide: "partner" as SlideId,
+    subSlides: [{ id: "partner" as SlideId, label: "Overview" }],
     image: "/images/Partner/Partner_Cover.jpg",
     color: "#FFC72C",
   },
@@ -135,7 +142,6 @@ export default function Hub({
   onNavigate,
   explorationProgress,
 }: HubProps) {
-  const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -273,7 +279,9 @@ export default function Hub({
             </motion.div>
 
             <motion.button
-              onClick={() => setExpandedSection(heroSection.id)}
+              onClick={() =>
+                onNavigate(heroSection.subSlides[0].id, heroSection.id)
+              }
               className="relative self-start inline-flex items-center gap-3"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -291,7 +299,7 @@ export default function Hub({
                 }}
               />
               <div className="relative flex items-center gap-3 bg-[#FFC72C] text-black px-8 py-3 font-black uppercase tracking-[0.18em] text-sm">
-                {heroVisited ? "Continue" : "Start Experience"}
+                See Why
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -345,7 +353,9 @@ export default function Hub({
           >
             <CinematicTile
               data={toTileData(retailSection)}
-              onClick={() => setExpandedSection(retailSection.id)}
+              onClick={() =>
+                onNavigate(retailSection.subSlides[0].id, retailSection.id)
+              }
               delayIndex={0}
               className="w-full h-full"
             />
@@ -359,7 +369,9 @@ export default function Hub({
               <div key={section.id} className="overflow-hidden">
                 <CinematicTile
                   data={toTileData(section)}
-                  onClick={() => setExpandedSection(section.id)}
+                  onClick={() =>
+                    onNavigate(section.subSlides[0].id, section.id)
+                  }
                   delayIndex={i + 1}
                   className="w-full h-full"
                 />
@@ -375,7 +387,9 @@ export default function Hub({
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, delay: 1.3, ease: [0.22, 1, 0.36, 1] }}
-        onClick={() => setExpandedSection(partnerSection.id)}
+        onClick={() =>
+          onNavigate(partnerSection.subSlides[0].id, partnerSection.id)
+        }
         whileHover={{ scaleY: 1.06 }}
       >
         <div
@@ -433,156 +447,6 @@ export default function Hub({
           </a>
         ))}
       </motion.div>
-
-      <AnimatePresence>
-        {expandedSection && (
-          <motion.div
-            className="fixed inset-0 z-[70] flex items-center justify-center p-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-          >
-            <button
-              className="absolute inset-0 bg-black/75 backdrop-blur-md"
-              aria-label="Close"
-              onClick={() => setExpandedSection(null)}
-            />
-
-            {(() => {
-              const section = SECTIONS.find((s) => s.id === expandedSection);
-              if (!section) return null;
-
-              return (
-                <motion.div
-                  className="relative z-10 w-full max-w-2xl"
-                  initial={{ scale: 0.93, y: 28, opacity: 0 }}
-                  animate={{ scale: 1, y: 0, opacity: 1 }}
-                  exit={{ scale: 0.97, y: 12, opacity: 0 }}
-                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <div className="relative overflow-hidden border border-white/10">
-                    {/* Section image behind modal */}
-                    <div
-                      className="absolute inset-0 bg-cover bg-center opacity-20"
-                      style={{ backgroundImage: `url(${section.image})` }}
-                    />
-                    <div className="absolute inset-0 bg-[#03080F]/90" />
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background: `linear-gradient(135deg, ${section.color}20 0%, transparent 60%)`,
-                      }}
-                    />
-                    {/* Accent top bar */}
-                    <div
-                      className="absolute top-0 left-0 right-0 h-[2px]"
-                      style={{ background: section.color }}
-                    />
-
-                    <div className="relative z-10 p-8">
-                      {/* Header */}
-                      <div className="flex items-start justify-between mb-8">
-                        <div>
-                          <div
-                            className="text-xs uppercase tracking-[0.28em] font-semibold mb-2"
-                            style={{ color: section.color }}
-                          >
-                            {section.tagline}
-                          </div>
-                          <h2 className="text-4xl md:text-5xl font-black uppercase text-white tracking-tight leading-none">
-                            {section.label}
-                          </h2>
-                          <div
-                            className="mt-3 text-3xl font-black leading-none"
-                            style={{ color: section.color }}
-                          >
-                            {section.stat}
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => setExpandedSection(null)}
-                          className="w-8 h-8 flex items-center justify-center text-white/40 hover:text-white transition-colors text-xl leading-none border border-white/10 hover:border-white/30 mt-1"
-                        >
-                          ×
-                        </button>
-                      </div>
-
-                      {/* Sub-slides */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {section.subSlides.map((subSlide, i) => (
-                          <motion.button
-                            key={subSlide.id}
-                            onClick={() => {
-                              setExpandedSection(null);
-                              onNavigate(subSlide.id, section.id);
-                            }}
-                            className="relative overflow-hidden text-left px-5 py-4 border border-white/10 hover:border-white/25 transition-all duration-300 group/sub"
-                            initial={{ opacity: 0, x: -16 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.06 * i, duration: 0.35 }}
-                            whileHover={{ x: 5 }}
-                          >
-                            <motion.div
-                              className="absolute inset-0 opacity-0 group-hover/sub:opacity-100 transition-opacity duration-300"
-                              style={{
-                                background: `linear-gradient(90deg, ${section.color}15, transparent)`,
-                              }}
-                            />
-                            <div className="relative flex items-center justify-between">
-                              <span className="text-white/90 text-sm font-medium">
-                                {subSlide.label}
-                              </span>
-                              <svg
-                                className="w-3.5 h-3.5 text-white/25 group-hover/sub:text-white/70 transition-colors"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M9 5l7 7-7 7"
-                                />
-                              </svg>
-                            </div>
-                          </motion.button>
-                        ))}
-                      </div>
-
-                      {/* Enter CTA */}
-                      <motion.button
-                        onClick={() => {
-                          setExpandedSection(null);
-                          // For entertainment, events, dining: show the cover (it's the main experience)
-                          // For retail, luxury: skip to first sub-slide (they have section navigation)
-                          const shouldShowCover =
-                            section.id === "entertainment" ||
-                            section.id === "events" ||
-                            section.id === "dining";
-
-                          const targetSlide = shouldShowCover
-                            ? section.coverSlide
-                            : section.subSlides[0].id;
-
-                          onNavigate(targetSlide, section.id);
-                        }}
-                        className="mt-6 w-full py-4 font-black uppercase tracking-[0.22em] text-sm text-black"
-                        style={{ background: section.color }}
-                        whileHover={{ scale: 1.01, filter: "brightness(1.1)" }}
-                        whileTap={{ scale: 0.99 }}
-                      >
-                        Enter {section.label}
-                      </motion.button>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })()}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

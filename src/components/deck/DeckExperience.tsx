@@ -25,42 +25,30 @@ import {
 } from "@/lib/lazy-slides";
 
 import {
-  WhyCover,
-  RetailCover,
-  LuxuryCover,
-  DiningCover,
   EntertainmentCover,
   EntertainmentNickelodeon,
   EntertainmentSealife,
   EntertainmentCrayola,
   EntertainmentFlyover,
-  EventsCover,
-  PartnerCover,
 } from "./slides/CoverComponents";
 
 const SLIDE_COMPONENTS: Record<SlideId, SlideComponent> = {
   hero: HeroSlide,
-  "why-cover": WhyCover,
   why: WhySlide,
-  "retail-cover": RetailCover,
   "retail-leasing": RetailLeasingSlide,
   "retail-phase-ii": RetailPhaseIISlide,
   "retail-expansion-hospitality": RetailExpansionHospitalitySlide,
   "retail-expansion-wellness": RetailExpansionWellnessSlide,
-  "luxury-cover": LuxuryCover,
   "luxury-signature": LuxurySignatureSlide,
   "luxury-proposition": LuxuryPropositionSlide,
   "luxury-future": LuxuryFutureSlide,
-  "dining-cover": DiningCover,
   dining: DiningSlide,
   "entertainment-cover": EntertainmentCover,
   "entertainment-nickelodeon": EntertainmentNickelodeon,
   "entertainment-sealife": EntertainmentSealife,
   "entertainment-crayola": EntertainmentCrayola,
   "entertainment-flyover": EntertainmentFlyover,
-  "events-cover": EventsCover,
   events: EventsSlide,
-  "partner-cover": PartnerCover,
   partner: CTASlide,
 };
 

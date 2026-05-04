@@ -8,7 +8,7 @@ interface HubSection {
   label: string;
   tagline: string;
   stat: string;
-  coverSlide: SlideId;
+  firstSlide: SlideId;
   image: string;
   span?: string;
 }
@@ -19,7 +19,7 @@ const SECTIONS: HubSection[] = [
     label: "Why MOA",
     tagline: "America's #1 Destination",
     stat: "40M+ Visitors",
-    coverSlide: "why-cover",
+    firstSlide: "why",
     image: "/images/why/Why_MOA_Cover.jpg",
     span: "col-span-2",
   },
@@ -28,7 +28,7 @@ const SECTIONS: HubSection[] = [
     label: "Retail Leasing",
     tagline: "500+ Stores & Restaurants",
     stat: "$2B+ Sales",
-    coverSlide: "retail-cover",
+    firstSlide: "retail-leasing",
     image: "/images/retail/Retail_Leasing_Cover.jpg",
   },
   {
@@ -36,7 +36,7 @@ const SECTIONS: HubSection[] = [
     label: "Luxury",
     tagline: "World-Class Brands",
     stat: "60% Destination Shoppers",
-    coverSlide: "luxury-cover",
+    firstSlide: "luxury-signature",
     image: "/images/luxury/Luxury_Cover.jpg",
   },
   {
@@ -44,7 +44,7 @@ const SECTIONS: HubSection[] = [
     label: "Dining",
     tagline: "50+ Culinary Experiences",
     stat: "14 Distinctive Concepts",
-    coverSlide: "dining-cover",
+    firstSlide: "dining",
     image: "/images/Dinning/Dinning_Cover.jpg",
   },
   {
@@ -52,7 +52,7 @@ const SECTIONS: HubSection[] = [
     label: "Entertainment",
     tagline: "Unmatched Attractions",
     stat: "7 Major Attractions",
-    coverSlide: "entertainment-cover",
+    firstSlide: "entertainment-nickelodeon",
     image: "/images/entertainment/Attractions_and_Entertainment_Cover.png",
     span: "col-span-2",
   },
@@ -61,7 +61,7 @@ const SECTIONS: HubSection[] = [
     label: "Events",
     tagline: "400+ Events Per Year",
     stat: "Global Stage",
-    coverSlide: "events-cover",
+    firstSlide: "events",
     image: "/images/events/Events_Cover.jpg",
   },
   {
@@ -69,7 +69,7 @@ const SECTIONS: HubSection[] = [
     label: "Partner With Us",
     tagline: "Your Brand. Our Stage.",
     stat: "Category Exclusivity Available",
-    coverSlide: "partner-cover",
+    firstSlide: "partner",
     image: "/images/Partner/Partner_Cover.jpg",
     span: "col-span-4",
   },
@@ -149,7 +149,7 @@ export default function HubNav({ visitedSections, onNavigate }: HubNavProps) {
                           ${section.span ?? "col-span-1"}
                           ${section.id === "partner" ? "h-28" : "h-44"}
                           focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]`}
-              onClick={() => onNavigate(section.coverSlide)}
+              onClick={() => onNavigate(section.firstSlide)}
               style={{ willChange: "transform" }}
             >
               <img
