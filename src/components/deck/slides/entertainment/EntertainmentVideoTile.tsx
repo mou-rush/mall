@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { VideoHTMLAttributes } from "react";
 import gsap from "gsap";
 import Image from "next/image";
 
@@ -37,10 +36,6 @@ interface EntertainmentVideoTileProps {
   ) => void;
 }
 
-const lazyVideoProps = {
-  loading: "lazy",
-} as unknown as VideoHTMLAttributes<HTMLVideoElement>;
-
 function EntertainmentVideoTile({
   attraction,
   isExpanded,
@@ -66,23 +61,20 @@ function EntertainmentVideoTile({
 
   useEffect(() => {
     setTileRef(attraction.id, tileRef.current);
-    return () => {
-      setTileRef(attraction.id, null);
-    };
+    return () => setTileRef(attraction.id, null);
   }, [attraction.id, setTileRef]);
 
   useEffect(() => {
     if (!tileRef.current) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => setInViewport(entry.isIntersecting),
       { threshold: 0.35 },
     );
-
     observer.observe(tileRef.current);
     return () => observer.disconnect();
   }, []);
 
+  // Ken Burns on poster
   useEffect(() => {
     if (!posterRef.current) return;
     const tween = gsap.to(posterRef.current, {
@@ -92,28 +84,23 @@ function EntertainmentVideoTile({
       repeat: -1,
       yoyo: true,
     });
-
-    return () => {
-      tween.kill();
-    };
+    return () => tween.kill();
   }, []);
 
+  // Play/pause based on visibility and state
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
-    const active = shouldPlay && inViewport && !isExpanded;
-    if (active) {
+    const shouldBeActive = shouldPlay && inViewport && !isExpanded;
+    if (shouldBeActive) {
       void video.play().catch(() => undefined);
-      return;
+    } else {
+      video.pause();
     }
-
-    video.pause();
   }, [inViewport, isExpanded, shouldPlay]);
 
   const handleEnter = () => {
     if (!overlayRef.current || !titleRef.current || !ctaRef.current) return;
-
     gsap.to(overlayRef.current, {
       opacity: 0.48,
       duration: 0.35,
@@ -134,17 +121,12 @@ function EntertainmentVideoTile({
 
   const handleLeave = () => {
     if (!overlayRef.current || !titleRef.current || !ctaRef.current) return;
-
     gsap.to(overlayRef.current, {
       opacity: 0.68,
       duration: 0.35,
       ease: "power2.out",
     });
-    gsap.to(titleRef.current, {
-      scale: 1,
-      duration: 0.35,
-      ease: "power2.out",
-    });
+    gsap.to(titleRef.current, { scale: 1, duration: 0.35, ease: "power2.out" });
     gsap.to(ctaRef.current, {
       y: 15,
       opacity: 0,
@@ -163,13 +145,17 @@ function EntertainmentVideoTile({
       onFocus={handleEnter}
       onBlur={handleLeave}
       data-entertainment-tile={attraction.id}
+      aria-label={
+        isDimmed ? `Switch to ${attraction.name}` : `Open ${attraction.name}`
+      }
       className="relative h-full w-full overflow-hidden border border-white/10 text-left"
       style={{
+        // Dimmed tiles stay fully interactive — they act as direct navigation targets
         opacity: isDimmed ? 0.06 : 1,
-        pointerEvents: isExpanded ? "none" : "auto",
+        cursor: isDimmed ? "pointer" : "default",
       }}
-      aria-label={`Open ${attraction.name}`}
     >
+      {/* Poster with Ken Burns */}
       <div ref={posterRef} className="absolute inset-0">
         <Image
           src={attraction.poster}
@@ -182,25 +168,26 @@ function EntertainmentVideoTile({
         />
       </div>
 
+      {/* Looping tile video */}
       <video
         ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
         src={attraction.video}
         poster={attraction.poster}
-        autoPlay
         muted
         loop
         playsInline
         preload="none"
-        {...lazyVideoProps}
       />
 
+      {/* Gradient + accent overlay */}
       <div
         ref={overlayRef}
         className="absolute inset-0"
         style={{ ...overlayStyle, opacity: 0.68 }}
       />
 
+      {/* Text */}
       <div className="absolute inset-x-0 bottom-0 p-5 md:p-7">
         <h2
           ref={titleRef}
@@ -208,7 +195,7 @@ function EntertainmentVideoTile({
         >
           {attraction.name}
         </h2>
-        <p className="mt-2 max-w-[18rem] text-xs text-white/82 md:text-sm">
+        <p className="mt-2 max-w-[18rem] text-xs text-white/80 md:text-sm">
           {attraction.tagline}
         </p>
 
