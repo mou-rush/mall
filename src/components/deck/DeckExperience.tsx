@@ -1,16 +1,15 @@
 "use client";
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useExplorationNavigation } from "@/hooks/useExplorationNavigation";
 import { getTotalSlides, type SlideId } from "@/lib/slide-registry";
-import EntryScreen from "./EntryScreen";
-import IntroScreen from "./IntroScreen";
+import EntryScreen from "./entryScreen/EntryScreen";
+import IntroScreen from "./introScreen/IntroScreen";
 import Hub from "./Hub";
 import ContentStage from "./ContentStage";
 import type { SlideComponent } from "@/lib/lazy-slides";
 
 import {
-  HeroSlide,
   WhySlide,
   RetailLeasingSlide,
   RetailPhaseIISlide,
@@ -33,7 +32,7 @@ import {
 } from "./slides/CoverComponents";
 
 const SLIDE_COMPONENTS: Record<SlideId, SlideComponent> = {
-  hero: HeroSlide,
+  // hero: HeroSlide,
   why: WhySlide,
   "retail-leasing": RetailLeasingSlide,
   "retail-phase-ii": RetailPhaseIISlide,

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { memo } from "react";
+import { motion } from "framer-motion";
 import { type SlideId } from "@/lib/slide-registry";
 import { ScrollProgressBar } from "@/components/ui/ScrollAnimations";
 import type { SlideComponent } from "@/types";
@@ -27,8 +27,6 @@ function ContentStage({
   progress,
   Component,
 }: ContentStageProps) {
-  const [showBreadcrumbs, setShowBreadcrumbs] = useState(false);
-
   if (!Component) return null;
 
   const progressPercent = Math.round((progress.visited / progress.total) * 100);
@@ -45,58 +43,6 @@ function ContentStage({
         <div className="max-w-screen-2xl mx-auto px-6 py-6 flex items-center justify-between pointer-events-auto">
           <div className="flex items-center  group" />
 
-          <div className="relative">
-            <button
-              className="px-4 py-2.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/30 transition-all"
-              onMouseEnter={() => setShowBreadcrumbs(true)}
-              onMouseLeave={() => setShowBreadcrumbs(false)}
-              aria-label="View breadcrumbs"
-            >
-              <span className="text-white/60 text-xs uppercase tracking-wider">
-                Path: {explorationPath.length} stops
-              </span>
-            </button>
-
-            <AnimatePresence>
-              {showBreadcrumbs && explorationPath.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute top-full right-0 mt-2 p-4 rounded-xl bg-black/90 backdrop-blur-xl border border-white/20 shadow-2xl min-w-[300px]"
-                >
-                  <p className="text-white/40 text-xs uppercase tracking-wider mb-3">
-                    Your Journey
-                  </p>
-                  <div className="space-y-2 max-h-[400px] overflow-y-auto">
-                    {explorationPath.map((item, index) => (
-                      <button
-                        key={`${item.slideId}-${item.timestamp}`}
-                        onClick={() =>
-                          onNavigateToSlide(item.slideId, item.section)
-                        }
-                        className="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 transition-colors flex items-center gap-3"
-                      >
-                        <span className="text-white/40 text-xs tabular-nums">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span className="text-white/80 text-sm flex-1">
-                          {item.slideId
-                            .replace(/-/g, " ")
-                            .replace(/\b\w/g, (l) => l.toUpperCase())}
-                        </span>
-                        {index === explorationPath.length - 1 && (
-                          <span className="text-[var(--gold)] text-xs">
-                            Current
-                          </span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
           <motion.button
             onClick={onGoToHub}
             className="flex  items-center gap-2 px-4 py-2.5 rounded-full bg-[var(--gold)]/10 backdrop-blur-xl border border-[var(--gold)]/30 hover:border-[var(--gold)]/60 transition-all group"
@@ -165,4 +111,4 @@ function ContentStage({
   );
 }
 
-export default React.memo(ContentStage);
+export default memo(ContentStage);
