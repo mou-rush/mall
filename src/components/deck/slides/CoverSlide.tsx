@@ -1,9 +1,9 @@
 "use client";
 
-import  { memo } from "react";
+import { memo } from "react";
 import { motion } from "framer-motion";
 import CinematicBackground from "@/components/ui/CinematicBackground";
-import { EASE_SMOOTH } from "@/lib/animation";
+import { EASING } from "@/lib/animations";
 
 interface CoverSlideProps {
   readonly isActive: boolean;
@@ -35,7 +35,7 @@ export default memo(function CoverSlide({
               ? { opacity: 1, y: 0, scale: 1 }
               : { opacity: 0, y: 40, scale: 0.9 }
           }
-          transition={{ duration: 1, ease: EASE_SMOOTH }}
+          transition={{ duration: 1, ease: EASING.reveal }}
           className="text-center"
         >
           <h1 className="text-6xl md:text-8xl lg:text-9xl font-extralight tracking-tight text-white mb-6">
@@ -45,7 +45,7 @@ export default memo(function CoverSlide({
           <motion.div
             initial={{ scaleX: 0 }}
             animate={isActive ? { scaleX: 1 } : { scaleX: 0 }}
-            transition={{ delay: 0.4, duration: 0.8, ease: EASE_SMOOTH }}
+            transition={{ delay: 0.4, duration: 0.8, ease: EASING.reveal }}
             className="h-[2px] w-32 mx-auto bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent"
           />
         </motion.div>

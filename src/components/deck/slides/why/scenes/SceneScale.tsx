@@ -1,6 +1,14 @@
 "use client";
-import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import {
+  BaseSlide,
+  StaticImageBackground,
+  Overlay,
+  ContentContainer,
+  AnimatedHeadline,
+  AnimatedText,
+} from "@/components/shared/SlideComponents";
+import { TEXT_STYLES } from "@/lib/animations";
 
 interface SceneScaleProps {
   readonly isActive: boolean;
@@ -35,38 +43,39 @@ export default function SceneScale({ isActive }: SceneScaleProps) {
   }, [isActive]);
 
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black">
-      <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center"
-        style={{
-          backgroundImage: "url(/images/retail/Retail_Leasing_Cover.jpg)",
-          opacity: 0.45,
-        }}
+    <BaseSlide>
+      <StaticImageBackground
+        src="/images/retail/Retail_Leasing_Cover.jpg"
+        opacity={0.45}
       />
-      <div className="absolute inset-0 bg-black/55" />
+      <Overlay variant="solidMedium" />
 
-      <div className="relative z-10 text-center px-6">
-        <motion.div
-          className="font-black text-white leading-none tracking-tighter tabular-nums"
-          style={{ fontSize: "clamp(10rem, 20vw, 24rem)" }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={isActive ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      <ContentContainer>
+        <AnimatedHeadline
+          isActive={isActive}
+          className={`${TEXT_STYLES.heroNumber.className} text-white tabular-nums`}
+          style={{ fontSize: TEXT_STYLES.heroNumber.fontSize }}
+          delay={0.2}
+          duration={0.8}
         >
           {count}
           <span className="text-[#FFC72C]">+</span>
-        </motion.div>
+        </AnimatedHeadline>
 
-        <motion.p
-          className="text-white/55 font-light uppercase tracking-[0.3em]"
-          style={{ fontSize: "clamp(1rem, 2vw, 1.5rem)", marginTop: "2.5rem" }}
-          initial={{ opacity: 0 }}
-          animate={isActive ? { opacity: 1 } : {}}
-          transition={{ duration: 0.8, delay: 1.2 }}
+        <AnimatedText
+          isActive={isActive}
+          className={TEXT_STYLES.supporting.className}
+          style={{
+            fontSize: TEXT_STYLES.supporting.fontSize,
+            marginTop: "2.5rem",
+          }}
+          delay={1.2}
+          duration={0.8}
+          yOffset={0}
         >
           Stores &amp; restaurants
-        </motion.p>
-      </div>
-    </section>
+        </AnimatedText>
+      </ContentContainer>
+    </BaseSlide>
   );
 }

@@ -1,5 +1,14 @@
 "use client";
 import { motion } from "framer-motion";
+import {
+  BaseSlide,
+  StaticImageBackground,
+  Overlay,
+  ContentContainer,
+  AnimatedHeadline,
+  AnimatedText,
+} from "@/components/shared/SlideComponents";
+import { EASING } from "@/lib/animations";
 
 interface SceneProximityProps {
   readonly isActive: boolean;
@@ -7,15 +16,12 @@ interface SceneProximityProps {
 
 export default function SceneProximity({ isActive }: SceneProximityProps) {
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black">
-      <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center"
-        style={{
-          backgroundImage: "url(/images/why/Why_MOA_Cover.jpg)",
-          opacity: 0.5,
-        }}
+    <BaseSlide>
+      <StaticImageBackground
+        src="/images/why/Why_MOA_Cover.jpg"
+        opacity={0.5}
       />
-      <div className="absolute inset-0 bg-black/65" />
+      <Overlay variant="bg-black/65" />
 
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none overflow-visible"
@@ -30,7 +36,7 @@ export default function SceneProximity({ isActive }: SceneProximityProps) {
           vectorEffect="non-scaling-stroke"
           initial={{ pathLength: 0, opacity: 0 }}
           animate={isActive ? { pathLength: 1, opacity: 0.35 } : {}}
-          transition={{ duration: 2.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 2.2, delay: 0.3, ease: EASING.cinematic }}
         />
       </svg>
 
@@ -39,7 +45,7 @@ export default function SceneProximity({ isActive }: SceneProximityProps) {
         style={{ top: "55%", left: "0%" }}
         initial={{ x: "-10%", y: "-50%", rotate: 90 }}
         animate={isActive ? { x: "110vw", y: "-50%", rotate: 90 } : {}}
-        transition={{ duration: 5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 5, delay: 0.3, ease: EASING.smoothOut }}
       >
         <svg
           width="48"
@@ -55,13 +61,16 @@ export default function SceneProximity({ isActive }: SceneProximityProps) {
         </svg>
       </motion.div>
 
-      <div className="relative z-10 text-center px-6">
-        <motion.div
+      <ContentContainer>
+        <AnimatedHeadline
+          isActive={isActive}
           className="font-black text-white leading-none tracking-tighter"
           style={{ fontSize: "clamp(10rem, 22vw, 26rem)" }}
           initial={{ opacity: 0, y: 40 }}
-          animate={isActive ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1.8, delay: 2, ease: [0.19, 1, 0.22, 1] }}
+          animate={{ opacity: 1, y: 0 }}
+          delay={2}
+          duration={1.8}
+          ease={EASING.reveal}
         >
           12
           <span
@@ -70,22 +79,23 @@ export default function SceneProximity({ isActive }: SceneProximityProps) {
           >
             min
           </span>
-        </motion.div>
+        </AnimatedHeadline>
 
-        <motion.p
+        <AnimatedText
+          isActive={isActive}
           className="text-white/80 font-light uppercase tracking-[0.45em]"
           style={{
             fontSize: "clamp(0.7rem, 1.2vw, 1rem)",
             marginTop: "2.5rem",
             letterSpacing: "0.45em",
           }}
-          initial={{ opacity: 0 }}
-          animate={isActive ? { opacity: 1 } : {}}
-          transition={{ duration: 1.8, delay: 2, ease: "easeOut" }}
+          delay={2}
+          duration={1.8}
+          yOffset={0}
         >
           From MSP International Airport
-        </motion.p>
-      </div>
-    </section>
+        </AnimatedText>
+      </ContentContainer>
+    </BaseSlide>
   );
 }

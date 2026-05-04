@@ -1,5 +1,13 @@
 "use client";
-import { motion } from "framer-motion";
+import {
+  BaseSlide,
+  StaticImageBackground,
+  Overlay,
+  ContentContainer,
+  AnimatedHeadline,
+  AnimatedText,
+} from "@/components/shared/SlideComponents";
+import { TEXT_STYLES } from "@/lib/animations";
 
 interface SceneAudienceProps {
   readonly isActive: boolean;
@@ -7,23 +15,17 @@ interface SceneAudienceProps {
 
 export default function SceneAudience({ isActive }: SceneAudienceProps) {
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black">
-      <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center"
-        style={{
-          backgroundImage: "url(/images/Home/Home_Hero.jpg)",
-          opacity: 0.45,
-        }}
-      />
-      <div className="absolute inset-0 bg-black/55" />
+    <BaseSlide>
+      <StaticImageBackground src="/images/Home/Home_Hero.jpg" opacity={0.45} />
+      <Overlay variant="solidMedium" />
 
-      <div className="relative z-10 text-center px-6">
-        <motion.div
+      <ContentContainer>
+        <AnimatedHeadline
+          isActive={isActive}
           className="font-black leading-none tracking-tighter"
           style={{ fontSize: "clamp(8rem, 18vw, 22rem)" }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={isActive ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          delay={0.3}
+          duration={1}
         >
           <span className="text-white">8</span>
           <span
@@ -33,18 +35,22 @@ export default function SceneAudience({ isActive }: SceneAudienceProps) {
             —
           </span>
           <span className="text-[#FFC72C]">82</span>
-        </motion.div>
+        </AnimatedHeadline>
 
-        <motion.p
-          className="text-white/55 font-light uppercase tracking-[0.3em]"
-          style={{ fontSize: "clamp(1rem, 2vw, 1.5rem)", marginTop: "2.5rem" }}
-          initial={{ opacity: 0 }}
-          animate={isActive ? { opacity: 1 } : {}}
-          transition={{ duration: 0.8, delay: 1 }}
+        <AnimatedText
+          isActive={isActive}
+          className={TEXT_STYLES.supporting.className}
+          style={{
+            fontSize: TEXT_STYLES.supporting.fontSize,
+            marginTop: "2.5rem",
+          }}
+          delay={1}
+          duration={0.8}
+          yOffset={0}
         >
           Universal appeal
-        </motion.p>
-      </div>
-    </section>
+        </AnimatedText>
+      </ContentContainer>
+    </BaseSlide>
   );
 }

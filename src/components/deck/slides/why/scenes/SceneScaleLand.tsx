@@ -1,5 +1,14 @@
 "use client";
 import { motion } from "framer-motion";
+import {
+  BaseSlide,
+  AnimatedImageBackground,
+  Overlay,
+  ContentContainer,
+  RadialGlow,
+  LightSweep,
+} from "@/components/shared/SlideComponents";
+import { EASING, TRANSITIONS } from "@/lib/animations";
 
 interface SceneScaleLandProps {
   readonly isActive: boolean;
@@ -7,45 +16,28 @@ interface SceneScaleLandProps {
 
 export default function SceneScaleLand({ isActive }: SceneScaleLandProps) {
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black">
-      <motion.div
-        className="absolute inset-0 w-full h-full bg-cover bg-center"
-        style={{
-          backgroundImage: "url(/images/why/Why_MOA_Cover.jpg)",
-        }}
-        initial={{ scale: 1.0, opacity: 0 }}
-        animate={isActive ? { scale: 1.15, opacity: 0.55 } : {}}
-        transition={{
-          scale: { duration: 15, ease: "easeOut" },
-          opacity: { duration: 2, ease: "easeOut" },
-        }}
+    <BaseSlide>
+      <AnimatedImageBackground
+        src="/images/why/Why_MOA_Cover.jpg"
+        isActive={isActive}
+        initialScale={1.0}
+        animateScale={1.15}
+        initialOpacity={0}
+        animateOpacity={0.55}
+        transition={TRANSITIONS.kenBurns}
       />
-      <div className="absolute inset-0 bg-black/60" />
+      <Overlay variant="bg-black/60" />
 
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={isActive ? { opacity: 1 } : {}}
-        transition={{ duration: 3, delay: 1.5, ease: "easeOut" }}
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,199,44,0.12) 0%, transparent 70%)",
-        }}
+      <RadialGlow
+        isActive={isActive}
+        delay={1.5}
+        size="60% 50%"
+        color="rgba(255,199,44,0.12)"
       />
 
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        initial={{ x: "-100%", opacity: 0 }}
-        animate={isActive ? { x: "100%", opacity: [0, 0.4, 0] } : {}}
-        transition={{ duration: 2.5, delay: 0.8, ease: "easeInOut" }}
-        style={{
-          background:
-            "linear-gradient(110deg, transparent 30%, rgba(255,199,44,0.15) 50%, transparent 70%)",
-          transform: "skewX(-15deg)",
-        }}
-      />
+      <LightSweep isActive={isActive} delay={0.8} duration={2.5} />
 
-      <div className="relative z-10 text-center px-6">
+      <ContentContainer>
         <div className="mb-6">
           <div className="overflow-hidden">
             <motion.div
@@ -59,7 +51,7 @@ export default function SceneScaleLand({ isActive }: SceneScaleLandProps) {
               transition={{
                 duration: 1.2,
                 delay: 0.4,
-                ease: [0.19, 1, 0.22, 1],
+                ease: EASING.reveal,
               }}
             >
               78
@@ -81,11 +73,11 @@ export default function SceneScaleLand({ isActive }: SceneScaleLandProps) {
           }}
           initial={{ opacity: 0, y: 20 }}
           animate={isActive ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1.3, delay: 1.8, ease: "easeOut" }}
+          transition={{ duration: 1.3, delay: 1.8, ease: EASING.easeOut }}
         >
           Built for discovery
         </motion.p>
-      </div>
-    </section>
+      </ContentContainer>
+    </BaseSlide>
   );
 }

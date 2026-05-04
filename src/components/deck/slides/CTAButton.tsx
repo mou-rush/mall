@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { EASE_PREMIUM } from "@/lib/animation";
+import { EASING } from "@/lib/animations";
 
 interface CTAButtonProps {
   readonly isActive: boolean;
@@ -20,7 +20,7 @@ export default memo(function CTAButton({ isActive, onNext }: CTAButtonProps) {
             ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
             : { opacity: 0, y: 28, scale: 0.96, filter: "blur(10px)" }
         }
-        transition={{ delay: 1.7, duration: 1.5, ease: EASE_PREMIUM }}
+        transition={{ delay: 1.7, duration: 1.5, ease: EASING.smoothOut }}
         whileHover={{ y: -6, scale: 1.01 }}
         whileTap={{ scale: 0.985 }}
         className="group relative w-full cursor-pointer overflow-hidden rounded-[32px] border border-white/16 bg-[linear-gradient(135deg,rgba(18,18,24,0.54),rgba(0,0,0,0.26))] px-6 py-5 backdrop-blur-2xl shadow-[0_24px_90px_rgba(0,0,0,0.34)]"
