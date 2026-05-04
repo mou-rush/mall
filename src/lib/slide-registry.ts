@@ -1,5 +1,4 @@
 export type SlideId =
-  | "hero"
   // Why MOA
   | "why"
   // Retail Leasing

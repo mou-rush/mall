@@ -33,14 +33,6 @@ export interface SlideProps {
 
 export type SlideComponent = ComponentType<SlideProps>;
 
-export const HeroSlide = dynamic(
-  () => import("@/components/deck/slides/HeroSlide"),
-  {
-    ssr: false,
-    loading: SlideLoader,
-  },
-) as SlideComponent;
-
 export const WhySlide = dynamic(
   () => import("@/components/deck/slides/WhyCinematicExperience"),
   {
