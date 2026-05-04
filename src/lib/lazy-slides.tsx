@@ -37,7 +37,7 @@ export const HeroSlide = dynamic(
 ) as SlideComponent;
 
 export const WhySlide = dynamic(
-  () => import("@/components/deck/slides/WhySlide"),
+  () => import("@/components/deck/slides/WhyCinematicExperience"),
   {
     ssr: false,
     loading: SlideLoader,
