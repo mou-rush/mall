@@ -5,14 +5,27 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { getLuxuryContent } from "@/lib/data-service";
+import SectionNav from "@/components/deck/SectionNav";
+import type { SlideComponentProps } from "@/types";
+import type { SlideId } from "@/lib/slide-registry";
 
-interface SlideProps {
+const LUXURY_SLIDES = [
+  { id: "luxury-signature" as SlideId, label: "Signature" },
+  { id: "luxury-proposition" as SlideId, label: "Proposition" },
+  { id: "luxury-future" as SlideId, label: "Future" },
+];
+
+interface SlideProps extends SlideComponentProps {
   readonly isActive: boolean;
 }
 
 const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
-export default function LuxuryPropositionSlide({ isActive }: SlideProps) {
+export default function LuxuryPropositionSlide({
+  isActive,
+  onNavigateToSlide,
+  currentSection,
+}: SlideProps) {
   const content = getLuxuryContent();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -215,6 +228,15 @@ export default function LuxuryPropositionSlide({ isActive }: SlideProps) {
           </div>
         </div>
       </div>
+
+      {onNavigateToSlide && currentSection && (
+        <SectionNav
+          currentSlideId="luxury-proposition"
+          slides={LUXURY_SLIDES}
+          onNavigate={(slideId) => onNavigateToSlide(slideId, currentSection)}
+          accentColor="#003DA5"
+        />
+      )}
     </div>
   );
 }

@@ -3,14 +3,27 @@
 import CinematicBackground from "@/components/ui/CinematicBackground";
 import { motion } from "framer-motion";
 import { getLuxuryContent } from "@/lib/data-service";
+import SectionNav from "@/components/deck/SectionNav";
+import type { SlideComponentProps } from "@/types";
+import type { SlideId } from "@/lib/slide-registry";
 
-interface SlideProps {
+const LUXURY_SLIDES = [
+  { id: "luxury-signature" as SlideId, label: "Signature" },
+  { id: "luxury-proposition" as SlideId, label: "Proposition" },
+  { id: "luxury-future" as SlideId, label: "Future" },
+];
+
+interface SlideProps extends SlideComponentProps {
   readonly isActive: boolean;
 }
 
 const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
-export default function LuxuryFutureSlide({ isActive }: SlideProps) {
+export default function LuxuryFutureSlide({
+  isActive,
+  onNavigateToSlide,
+  currentSection,
+}: SlideProps) {
   const content = getLuxuryContent();
   const futurePillar = content.pillars[2];
 
@@ -98,6 +111,15 @@ export default function LuxuryFutureSlide({ isActive }: SlideProps) {
           </motion.div>
         </div>
       </div>
+
+      {onNavigateToSlide && currentSection && (
+        <SectionNav
+          currentSlideId="luxury-future"
+          slides={LUXURY_SLIDES}
+          onNavigate={(slideId) => onNavigateToSlide(slideId, currentSection)}
+          accentColor="#003DA5"
+        />
+      )}
     </div>
   );
 }

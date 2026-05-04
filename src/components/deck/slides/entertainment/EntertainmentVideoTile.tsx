@@ -74,7 +74,6 @@ function EntertainmentVideoTile({
     return () => observer.disconnect();
   }, []);
 
-  // Ken Burns on poster
   useEffect(() => {
     if (!posterRef.current) return;
     const tween = gsap.to(posterRef.current, {
@@ -84,10 +83,11 @@ function EntertainmentVideoTile({
       repeat: -1,
       yoyo: true,
     });
-    return () => tween.kill();
+    return () => {
+      tween.kill();
+    };
   }, []);
 
-  // Play/pause based on visibility and state
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;

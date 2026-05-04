@@ -1,19 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import dynamic from "next/dynamic";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
+import Image from "next/image";
 import type { EntertainmentTileData } from "./EntertainmentVideoTile";
 
 interface EntertainmentImmersiveSlideProps {
   readonly isActive: boolean;
   readonly initialAttraction?: EntertainmentTileData["id"];
 }
-
-const EntertainmentVideoTile = dynamic(
-  () => import("./EntertainmentVideoTile"),
-  { ssr: false },
-);
 
 const ATTRACTIONS: ReadonlyArray<EntertainmentTileData> = [
   {
@@ -88,287 +83,559 @@ const ATTRACTIONS: ReadonlyArray<EntertainmentTileData> = [
   },
 ];
 
+function DualVideoBg({
+  videoA,
+  videoB,
+  poster,
+}: {
+  readonly videoA: string;
+  readonly videoB: string;
+  readonly poster: string;
+}) {
+  const refA = useRef<HTMLVideoElement>(null);
+  const refB = useRef<HTMLVideoElement>(null);
+  const [activeSlot, setActiveSlot] = useState<"a" | "b">("a");
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    const vA = refA.current;
+    const vB = refB.current;
+    if (!vA || !vB) return;
+    void vA.play().catch(() => undefined);
+    void vB.play().catch(() => undefined);
+    timerRef.current = setInterval(() => {
+      setActiveSlot((prev) => (prev === "a" ? "b" : "a"));
+    }, 7000);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      vA.pause();
+      vB.pause();
+    };
+  }, [videoA, videoB]);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      <video
+        ref={refA}
+        key={`a-${videoA}`}
+        src={videoA}
+        poster={poster}
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1400ms] ease-in-out"
+        style={{ opacity: activeSlot === "a" ? 1 : 0 }}
+      />
+      <video
+        ref={refB}
+        key={`b-${videoB}`}
+        src={videoB}
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1400ms] ease-in-out"
+        style={{ opacity: activeSlot === "b" ? 1 : 0 }}
+      />
+    </div>
+  );
+}
+
+function AttractionStrip({
+  attraction,
+  isActive,
+  isHovered,
+  isAnyHovered,
+  isExpanded,
+  onOpen,
+  onHover,
+  onLeave,
+}: {
+  readonly attraction: EntertainmentTileData;
+  readonly isActive: boolean;
+  readonly isHovered: boolean;
+  readonly isAnyHovered: boolean;
+  readonly isExpanded: boolean;
+  readonly onOpen: (id: EntertainmentTileData["id"]) => void;
+  readonly onHover: (id: EntertainmentTileData["id"]) => void;
+  readonly onLeave: () => void;
+}) {
+  const videoRefA = useRef<HTMLVideoElement>(null);
+  const videoRefB = useRef<HTMLVideoElement>(null);
+  const [activeVideo, setActiveVideo] = useState<"a" | "b">("a");
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    const vA = videoRefA.current;
+    const vB = videoRefB.current;
+    if (!vA || !vB) return;
+
+    if (isActive && !isExpanded) {
+      void vA.play().catch(() => undefined);
+      void vB.play().catch(() => undefined);
+
+      timerRef.current = setInterval(() => {
+        setActiveVideo((prev) => (prev === "a" ? "b" : "a"));
+      }, 5000);
+    } else {
+      vA.pause();
+      vB.pause();
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    }
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isActive, isExpanded]);
+
+  let flexGrow = 1;
+  if (isHovered) flexGrow = 3.5;
+  else if (isAnyHovered) flexGrow = 0.55;
+
+  let labelOpacity = 1;
+  if (isHovered) labelOpacity = 0;
+  else if (isAnyHovered) labelOpacity = 0.5;
+
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen(attraction.id)}
+      onMouseEnter={() => onHover(attraction.id)}
+      onMouseLeave={onLeave}
+      onFocus={() => onHover(attraction.id)}
+      onBlur={onLeave}
+      aria-label={`Open ${attraction.name}`}
+      className="relative h-full overflow-hidden border-r border-white/10 text-left outline-none"
+      style={{
+        flex: flexGrow,
+        transition: "flex 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+        minWidth: 0,
+      }}
+    >
+      <div className="absolute inset-0 overflow-hidden">
+        <video
+          ref={videoRefA}
+          src={attraction.video}
+          poster={attraction.poster}
+          muted
+          loop
+          playsInline
+          preload="none"
+          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms] ease-in-out"
+          style={{
+            transform: isHovered ? "scale(1.04)" : "scale(1)",
+            transition:
+              "transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s ease-in-out",
+            opacity: activeVideo === "a" ? 1 : 0,
+          }}
+        />
+        <video
+          ref={videoRefB}
+          src={attraction.expandedVideo ?? attraction.video}
+          muted
+          loop
+          playsInline
+          preload="none"
+          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms] ease-in-out"
+          style={{
+            transform: isHovered ? "scale(1.04)" : "scale(1)",
+            transition:
+              "transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s ease-in-out",
+            opacity: activeVideo === "b" ? 1 : 0,
+          }}
+        />
+      </div>
+      <div
+        className="absolute inset-0"
+        style={{ opacity: 0, pointerEvents: "none" }}
+      >
+        <Image
+          src={attraction.poster}
+          alt={attraction.name}
+          fill
+          sizes="25vw"
+          className="object-cover"
+          priority={false}
+        />
+      </div>
+      <div
+        className="absolute inset-0 transition-opacity duration-500"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.88) 100%)",
+          opacity: isHovered ? 0.75 : 1,
+        }}
+      />
+      <div
+        className="absolute inset-x-0 top-0 h-[3px]"
+        style={{
+          background: attraction.accent,
+          transform: isHovered ? "scaleX(1)" : "scaleX(0)",
+          transformOrigin: "left",
+          transition: "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      />
+      <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end gap-2 p-5 md:p-7">
+        <div
+          className="overflow-hidden transition-all duration-500"
+          style={{
+            maxHeight: isHovered ? "0px" : "200px",
+            opacity: labelOpacity,
+          }}
+        >
+          <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/60">
+            {attraction.name}
+          </p>
+        </div>
+        <div
+          className="overflow-hidden transition-all duration-500"
+          style={{
+            maxHeight: isHovered ? "300px" : "0px",
+            opacity: isHovered ? 1 : 0,
+          }}
+        >
+          <h2 className="text-2xl font-black leading-tight text-white md:text-3xl">
+            {attraction.name}
+          </h2>
+          <p className="mt-2 text-xs text-white/70 md:text-sm">
+            {attraction.tagline}
+          </p>
+          <div
+            className="mt-5 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-black uppercase tracking-[0.2em]"
+            style={{ background: attraction.accent, color: "#000" }}
+          >
+            <span>Explore</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path
+                d="M2 6h8M7 3l3 3-3 3"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </button>
+  );
+}
+
 export default function EntertainmentImmersiveSlide({
   isActive,
   initialAttraction,
 }: EntertainmentImmersiveSlideProps) {
   const [expandedId, setExpandedId] = useState<
     EntertainmentTileData["id"] | null
-  >(initialAttraction ?? null);
-  const [isAnimating, setIsAnimating] = useState(false);
+  >(null);
+  const [hoveredId, setHoveredId] = useState<
+    EntertainmentTileData["id"] | null
+  >(null);
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const expandedRef = useRef<HTMLDivElement | null>(null);
-  const panelRef = useRef<HTMLDivElement | null>(null);
-  const tileRefs = useRef<
-    Record<EntertainmentTileData["id"], HTMLButtonElement | null>
-  >({
-    nick: null,
-    sealife: null,
-    crayola: null,
-    flyover: null,
-  });
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const countersRan = useRef(false);
 
   const activeAttraction = useMemo(
     () => ATTRACTIONS.find((a) => a.id === expandedId) ?? null,
     [expandedId],
   );
 
-  const currentIndex = useMemo(
-    () => ATTRACTIONS.findIndex((a) => a.id === expandedId),
+  const openExpanded = useCallback(
+    (id: EntertainmentTileData["id"], instant = false) => {
+      if (!overlayRef.current) return;
+      countersRan.current = false;
+      setExpandedId(id);
+      if (instant) {
+        gsap.set(overlayRef.current, { opacity: 1, pointerEvents: "auto" });
+        setTimeout(() => {
+          if (panelRef.current)
+            gsap.fromTo(
+              panelRef.current,
+              { x: 80, opacity: 0 },
+              { x: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
+            );
+        }, 80);
+      } else {
+        gsap.set(overlayRef.current, { opacity: 0, pointerEvents: "auto" });
+        gsap.to(overlayRef.current, {
+          opacity: 1,
+          duration: 0.55,
+          ease: "power2.out",
+          onComplete: () => {
+            if (panelRef.current)
+              gsap.fromTo(
+                panelRef.current,
+                { x: 80, opacity: 0 },
+                { x: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
+              );
+          },
+        });
+      }
+    },
+    [],
+  );
+
+  const closeExpanded = useCallback(() => {
+    if (!overlayRef.current) return;
+    gsap.to(overlayRef.current, {
+      opacity: 0,
+      duration: 0.45,
+      ease: "power2.inOut",
+      onComplete: () => {
+        setExpandedId(null);
+        if (overlayRef.current)
+          gsap.set(overlayRef.current, { pointerEvents: "none" });
+        countersRan.current = false;
+      },
+    });
+  }, []);
+
+  const switchAttraction = useCallback(
+    (id: EntertainmentTileData["id"]) => {
+      if (id === expandedId || !panelRef.current) return;
+      countersRan.current = false;
+      gsap.to(panelRef.current, {
+        x: 40,
+        opacity: 0,
+        duration: 0.22,
+        ease: "power2.in",
+        onComplete: () => {
+          setExpandedId(id);
+          if (panelRef.current)
+            gsap.fromTo(
+              panelRef.current,
+              { x: -40, opacity: 0 },
+              { x: 0, opacity: 1, duration: 0.45, ease: "power3.out" },
+            );
+        },
+      });
+    },
     [expandedId],
   );
 
-  useEffect(() => {
-    setExpandedId(initialAttraction ?? null);
-  }, [initialAttraction]);
+  const handleOpen = useCallback(
+    (id: EntertainmentTileData["id"]) => {
+      if (expandedId !== null) {
+        switchAttraction(id);
+      } else {
+        openExpanded(id, false);
+      }
+    },
+    [expandedId, openExpanded, switchAttraction],
+  );
 
   useEffect(() => {
-    if (!expandedId || !panelRef.current) return;
-    const counters =
-      panelRef.current.querySelectorAll<HTMLElement>("[data-count-to]");
-    counters.forEach((counter) => {
-      const total = Number(counter.dataset.countTo ?? 0);
-      const suffix = counter.dataset.suffix ?? "";
-      const value = { current: 0 };
-      gsap.to(value, {
-        current: total,
-        duration: 1.1,
-        ease: "power2.out",
-        onUpdate: () => {
-          counter.textContent = `${Math.round(value.current).toLocaleString()}${suffix}`;
-        },
+    if (initialAttraction) {
+      const t = setTimeout(() => openExpanded(initialAttraction, true), 150);
+      return () => clearTimeout(t);
+    }
+  }, [initialAttraction, openExpanded]);
+
+  useEffect(() => {
+    if (!expandedId || countersRan.current || !panelRef.current) return;
+    const t = setTimeout(() => {
+      const counters =
+        panelRef.current?.querySelectorAll<HTMLElement>("[data-count-to]") ??
+        [];
+      counters.forEach((el) => {
+        const total = Number(el.dataset.countTo ?? 0);
+        const suffix = el.dataset.suffix ?? "";
+        const val = { v: 0 };
+        gsap.to(val, {
+          v: total,
+          duration: 1.2,
+          ease: "power2.out",
+          onUpdate: () => {
+            el.textContent = `${Math.round(val.v).toLocaleString()}${suffix}`;
+          },
+        });
       });
-    });
+      countersRan.current = true;
+    }, 400);
+    return () => clearTimeout(t);
   }, [expandedId]);
 
-  const setTileRef = (
-    id: EntertainmentTileData["id"],
-    el: HTMLButtonElement | null,
-  ) => {
-    tileRefs.current[id] = el;
-  };
-
-  // Full clip-path open from tile position — used when coming from the hub
-  const openAttraction = (id: EntertainmentTileData["id"]) => {
-    if (isAnimating || !containerRef.current || !expandedRef.current) return;
-
-    // If already expanded, navigate directly without re-animating the overlay
-    if (expandedId !== null) {
-      navigateToAttraction(id);
-      return;
-    }
-
-    const tileEl = tileRefs.current[id];
-    if (!tileEl) return;
-
-    const containerRect = containerRef.current.getBoundingClientRect();
-    const tileRect = tileEl.getBoundingClientRect();
-
-    const top = tileRect.top - containerRect.top;
-    const left = tileRect.left - containerRect.left;
-    const right = containerRect.right - tileRect.right;
-    const bottom = containerRect.bottom - tileRect.bottom;
-
-    setIsAnimating(true);
-    setExpandedId(id);
-
-    gsap.set(expandedRef.current, {
-      opacity: 1,
-      clipPath: `inset(${top}px ${right}px ${bottom}px ${left}px)`,
-      pointerEvents: "auto",
-    });
-
-    gsap
-      .timeline({
-        onComplete: () => {
-          animatePanelIn();
-          setIsAnimating(false);
-        },
-      })
-      .to("[data-entertainment-tile]", {
-        opacity: (_i, el) =>
-          el.getAttribute("data-entertainment-tile") === id ? 1 : 0,
-        scale: (_i, el) =>
-          el.getAttribute("data-entertainment-tile") === id ? 1 : 0.92,
-        duration: 0.45,
-        ease: "power2.out",
-      })
-      .to(
-        expandedRef.current,
-        {
-          clipPath: "inset(0px 0px 0px 0px)",
-          duration: 0.8,
-          ease: "power3.inOut",
-        },
-        0,
-      );
-  };
-
-  // Crossfade panel — used when switching between attractions while already expanded
-  const navigateToAttraction = (id: EntertainmentTileData["id"]) => {
-    if (isAnimating || id === expandedId || !panelRef.current) return;
-    setIsAnimating(true);
-
-    gsap.to(panelRef.current, {
-      x: 40,
-      opacity: 0,
-      duration: 0.25,
-      ease: "power2.in",
-      onComplete: () => {
-        setExpandedId(id);
-        // Count-up runs via the useEffect above after state updates
-        gsap.fromTo(
-          panelRef.current,
-          { x: -40, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.45, ease: "power3.out" },
-        );
-        setIsAnimating(false);
-      },
-    });
-  };
-
-  const closeAttraction = () => {
-    if (isAnimating || !expandedRef.current) return;
-    setIsAnimating(true);
-
-    gsap
-      .timeline({
-        onComplete: () => {
-          setExpandedId(null);
-          gsap.set(expandedRef.current!, { opacity: 0, pointerEvents: "none" });
-          gsap.set("[data-entertainment-tile]", { opacity: 1, scale: 1 });
-          setIsAnimating(false);
-        },
-      })
-      .to(expandedRef.current, {
-        opacity: 0,
-        duration: 0.45,
-        ease: "power2.inOut",
-      })
-      .to(
-        "[data-entertainment-tile]",
-        { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" },
-        0,
-      );
-  };
-
-  const animatePanelIn = () => {
-    if (!panelRef.current) return;
-    gsap.fromTo(
-      panelRef.current,
-      { x: 120, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
-    );
-  };
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && expandedId) closeExpanded();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [expandedId, closeExpanded]);
 
   return (
-    <section className="min-h-screen w-full bg-black text-white">
-      <div ref={containerRef} className="relative h-screen overflow-hidden">
-        <div className="grid h-full grid-cols-2 grid-rows-2 md:grid-cols-4 md:grid-rows-1">
-          {ATTRACTIONS.map((attraction) => (
-            <EntertainmentVideoTile
-              key={attraction.id}
-              attraction={attraction}
-              isExpanded={Boolean(expandedId)}
-              isDimmed={Boolean(expandedId && expandedId !== attraction.id)}
-              shouldPlay={isActive && !isAnimating}
-              onOpen={openAttraction}
-              setTileRef={setTileRef}
+    <section className="relative h-screen w-full overflow-hidden bg-black text-white">
+      <div className="absolute left-0 right-0 top-0 z-20 flex items-center justify-between px-8 py-6">
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">
+          Attractions + Entertainment
+        </p>
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30">
+          4 world-class experiences
+        </p>
+      </div>
+
+      <div className="flex h-full w-full">
+        {ATTRACTIONS.map((attraction) => (
+          <AttractionStrip
+            key={attraction.id}
+            attraction={attraction}
+            isActive={isActive}
+            isHovered={hoveredId === attraction.id}
+            isAnyHovered={hoveredId !== null}
+            isExpanded={expandedId !== null}
+            onOpen={handleOpen}
+            onHover={setHoveredId}
+            onLeave={() => setHoveredId(null)}
+          />
+        ))}
+      </div>
+
+      <div
+        ref={overlayRef}
+        className="pointer-events-none absolute inset-0 z-40"
+        style={{ opacity: 0 }}
+      >
+        {activeAttraction && (
+          <>
+            <DualVideoBg
+              videoA={activeAttraction.video}
+              videoB={activeAttraction.expandedVideo ?? activeAttraction.video}
+              poster={activeAttraction.poster}
             />
-          ))}
-        </div>
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.18)_0%,rgba(0,0,0,0.35)_40%,rgba(0,0,0,0.88)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.35)_0%,transparent_35%,transparent_65%,rgba(0,0,0,0.55)_100%)]" />
 
-        {/* Expanded overlay */}
-        <div
-          ref={expandedRef}
-          className="pointer-events-none absolute inset-0 z-30 opacity-0"
-        >
-          {activeAttraction && (
-            <>
-              {/* Background video */}
-              <video
-                key={activeAttraction.expandedVideo ?? activeAttraction.video}
-                className="absolute inset-0 h-full w-full object-cover"
-                src={activeAttraction.expandedVideo ?? activeAttraction.video}
-                poster={activeAttraction.poster}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="none"
+            <div className="absolute left-8 top-1/2 -translate-y-1/2">
+              <div
+                className="rounded-full px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.22em] backdrop-blur-sm"
+                style={{
+                  background: `${activeAttraction.accent}30`,
+                  border: `1px solid ${activeAttraction.accent}60`,
+                  color: activeAttraction.accent,
+                }}
+              >
+                <span className="relative inline-flex items-center gap-2">
+                  <span className="relative flex h-2 w-2">
+                    <span
+                      className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
+                      style={{ background: activeAttraction.accent }}
+                    />
+                    <span
+                      className="relative inline-flex h-2 w-2 rounded-full"
+                      style={{ background: activeAttraction.accent }}
+                    />
+                  </span>
+                  Live footage · Dual view
+                </span>
+              </div>
+            </div>
+
+            <div className="absolute bottom-8 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3">
+              {ATTRACTIONS.map((a) => (
+                <button
+                  key={a.id}
+                  type="button"
+                  onClick={() => switchAttraction(a.id)}
+                  aria-label={a.name}
+                  className="transition-all duration-300"
+                  style={{
+                    width: a.id === expandedId ? "2rem" : "0.35rem",
+                    height: "0.35rem",
+                    borderRadius: "9999px",
+                    background:
+                      a.id === expandedId
+                        ? activeAttraction.accent
+                        : "rgba(255,255,255,0.28)",
+                  }}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={closeExpanded}
+              aria-label="Close"
+              className="absolute left-7 top-7 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white/70 transition hover:bg-white/10 hover:text-white"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              >
+                <path d="M3 3l10 10M13 3L3 13" />
+              </svg>
+            </button>
+
+            <div
+              ref={panelRef}
+              className="absolute right-0 top-0 flex h-full w-full max-w-[520px] flex-col justify-end px-8 pb-24 pt-20 md:px-12"
+              style={{ opacity: 0, transform: "translateX(80px)" }}
+            >
+              <div
+                className="mb-4 h-[3px] w-12 rounded-full"
+                style={{ background: activeAttraction.accent }}
               />
+              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/45">
+                Attractions + Entertainment
+              </p>
+              <h2 className="mt-3 text-4xl font-black leading-[0.96] md:text-5xl">
+                {activeAttraction.name}
+              </h2>
+              <p className="mt-4 max-w-md text-base leading-relaxed text-white/75 md:text-lg">
+                {activeAttraction.headline}
+              </p>
 
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0.24)_40%,rgba(0,0,0,0.92)_100%)]" />
-
-              <div className="absolute bottom-8 left-1/2 z-50 flex -translate-x-1/2 gap-2 md:bottom-10">
-                {ATTRACTIONS.map((a, i) => (
-                  <button
-                    key={a.id}
-                    type="button"
-                    onClick={() => navigateToAttraction(a.id)}
-                    aria-label={`Go to ${a.name}`}
-                    className="h-1.5 rounded-full transition-all duration-300"
-                    style={{
-                      width: a.id === expandedId ? "2rem" : "0.375rem",
-                      background:
-                        a.id === expandedId
-                          ? activeAttraction.accent
-                          : "rgba(255,255,255,0.3)",
-                    }}
-                  />
+              <div className="mt-8 grid grid-cols-3 gap-3">
+                {activeAttraction.stats.map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-4 text-center backdrop-blur-sm"
+                  >
+                    <div
+                      data-count-to={stat.value}
+                      data-suffix={stat.suffix}
+                      className="text-2xl font-black md:text-3xl"
+                      style={{ color: activeAttraction.accent }}
+                    >
+                      0{stat.suffix}
+                    </div>
+                    <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.18em] text-white/50">
+                      {stat.label}
+                    </p>
+                  </div>
                 ))}
               </div>
 
-              <div
-                ref={panelRef}
-                className="absolute right-0 top-0 z-40 flex h-full w-full max-w-[560px] flex-col justify-end bg-gradient-to-l from-black/90 via-black/72 to-transparent p-6 pb-20 md:p-10 md:pb-24"
-                style={{ opacity: 0, transform: "translateX(120px)" }}
+              <a
+                href={activeAttraction.ctaHref}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-8 inline-flex items-center justify-center gap-3 px-6 py-4 text-[11px] font-black uppercase tracking-[0.18em] text-black transition hover:brightness-110"
+                style={{ background: activeAttraction.accent }}
               >
-                <p className="text-[11px] uppercase tracking-[0.22em] text-white/50">
-                  Attractions + Entertainment
-                </p>
-                <h2 className="mt-3 text-4xl font-black leading-[0.98] md:text-5xl">
-                  {activeAttraction.name}
-                </h2>
-                <p className="mt-4 max-w-md text-base text-white/80 md:text-lg">
-                  {activeAttraction.headline}
-                </p>
-
-                <div className="mt-8 grid gap-3">
-                  {activeAttraction.stats.map((stat) => (
-                    <div
-                      key={stat.label}
-                      className="rounded-2xl border border-white/12 bg-white/5 px-4 py-4"
-                    >
-                      <div
-                        data-count-to={stat.value}
-                        data-suffix={stat.suffix}
-                        className="text-3xl font-black"
-                        style={{ color: activeAttraction.accent }}
-                      >
-                        0{stat.suffix}
-                      </div>
-                      <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-white/60">
-                        {stat.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                <a
-                  href={activeAttraction.ctaHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-8 inline-flex items-center justify-center px-6 py-4 text-sm font-black uppercase tracking-[0.14em] text-black transition hover:brightness-110"
-                  style={{ background: activeAttraction.accent }}
-                >
-                  {activeAttraction.ctaLabel}
-                </a>
-              </div>
-            </>
-          )}
-        </div>
+                <span>{activeAttraction.ctaLabel}</span>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M2 7h10M8 3l4 4-4 4"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

@@ -4,8 +4,18 @@ import CinematicBackground from "@/components/ui/CinematicBackground";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { getRetailScene } from "@/lib/data-service";
+import SectionNav from "@/components/deck/SectionNav";
+import type { SlideComponentProps } from "@/types";
+import type { SlideId } from "@/lib/slide-registry";
 
-interface SlideProps {
+const RETAIL_SLIDES = [
+  { id: "retail-leasing" as SlideId, label: "Leasing" },
+  { id: "retail-phase-ii" as SlideId, label: "Phase II" },
+  { id: "retail-expansion-hospitality" as SlideId, label: "Hospitality" },
+  { id: "retail-expansion-wellness" as SlideId, label: "Wellness" },
+];
+
+interface SlideProps extends SlideComponentProps {
   readonly isActive: boolean;
 }
 
@@ -13,6 +23,8 @@ const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
 export default function RetailExpansionHospitalitySlide({
   isActive,
+  onNavigateToSlide,
+  currentSection,
 }: SlideProps) {
   const scene = getRetailScene("expansion-1");
   const getStatDelay = (label: string): number => {
@@ -205,6 +217,15 @@ export default function RetailExpansionHospitalitySlide({
           </div>
         </div>
       </div>
+
+      {onNavigateToSlide && currentSection && (
+        <SectionNav
+          currentSlideId="retail-expansion-hospitality"
+          slides={RETAIL_SLIDES}
+          onNavigate={(slideId) => onNavigateToSlide(slideId, currentSection)}
+          accentColor="#FFC72C"
+        />
+      )}
     </div>
   );
 }

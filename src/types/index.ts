@@ -47,6 +47,8 @@ export interface SlideComponentProps {
   readonly goTo?: (slide: number) => void;
   readonly currentSlide?: number;
   readonly onGoToHub?: () => void;
+  readonly onNavigateToSlide?: (slideId: SlideId, section: string) => void;
+  readonly currentSection?: string;
 }
 
 export type SlideComponent = ComponentType<SlideComponentProps>;

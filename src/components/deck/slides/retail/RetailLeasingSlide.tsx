@@ -3,12 +3,26 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { getLeasingContent } from "@/lib/data-service";
 import CinematicBackground from "@/components/ui/CinematicBackground";
+import SectionNav from "@/components/deck/SectionNav";
+import type { SlideComponentProps } from "@/types";
+import type { SlideId } from "@/lib/slide-registry";
 
-interface RetailSlideProps {
+const RETAIL_SLIDES = [
+  { id: "retail-leasing" as SlideId, label: "Leasing" },
+  { id: "retail-phase-ii" as SlideId, label: "Phase II" },
+  { id: "retail-expansion-hospitality" as SlideId, label: "Hospitality" },
+  { id: "retail-expansion-wellness" as SlideId, label: "Wellness" },
+];
+
+interface RetailSlideProps extends SlideComponentProps {
   readonly isActive: boolean;
 }
 
-export default function RetailSlide({ isActive }: RetailSlideProps) {
+export default function RetailSlide({
+  isActive,
+  onNavigateToSlide,
+  currentSection,
+}: RetailSlideProps) {
   const scenes = getLeasingContent().retail.scenes;
 
   const scene = scenes[0];
@@ -21,7 +35,6 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
         variant="noir"
         overlayOpacity={0.35}
       />
-
       <div className="relative z-10 h-full w-full">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full max-w-[1320px] mx-auto px-8 lg:px-16">
@@ -155,6 +168,14 @@ export default function RetailSlide({ isActive }: RetailSlideProps) {
           </div>
         </div>
       </div>
+      {onNavigateToSlide && currentSection && (
+        <SectionNav
+          currentSlideId="retail-leasing"
+          slides={RETAIL_SLIDES}
+          onNavigate={(slideId) => onNavigateToSlide(slideId, currentSection)}
+          accentColor="#FFC72C"
+        />
+      )}{" "}
     </div>
   );
 }

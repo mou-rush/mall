@@ -10,8 +10,17 @@ import {
   getBrandLogoMap,
   getLuxuryContent,
 } from "@/lib/data-service";
+import SectionNav from "@/components/deck/SectionNav";
+import type { SlideComponentProps } from "@/types";
+import type { SlideId } from "@/lib/slide-registry";
 
-interface SlideProps {
+const LUXURY_SLIDES = [
+  { id: "luxury-signature" as SlideId, label: "Signature" },
+  { id: "luxury-proposition" as SlideId, label: "Proposition" },
+  { id: "luxury-future" as SlideId, label: "Future" },
+];
+
+interface SlideProps extends SlideComponentProps {
   readonly isActive: boolean;
 }
 
@@ -23,7 +32,11 @@ const brandMarquee = [
   ...brands.map((name) => ({ name, run: 1 as const })),
 ];
 
-export default function LuxurySignatureSlide({ isActive }: SlideProps) {
+export default function LuxurySignatureSlide({
+  isActive,
+  onNavigateToSlide,
+  currentSection,
+}: SlideProps) {
   const content = getLuxuryContent();
   const storesCount = Math.round(useCountUp(520, 1800, isActive));
   const departmentCount = Math.round(useCountUp(2, 1600, isActive));
@@ -165,6 +178,15 @@ export default function LuxurySignatureSlide({ isActive }: SlideProps) {
           </motion.div>
         </div>
       </div>
+
+      {onNavigateToSlide && currentSection && (
+        <SectionNav
+          currentSlideId="luxury-signature"
+          slides={LUXURY_SLIDES}
+          onNavigate={(slideId) => onNavigateToSlide(slideId, currentSection)}
+          accentColor="#003DA5"
+        />
+      )}
     </div>
   );
 }
