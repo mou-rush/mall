@@ -5,275 +5,107 @@ interface SceneImpactProps {
   readonly isActive: boolean;
 }
 
+const WORDS = ["Your", "Brand.", "Here."];
+const WORD_COLORS = ["text-white", "text-white", "text-[#FFC72C]"];
+const WORD_DELAYS = [0.4, 1.1, 1.9];
+
 export default function SceneImpact({ isActive }: SceneImpactProps) {
   return (
     <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black">
       <motion.div
-        className="absolute inset-0 w-full h-full bg-cover bg-center"
+        className="absolute inset-[-8%] bg-cover"
         style={{
           backgroundImage: "url(/images/Partner/Partner_Cover.jpg)",
+          backgroundPosition: "55% 50%",
         }}
-        initial={{ scale: 1.05, y: 0 }}
-        animate={
-          isActive
-            ? {
-                scale: 1.15,
-                y: -20,
-              }
-            : {}
-        }
+        initial={{ scale: 1.0, opacity: 0 }}
+        animate={isActive ? { scale: 1.18, opacity: 1 } : {}}
         transition={{
-          scale: { duration: 12, ease: "easeOut" },
-          y: { duration: 12, ease: "easeOut" },
+          scale: { duration: 16, ease: "easeOut" },
+          opacity: { duration: 2.2, ease: "easeOut" },
         }}
       />
 
-      <div className="absolute inset-0 bg-black/85" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_10%,black_90%)]" />
+      <div className="absolute inset-0 bg-black/60" />
+
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,transparent_30%,rgba(0,0,0,0.75)_100%)]" />
 
       <motion.div
-        className="absolute inset-0 opacity-30"
-        initial={{ opacity: 0 }}
-        animate={isActive ? { opacity: 0.3 } : {}}
-        transition={{ duration: 2, delay: 1.5 }}
-      >
-        <motion.div
-          className="absolute top-0 left-1/2 w-px h-full bg-gradient-to-b from-transparent via-[#FFC72C]/40 to-transparent"
-          animate={{
-            opacity: [0.3, 0.6, 0.3],
-            scaleY: [0.8, 1, 0.8],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute top-0 left-1/3 w-px h-full bg-gradient-to-b from-transparent via-white/20 to-transparent"
-          animate={{
-            opacity: [0.2, 0.4, 0.2],
-            scaleY: [0.9, 1.1, 0.9],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.5,
-          }}
-        />
-        <motion.div
-          className="absolute top-0 left-2/3 w-px h-full bg-gradient-to-b from-transparent via-white/20 to-transparent"
-          animate={{
-            opacity: [0.2, 0.4, 0.2],
-            scaleY: [1, 0.9, 1],
-          }}
-          transition={{
-            duration: 5.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-        />
-      </motion.div>
-
-      <motion.div
-        className="absolute inset-0 bg-[radial-gradient(circle_600px_at_center,rgba(255,199,44,0.12)_0%,transparent_70%)]"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={isActive ? { opacity: 1, scale: 1 } : {}}
-        transition={{ duration: 2.5, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      />
-
-      <div className="relative z-10 text-center px-6 max-w-7xl">
-        <div>
-          <div className="mb-20">
-            <motion.div
-              className="overflow-hidden inline-block"
-              initial={{ opacity: 0, y: 80, rotateX: 45 }}
-              animate={
-                isActive
-                  ? { opacity: 1, y: 0, rotateX: 0 }
-                  : { opacity: 0, y: 80, rotateX: 45 }
-              }
-              transition={{
-                duration: 1.4,
-                delay: 1.2,
-                ease: [0.19, 1, 0.22, 1],
-              }}
-            >
-              <motion.h1
-                className="text-8xl md:text-[12rem] lg:text-[16rem] font-black uppercase text-white leading-none tracking-[-0.02em]"
-                style={{
-                  textShadow: "0 0 100px rgba(0,0,0,0.8)",
-                }}
-                animate={
-                  isActive
-                    ? {
-                        textShadow: [
-                          "0 0 100px rgba(0,0,0,0.8)",
-                          "0 0 120px rgba(255,199,44,0.3)",
-                          "0 0 100px rgba(0,0,0,0.8)",
-                        ],
-                      }
-                    : {}
-                }
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 3,
-                }}
-              >
-                Your
-              </motion.h1>
-            </motion.div>
-
-            <motion.div
-              className="overflow-hidden inline-block"
-              initial={{ opacity: 0, y: 80, rotateX: 45 }}
-              animate={
-                isActive
-                  ? { opacity: 1, y: 0, rotateX: 0 }
-                  : { opacity: 0, y: 80, rotateX: 45 }
-              }
-              transition={{
-                duration: 1.4,
-                delay: 2,
-                ease: [0.19, 1, 0.22, 1],
-              }}
-            >
-              <motion.h1
-                className="text-8xl md:text-[12rem] lg:text-[16rem] font-black uppercase text-white leading-none tracking-[-0.02em] ml-6 md:ml-12"
-                style={{
-                  textShadow: "0 0 100px rgba(0,0,0,0.8)",
-                }}
-              >
-                Brand
-              </motion.h1>
-            </motion.div>
-
-            <motion.div
-              className="mt-4 md:mt-8 overflow-hidden inline-block"
-              initial={{ opacity: 0, scale: 0.7, y: 100 }}
-              animate={
-                isActive
-                  ? { opacity: 1, scale: 1, y: 0 }
-                  : { opacity: 0, scale: 0.7, y: 100 }
-              }
-              transition={{
-                duration: 1.8,
-                delay: 2.8,
-                ease: [0.19, 1, 0.22, 1],
-              }}
-            >
-              <motion.h1
-                className="text-9xl md:text-[14rem] lg:text-[20rem] font-black uppercase text-[#FFC72C] leading-none tracking-[-0.03em]"
-                style={{
-                  textShadow:
-                    "0 0 80px rgba(255,199,44,0.6), 0 0 150px rgba(255,199,44,0.4)",
-                }}
-                animate={
-                  isActive
-                    ? {
-                        textShadow: [
-                          "0 0 80px rgba(255,199,44,0.6), 0 0 150px rgba(255,199,44,0.4)",
-                          "0 0 120px rgba(255,199,44,0.8), 0 0 200px rgba(255,199,44,0.5)",
-                          "0 0 80px rgba(255,199,44,0.6), 0 0 150px rgba(255,199,44,0.4)",
-                        ],
-                      }
-                    : {}
-                }
-                transition={{
-                  duration: 3.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 4.5,
-                }}
-              >
-                Here
-              </motion.h1>
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isActive ? { opacity: 1, y: 0 } : {}}
-            transition={{
-              duration: 1.5,
-              delay: 4.2,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          >
-            <motion.div
-              className="inline-block relative"
-              animate={
-                isActive
-                  ? {
-                      y: [0, -8, 0],
-                    }
-                  : {}
-              }
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 5,
-              }}
-            >
-              <motion.div
-                className="absolute inset-0 bg-[#FFC72C]/20 blur-3xl"
-                animate={{
-                  scale: [1, 1.3, 1],
-                  opacity: [0.2, 0.4, 0.2],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-              <p
-                className="relative text-2xl md:text-4xl lg:text-5xl font-light text-white/70 tracking-[0.15em] uppercase"
-                style={{
-                  fontVariant: "small-caps",
-                  letterSpacing: "0.2em",
-                }}
-              >
-                Mall of America
-              </p>
-            </motion.div>
-          </motion.div>
-        </div>
-      </div>
-
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_50%_52%,rgba(255,199,44,0.10)_0%,transparent_70%)]"
         initial={{ opacity: 0 }}
         animate={isActive ? { opacity: 1 } : {}}
-        transition={{ duration: 2, delay: 3 }}
-      >
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-[#FFC72C] rounded-full"
-            style={{
-              left: `${20 + i * 10}%`,
-              top: `${30 + (i % 3) * 20}%`,
-            }}
-            animate={{
-              y: [0, -100, 0],
-              opacity: [0, 0.6, 0],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: 4 + i * 0.5,
-              repeat: Infinity,
-              delay: i * 0.7,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </motion.div>
+        transition={{ duration: 2.5, delay: 2.4, ease: "easeOut" }}
+      />
+
+      <motion.div
+        className="absolute left-1/2 -translate-x-1/2 h-px bg-[#FFC72C]"
+        style={{
+          top: "calc(50% - clamp(6rem, 13vw, 16rem))",
+          width: "clamp(2rem, 5vw, 5rem)",
+        }}
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={isActive ? { scaleX: 1, opacity: 0.7 } : {}}
+        transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+      />
+
+      <div className="relative z-10 text-center px-8 select-none">
+        <div
+          className="flex flex-col items-center"
+          style={{ gap: "clamp(-1rem, -1vw, -0.5rem)" }}
+        >
+          {WORDS.map((word, i) => (
+            <div key={word} className="overflow-hidden">
+              <motion.div
+                initial={{ y: "110%", opacity: 0 }}
+                animate={isActive ? { y: "0%", opacity: 1 } : {}}
+                transition={{
+                  duration: 1.05,
+                  delay: WORD_DELAYS[i],
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                <span
+                  className={`block font-black uppercase leading-[0.88] tracking-[-0.03em] ${WORD_COLORS[i]}`}
+                  style={{
+                    fontSize: "clamp(6rem, 14vw, 18rem)",
+                    textShadow:
+                      i === 2
+                        ? "0 0 80px rgba(255,199,44,0.45), 0 0 200px rgba(255,199,44,0.2)"
+                        : "0 0 120px rgba(0,0,0,0.9)",
+                  }}
+                >
+                  {word}
+                </span>
+              </motion.div>
+            </div>
+          ))}
+        </div>
+
+        <motion.p
+          className="text-white/40 font-light uppercase tracking-[0.45em]"
+          style={{
+            fontSize: "clamp(0.65rem, 1.1vw, 1rem)",
+            marginTop: "clamp(2rem, 4vh, 3.5rem)",
+            letterSpacing: "0.45em",
+          }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={isActive ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1.4, delay: 3.1, ease: "easeOut" }}
+        >
+          40 million visitors. One destination.
+        </motion.p>
+
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={isActive ? { opacity: [0, 1, 0.6] } : {}}
+          transition={{ duration: 2, delay: 2.8, ease: "easeOut" }}
+          style={{
+            background:
+              "radial-gradient(ellipse 40% 25% at 50% 75%, rgba(255,199,44,0.14) 0%, transparent 70%)",
+          }}
+        />
+      </div>
     </section>
   );
 }
