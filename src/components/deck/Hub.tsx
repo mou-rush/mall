@@ -184,8 +184,8 @@ export default function Hub({
   return (
     <div className="fixed inset-0 z-50 bg-black overflow-hidden">
       <div
-        className="flex flex-col md:flex-row h-full w-full"
-        style={{ paddingBottom: "clamp(52px, 7vh, 72px)" }}
+        className="flex flex-col md:flex-row w-full"
+        style={{ height: "calc(100% - clamp(64px, 9vh, 90px))" }}
       >
         <div
           ref={heroRef}
@@ -309,8 +309,11 @@ export default function Hub({
             </motion.button>
 
             <motion.div
-              className="absolute bottom-8 left-10 md:left-14 lg:left-16"
-              style={{ right: "2rem" }}
+              className="absolute left-10 md:left-14 lg:left-16"
+              style={{
+                right: "2rem",
+                bottom: "calc(clamp(64px,9vh,90px) + 1.5rem)",
+              }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.5, duration: 0.8 }}
@@ -332,8 +335,14 @@ export default function Hub({
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col h-[50vh] md:h-full overflow-hidden">
-          <div className="flex-none md:flex-[2] h-2/5 md:h-auto overflow-hidden">
+        <div
+          className="flex-1 flex flex-col h-[50vh] md:h-full overflow-hidden"
+          style={{ minHeight: 0 }}
+        >
+          <div
+            className="flex-none overflow-hidden"
+            style={{ flex: "0 0 40%" }}
+          >
             <CinematicTile
               data={toTileData(retailSection)}
               onClick={() => setExpandedSection(retailSection.id)}
@@ -342,7 +351,10 @@ export default function Hub({
             />
           </div>
 
-          <div className="flex-1 grid grid-cols-2 grid-rows-2">
+          <div
+            className="grid grid-cols-2 grid-rows-2"
+            style={{ flex: "1 1 60%", minHeight: 0 }}
+          >
             {tilesSm.map((section, i) => (
               <div key={section.id} className="overflow-hidden">
                 <CinematicTile
