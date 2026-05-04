@@ -132,16 +132,11 @@ const SECTIONS: HubSection[] = [
 ];
 
 interface HubProps {
-  readonly visitedSlides: Set<SlideId>;
   readonly onNavigate: (slideId: SlideId, section: string) => void;
   readonly explorationProgress: { visited: number; total: number };
 }
 
-export default function Hub({
-  visitedSlides,
-  onNavigate,
-  explorationProgress,
-}: HubProps) {
+export default function Hub({ onNavigate, explorationProgress }: HubProps) {
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -173,7 +168,6 @@ export default function Hub({
   const retailSection = SECTIONS[1];
   const tilesSm: HubSection[] = SECTIONS.slice(2, 6);
   const partnerSection = SECTIONS[6];
-  const heroVisited = visitedSlides.has(heroSection.coverSlide);
 
   const heroParallaxX = (mousePos.x - 0.5) * -20;
   const heroParallaxY = (mousePos.y - 0.5) * -14;

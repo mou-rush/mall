@@ -39,7 +39,7 @@ export default function SceneProximity({ isActive }: SceneProximityProps) {
         style={{ top: "55%", left: "0%" }}
         initial={{ x: "-10%", y: "-50%", rotate: 90 }}
         animate={isActive ? { x: "110vw", y: "-50%", rotate: 90 } : {}}
-        transition={{ duration: 2.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
       >
         <svg
           width="48"
@@ -61,7 +61,7 @@ export default function SceneProximity({ isActive }: SceneProximityProps) {
           style={{ fontSize: "clamp(10rem, 22vw, 26rem)" }}
           initial={{ opacity: 0, y: 40 }}
           animate={isActive ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1.1, delay: 1.2, ease: [0.19, 1, 0.22, 1] }}
+          transition={{ duration: 1.8, delay: 2, ease: [0.19, 1, 0.22, 1] }}
         >
           12
           <span
@@ -81,7 +81,7 @@ export default function SceneProximity({ isActive }: SceneProximityProps) {
           }}
           initial={{ opacity: 0 }}
           animate={isActive ? { opacity: 1 } : {}}
-          transition={{ duration: 1.2, delay: 2, ease: "easeOut" }}
+          transition={{ duration: 1.8, delay: 2, ease: "easeOut" }}
         >
           From MSP International Airport
         </motion.p>

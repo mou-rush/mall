@@ -129,7 +129,7 @@ export const MENU_STRUCTURE: ReadonlyArray<MenuItem> = [
 ];
 
 export function getAllSlideIds(): ReadonlyArray<SlideId> {
-  const slides: SlideId[] = ["hero"];
+  const slides: SlideId[] = [];
 
   MENU_STRUCTURE.forEach((item) => {
     if (item.subItems && item.subItems.length > 0) {

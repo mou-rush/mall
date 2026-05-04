@@ -32,7 +32,6 @@ import {
 } from "./slides/CoverComponents";
 
 const SLIDE_COMPONENTS: Record<SlideId, SlideComponent> = {
-  // hero: HeroSlide,
   why: WhySlide,
   "retail-leasing": RetailLeasingSlide,
   "retail-phase-ii": RetailPhaseIISlide,
@@ -115,7 +114,6 @@ export default function DeckExperience() {
       {stage === "hub" && (
         <Hub
           key="hub"
-          visitedSlides={nav.visitedSlides}
           onNavigate={handleNavigateToSlide}
           explorationProgress={progress}
         />
