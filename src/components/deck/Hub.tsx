@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import type { SlideId } from "@/lib/slide-registry";
 import { useSocialLinks } from "@/hooks/useSocialLinks";
 import CinematicTile, { type CinematicTileData } from "./CinematicTile";
+import { AnimatedVideoBackground } from "@/components/shared/VideoComponents";
 
 interface SocialItem {
   readonly label: string;
@@ -169,9 +170,6 @@ export default function Hub({ onNavigate, explorationProgress }: HubProps) {
   const tilesSm: HubSection[] = SECTIONS.slice(2, 6);
   const partnerSection = SECTIONS[6];
 
-  const heroParallaxX = (mousePos.x - 0.5) * -20;
-  const heroParallaxY = (mousePos.y - 0.5) * -14;
-
   const toTileData = (s: HubSection): CinematicTileData => ({
     id: s.id,
     label: s.label,
@@ -193,19 +191,17 @@ export default function Hub({ onNavigate, explorationProgress }: HubProps) {
           onMouseMove={handleHeroMouseMove}
           onMouseLeave={() => setMousePos({ x: 0.5, y: 0.5 })}
         >
-          <motion.div
-            className="absolute inset-[-6%] bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroSection.image})` }}
-            animate={{ x: heroParallaxX, y: heroParallaxY, scale: 1.08 }}
-            initial={{ scale: 1.14, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 60, damping: 30 }}
-          />
-          <motion.div
-            className="absolute inset-[-6%] bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroSection.image})` }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.4, ease: "easeOut" }}
+          <AnimatedVideoBackground
+            src="/videos/mall_2.mp4"
+            isActive={true}
+            entranceDirection="bottom"
+            initialScale={1.14}
+            scaleSequence={[1.14, 1.08, 1.12]}
+            duration={1.8}
+            ease={[0.22, 1, 0.36, 1]}
+            continuousZoom
+            continuousZoomDuration={16}
+            continuousZoomDelay={2.2}
           />
 
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/20" />
