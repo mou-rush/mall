@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import type { SlideId } from "@/lib/slide-registry";
 import { useSocialLinks } from "@/hooks/useSocialLinks";
 import CinematicTile, { type CinematicTileData } from "./CinematicTile";
@@ -131,6 +131,98 @@ const SECTIONS: HubSection[] = [
     color: "#FFC72C",
   },
 ];
+
+interface PartnerBarProps {
+  readonly section: HubSection;
+  readonly onNavigate: (slideId: SlideId, section: string) => void;
+}
+
+function PartnerBar({ section, onNavigate }: PartnerBarProps) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <motion.div
+      className="absolute bottom-0 left-0 right-0 z-30 cursor-pointer overflow-hidden"
+      style={{ height: "clamp(64px, 9vh, 90px)" }}
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, delay: 1.3, ease: [0.22, 1, 0.36, 1] }}
+      onClick={() => onNavigate(section.subSlides[0].id, section.id)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      whileHover={{ scaleY: 1.06 }}
+      whileTap={{ scale: 0.99 }}
+    >
+      <motion.div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${section.image})` }}
+        animate={{
+          filter: hovered ? "brightness(0.45)" : "brightness(0.25)",
+          scale: hovered ? 1.04 : 1,
+        }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#FFC72C]/20 via-transparent to-[#003DA5]/20" />
+      <div className="absolute inset-0 border-t border-[#FFC72C]/30" />
+
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            initial={{ opacity: 0, x: "-100%" }}
+            animate={{ opacity: 1, x: "150%" }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.7, ease: "easeInOut" }}
+            style={{
+              background:
+                "linear-gradient(105deg, transparent 20%, rgba(255,199,44,0.15) 50%, transparent 80%)",
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-[2px] bg-[#FFC72C]"
+        animate={{ scaleX: hovered ? 1 : 0, opacity: hovered ? 1 : 0 }}
+        initial={{ scaleX: 0, opacity: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      />
+
+      <div className="relative z-10 h-full flex items-center justify-center gap-6">
+        <motion.div
+          className="w-8 h-px bg-[#FFC72C]"
+          animate={{ scaleX: [1, 1.5, 1] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.span
+          className="text-[#FFC72C] text-sm uppercase tracking-[0.35em] font-black"
+          animate={{ letterSpacing: hovered ? "0.45em" : "0.35em" }}
+          transition={{ duration: 0.4 }}
+        >
+          Partner With Us
+        </motion.span>
+        <span className="text-white/30">·</span>
+        <motion.span
+          className="text-white/55 text-xs uppercase tracking-[0.18em] font-light"
+          animate={{ opacity: hovered ? 1 : 0.55 }}
+          transition={{ duration: 0.3 }}
+        >
+          Category Exclusivity Available
+        </motion.span>
+        <motion.div
+          className="w-8 h-px bg-[#FFC72C]"
+          animate={{ scaleX: [1, 1.5, 1] }}
+          transition={{
+            duration: 2.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1.25,
+          }}
+        />
+      </div>
+    </motion.div>
+  );
+}
 
 interface HubProps {
   readonly onNavigate: (slideId: SlideId, section: string) => void;
@@ -371,52 +463,7 @@ export default function Hub({ onNavigate, explorationProgress }: HubProps) {
         </div>
       </div>
 
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 z-30 cursor-pointer group/partner"
-        style={{ height: "clamp(64px, 9vh, 90px)" }}
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1, delay: 1.3, ease: [0.22, 1, 0.36, 1] }}
-        onClick={() =>
-          onNavigate(partnerSection.subSlides[0].id, partnerSection.id)
-        }
-        whileHover={{ scaleY: 1.06 }}
-      >
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-all duration-500 group-hover/partner:brightness-50"
-          style={{
-            backgroundImage: `url(${partnerSection.image})`,
-            filter: "brightness(0.25)",
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#FFC72C]/20 via-transparent to-[#003DA5]/20" />
-        <div className="absolute inset-0 border-t border-[#FFC72C]/30" />
-
-        <div className="relative z-10 h-full flex items-center justify-center gap-6">
-          <motion.div
-            className="w-8 h-px bg-[#FFC72C]"
-            animate={{ scaleX: [1, 1.5, 1] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <span className="text-[#FFC72C] text-sm uppercase tracking-[0.35em] font-black">
-            Partner With Us
-          </span>
-          <span className="text-white/30">·</span>
-          <span className="text-white/55 text-xs uppercase tracking-[0.18em] font-light">
-            Category Exclusivity Available
-          </span>
-          <motion.div
-            className="w-8 h-px bg-[#FFC72C]"
-            animate={{ scaleX: [1, 1.5, 1] }}
-            transition={{
-              duration: 2.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1.25,
-            }}
-          />
-        </div>
-      </motion.div>
+      <PartnerBar section={partnerSection} onNavigate={onNavigate} />
 
       <motion.div
         className="fixed top-5 right-5 z-40 flex gap-2"
