@@ -22,6 +22,7 @@ export interface EntertainmentTileData {
   readonly stats: ReadonlyArray<EntertainmentTileStat>;
   readonly ctaLabel: string;
   readonly ctaHref: string;
+  readonly galleryImages?: ReadonlyArray<string>;
 }
 
 interface EntertainmentVideoTileProps {

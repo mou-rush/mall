@@ -65,7 +65,7 @@ export function EventDetailPanel({
             rel="noopener noreferrer"
             onPointerDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
-            className="relative z-30 mt-5 inline-flex w-fit items-center gap-3  bg-[#FFC72C] px-6 py-3 font-mono text-[11px] font-black uppercase tracking-widest text-black shadow-[0_0_28px_rgba(255,199,44,0.28)] transition-transform hover:scale-[1.03] pointer-events-auto"
+            className="relative z-50 mt-5 inline-flex w-fit items-center gap-3 rounded-full bg-[#FFC72C] px-6 py-3 font-mono text-[11px] font-black uppercase tracking-widest text-black shadow-[0_0_28px_rgba(255,199,44,0.28)] transition-transform hover:scale-[1.03] pointer-events-auto cursor-pointer"
           >
             See All Events
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
